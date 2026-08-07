@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+damanananti_mobile/
+.venv/
+env/
+venv/
+*.apk

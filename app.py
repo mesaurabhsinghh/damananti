@@ -6218,46 +6218,46 @@ def render_nexus_duo_force_card(target_name, pred_col, pred_size, conf_col, conf
 
     target_issue_str = str(target_issue) if target_issue is not None else "LIVE"
 
-    card_html = f"""<div style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.12) 0%, rgba(15, 23, 42, 0.95) 50%, rgba(16, 185, 129, 0.12) 100%); border: 2px solid #38bdf8; border-radius: 14px; padding: 18px; margin-bottom: 20px; box-shadow: 0 0 25px rgba(239, 68, 68, 0.2), 0 0 25px rgba(16, 185, 129, 0.2);">
-<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; flex-wrap: wrap; gap: 8px;">
-<div style="display: flex; align-items: center; gap: 8px;">
-<span style="font-size: 22px;">⚡</span>
-<span style="font-size: 16px; font-weight: 900; color: #f8fafc; text-transform: uppercase; letter-spacing: 0.5px;">NEXUS DUO FORCE <span style="font-size: 11px; color: #94a3b8; font-weight: 700;">(Color + Size Precision Agent)</span></span>
+    card_html = f"""<div style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.12) 0%, rgba(15, 23, 42, 0.95) 50%, rgba(16, 185, 129, 0.12) 100%); border: 2px solid #38bdf8; border-radius: 12px; padding: 10px; margin-bottom: 16px; box-shadow: 0 0 20px rgba(56, 189, 248, 0.2);">
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px; flex-wrap: wrap; gap: 4px;">
+<div style="display: flex; align-items: center; gap: 6px;">
+<span style="font-size: 18px;">⚡</span>
+<span style="font-size: 14px; font-weight: 900; color: #f8fafc; text-transform: uppercase; letter-spacing: 0.5px;">NEXUS DUO FORCE <span style="font-size: 9.5px; color: #94a3b8; font-weight: 700;">(Color + Size Precision Agent)</span></span>
 </div>
-<div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
-<span style="background: rgba(15, 23, 42, 0.85); border: 1.5px solid #38bdf8; border-radius: 8px; padding: 4px 12px; font-size: 10px; font-weight: 800; color: #a7f3d0; display: inline-flex; align-items: center; gap: 6px;">🎯 TARGET ISSUE: <span style="color: #facc15; font-size: 12px; font-weight: 900;">#{target_issue_str}</span> <span style="background: #10b981; color: #020617; font-size: 8px; font-weight: 900; padding: 2px 6px; border-radius: 10px;">LIVE SYNC</span></span>
-<span style="background: rgba(56, 189, 248, 0.2); border: 1px solid #38bdf8; color: #7dd3fc; font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 12px;">65 Sources</span>
-<span style="background: rgba(168, 85, 247, 0.2); border: 1px solid #a855f7; color: #c084fc; font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 12px;">HMM Regime</span>
-<span style="background: rgba(234, 179, 8, 0.2); border: 1px solid #eab308; color: #fde047; font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 12px;">Platt Calibrated</span>
-<span style="background: rgba(16, 185, 129, 0.2); border: 1px solid #10b981; color: #6ee7b7; font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 12px;">Kelly Bets</span>
-</div>
-</div>
-
-<div style="display: flex; gap: 15px; margin-bottom: 15px;">
-<div style="flex: 1; background: {col_bg}; border: 1.5px solid {col_color}; border-radius: 12px; padding: 14px; text-align: center; box-shadow: inset 0 0 15px {col_bg};">
-<div style="font-size: 11px; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">🎯 COLOR TARGET PREDICTION</div>
-<div style="font-size: 32px; font-weight: 900; color: {col_color}; text-shadow: 0 0 12px {col_color}; margin: 4px 0;">{pred_col.upper()}</div>
-<div style="font-size: 13px; font-weight: 800; color: #e2e8f0; margin-top: 6px;">Confidence: <span style="color: {col_color};">{conf_col}%</span></div>
-</div>
-<div style="flex: 1; background: {size_bg}; border: 1.5px solid {size_color}; border-radius: 12px; padding: 14px; text-align: center; box-shadow: inset 0 0 15px {size_bg};">
-<div style="font-size: 11px; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">📏 SIZE TARGET PREDICTION</div>
-<div style="font-size: 32px; font-weight: 900; color: {size_color}; text-shadow: 0 0 12px {size_color}; margin: 4px 0;">{pred_size.upper()}</div>
-<div style="font-size: 13px; font-weight: 800; color: #e2e8f0; margin-top: 6px;">Confidence: <span style="color: {size_color};">{conf_sz}%</span></div>
+<div style="display: flex; gap: 4px; align-items: center; flex-wrap: wrap;">
+<span style="background: rgba(15, 23, 42, 0.85); border: 1px solid #38bdf8; border-radius: 6px; padding: 2px 6px; font-size: 8.5px; font-weight: 800; color: #a7f3d0; display: inline-flex; align-items: center; gap: 4px;">🎯 TARGET ISSUE: <span style="color: #facc15; font-size: 10px; font-weight: 900;">#{target_issue_str}</span> <span style="background: #10b981; color: #020617; font-size: 7.5px; font-weight: 900; padding: 1px 4px; border-radius: 8px;">LIVE SYNC</span></span>
+<span style="background: rgba(56, 189, 248, 0.2); border: 1px solid #38bdf8; color: #7dd3fc; font-size: 8px; font-weight: 800; padding: 1px 5px; border-radius: 10px;">65 Sources</span>
+<span style="background: rgba(168, 85, 247, 0.2); border: 1px solid #a855f7; color: #c084fc; font-size: 8px; font-weight: 800; padding: 1px 5px; border-radius: 10px;">HMM Regime</span>
+<span style="background: rgba(234, 179, 8, 0.2); border: 1px solid #eab308; color: #fde047; font-size: 8px; font-weight: 800; padding: 1px 5px; border-radius: 10px;">Platt Calibrated</span>
+<span style="background: rgba(16, 185, 129, 0.2); border: 1px solid #10b981; color: #6ee7b7; font-size: 8px; font-weight: 800; padding: 1px 5px; border-radius: 10px;">Kelly Bets</span>
 </div>
 </div>
 
-<div style="margin-top: 6px; margin-bottom: 10px; display: flex; justify-content: space-between; gap: 4px; width: 100%;">
+<div style="display: flex; gap: 6px; margin-bottom: 8px; width: 100%;">
+<div style="flex: 1; min-width: 0; background: {col_bg}; border: 1.5px solid {col_color}; border-radius: 10px; padding: 6px 3px; text-align: center; box-shadow: inset 0 0 10px {col_bg};">
+<div style="font-size: 8.5px; font-weight: 800; color: #94a3b8; text-transform: uppercase;">🎯 COLOR TARGET PREDICTION</div>
+<div style="font-size: 18px; font-weight: 900; color: {col_color}; text-shadow: 0 0 10px {col_color}; margin: 1px 0;">{pred_col.upper()}</div>
+<div style="font-size: 9px; font-weight: 800; color: #e2e8f0;">Confidence: <span style="color: {col_color};">{conf_col}%</span></div>
+</div>
+<div style="flex: 1; min-width: 0; background: {size_bg}; border: 1.5px solid {size_color}; border-radius: 10px; padding: 6px 3px; text-align: center; box-shadow: inset 0 0 10px {size_bg};">
+<div style="font-size: 8.5px; font-weight: 800; color: #94a3b8; text-transform: uppercase;">📏 SIZE TARGET PREDICTION</div>
+<div style="font-size: 18px; font-weight: 900; color: {size_color}; text-shadow: 0 0 10px {size_color}; margin: 1px 0;">{pred_size.upper()}</div>
+<div style="font-size: 9px; font-weight: 800; color: #e2e8f0;">Confidence: <span style="color: {size_color};">{conf_sz}%</span></div>
+</div>
+</div>
+
+<div style="margin-top: 4px; margin-bottom: 8px; display: flex; justify-content: space-between; gap: 4px; width: 100%;">
 <div style="flex: 1; min-width: 0; background: rgba(2, 6, 23, 0.7); border: 1px solid #22c55e; border-radius: 6px; padding: 3px 2px; text-align: center;">
-<span style="font-size: 8px; color: #86efac; font-weight: 800; display:block; text-transform: uppercase;">🎨 COLOR SCORE</span>
-<span style="font-size: 10px; font-weight: 900; color: #86efac;">{duo_col_sahi} Sahi | {duo_col_galat} Galat</span>
+<span style="font-size: 7.5px; color: #86efac; font-weight: 800; display:block; text-transform: uppercase;">🎨 COLOR SCORE</span>
+<span style="font-size: 9px; font-weight: 900; color: #86efac;">{duo_col_sahi} Sahi | {duo_col_galat} Galat</span>
 </div>
 <div style="flex: 1; min-width: 0; background: rgba(2, 6, 23, 0.7); border: 1px solid #38bdf8; border-radius: 6px; padding: 3px 2px; text-align: center;">
-<span style="font-size: 8px; color: #7dd3fc; font-weight: 800; display:block; text-transform: uppercase;">📏 SIZE SCORE</span>
-<span style="font-size: 10px; font-weight: 900; color: #7dd3fc;">{duo_size_sahi} Sahi | {duo_size_galat} Galat</span>
+<span style="font-size: 7.5px; color: #7dd3fc; font-weight: 800; display:block; text-transform: uppercase;">📏 SIZE SCORE</span>
+<span style="font-size: 9px; font-weight: 900; color: #7dd3fc;">{duo_size_sahi} Sahi | {duo_size_galat} Galat</span>
 </div>
 </div>
 
-<div style="text-align: center; padding: 8px 14px; border-radius: 8px; font-size: 12px; font-weight: 800; {kelly_style} margin-bottom: 10px;">💰 RECOMMENDED BANKROLL SIZING: {kelly_label}</div>
+<div style="text-align: center; padding: 4px 6px; border-radius: 6px; font-size: 9px; font-weight: 800; {kelly_style} margin-bottom: 4px;">💰 RECOMMENDED BANKROLL SIZING: {kelly_label}</div>
 </div>"""
 
     st.markdown(card_html, unsafe_allow_html=True)
@@ -6712,87 +6712,88 @@ def render_chromatic_god_mode_16_card(res_dict, engines_dict, df_history, cache_
     red_pct_bar = int(round(p_red * 100))
     green_pct_bar = 100 - red_pct_bar
 
-    card_html = f"""<div style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.98), rgba(236, 72, 153, 0.15), rgba(168, 85, 247, 0.15), rgba(2, 6, 23, 0.98)); border: 3.5px solid #ec4899; border-radius: 20px; padding: 24px; box-shadow: 0 0 45px rgba(236, 72, 153, 0.35); margin-bottom: 25px; position: relative;">
-<div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid rgba(255, 255, 255, 0.15); padding-bottom: 14px; margin-bottom: 16px;">
+    card_html = f"""<div style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.98), rgba(236, 72, 153, 0.15), rgba(168, 85, 247, 0.15), rgba(2, 6, 23, 0.98)); border: 2.5px solid #ec4899; border-radius: 12px; padding: 10px; box-shadow: 0 0 25px rgba(236, 72, 153, 0.25); margin-bottom: 16px; position: relative;">
+<div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255, 255, 255, 0.15); padding-bottom: 8px; margin-bottom: 10px; flex-wrap: wrap; gap: 4px;">
     <div>
-        <div style="font-size: 22px; font-weight: 900; color: #f8fafc; letter-spacing: 0.5px; display: flex; align-items: center; gap: 10px;">
-            🌌 CHROMATIC GOD-MODE 16.0 <span style="font-size: 10px; background: linear-gradient(90deg, #ec4899, #a855f7, #3b82f6); color: #ffffff; padding: 3px 12px; border-radius: 20px; font-weight: 900; text-transform: uppercase;">QUANTUM CONSCIOUSNESS AGI</span>
+        <div style="font-size: 14px; font-weight: 900; color: #f8fafc; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+            🌌 CHROMATIC GOD-MODE 16.0 <span style="font-size: 8px; background: linear-gradient(90deg, #ec4899, #a855f7, #3b82f6); color: #ffffff; padding: 2px 8px; border-radius: 12px; font-weight: 900; text-transform: uppercase;">QUANTUM AGI</span>
         </div>
-        <div style="font-size: 11px; color: #94a3b8; font-weight: 800; margin-top: 3px;">PURE MATHEMATICAL COLOR OMNISCIENCE & DIFFERENTIAL GEOMETRY (ISSUE #{target_issue})</div>
+        <div style="font-size: 9.5px; color: #94a3b8; font-weight: 800; margin-top: 2px;">PURE COLOR OMNISCIENCE & DIFFERENTIAL GEOMETRY (ISSUE #{target_issue})</div>
     </div>
-    <div style="text-align: right;">
-        <span style="background: rgba(236, 72, 153, 0.2); border: 2px solid #ec4899; color: #f472b6; padding: 8px 18px; border-radius: 14px; font-size: 14px; font-weight: 900; text-transform: uppercase; box-shadow: 0 0 20px rgba(236, 72, 153, 0.3);">
+    <div>
+        <span style="background: rgba(236, 72, 153, 0.2); border: 1.5px solid #ec4899; color: #f472b6; padding: 4px 10px; border-radius: 8px; font-size: 9.5px; font-weight: 900; text-transform: uppercase;">
             🎯 COLOR TARGET ONLY
         </span>
     </div>
 </div>
 
-<div style="display: flex; gap: 16px; margin-bottom: 18px; flex-wrap: wrap;">
-    <div style="flex: 2; background: rgba(15, 23, 42, 0.9); border: 2.5px solid {col_color}; border-radius: 14px; padding: 18px; text-align: center; box-shadow: 0 0 30px {col_bg};">
-        <div style="font-size: 11px; font-weight: 800; color: #cbd5e1; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">🌌 CHROMATIC COLOR PREDICTION</div>
-        <div style="font-size: 52px; font-weight: 900; color: {col_color}; text-shadow: 0 0 30px {col_color}; margin: 4px 0;">{pred_col.upper()}</div>
-        <div style="font-size: 14px; font-weight: 800; color: #e2e8f0;">God-Mode Consciousness Confidence: <span style="color: {col_color}; font-weight:900;">{confidence:.1f}%</span></div>
+<div style="display: flex; gap: 8px; margin-bottom: 10px; width: 100%;">
+    <div style="flex: 1; min-width: 0; background: rgba(15, 23, 42, 0.9); border: 2px solid {col_color}; border-radius: 10px; padding: 8px; text-align: center; box-shadow: 0 0 15px {col_bg};">
+        <div style="font-size: 8.5px; font-weight: 800; color: #cbd5e1; text-transform: uppercase;">🌌 CHROMATIC COLOR PREDICTION</div>
+        <div style="font-size: 22px; font-weight: 900; color: {col_color}; text-shadow: 0 0 15px {col_color}; margin: 2px 0;">{pred_col.upper()}</div>
+        <div style="font-size: 9.5px; font-weight: 800; color: #e2e8f0;">God-Mode Confidence: <span style="color: {col_color}; font-weight:900;">{confidence:.1f}%</span></div>
     </div>
 </div>
 
-<div style="background: rgba(2, 6, 23, 0.85); border: 1.5px solid #c084fc; border-radius: 12px; padding: 12px 16px; margin-bottom: 16px;">
-    <div style="font-size: 10px; color: #c084fc; font-weight: 900; text-transform: uppercase; margin-bottom: 4px;">⚛️ QUANTUM DIRAC KET VECTOR & PHASE-SPACE CONSCIOUSNESS</div>
-    <div style="font-size: 13px; font-weight: 900; color: #f8fafc;">|Ψ⟩ = {alpha}|Red⟩ + {beta}|Green⟩</div>
-    <div style="font-size: 11px; color: #cbd5e1; font-weight: 700; margin-top: 3px; display:flex; gap: 15px; flex-wrap: wrap;">
-        <span>📐 Riemannian Curvature κ: <b>{curvature_k}</b></span>
-        <span>🌀 Lyapunov Exponent λ: <b>{lyapunov_lambda}</b></span>
-        <span>⚡ TD(λ) Yield Vs: <b>{td_yield:+.3f}</b></span>
+<div style="background: rgba(2, 6, 23, 0.85); border: 1px solid #c084fc; border-radius: 8px; padding: 6px 8px; margin-bottom: 8px;">
+    <div style="font-size: 8px; color: #c084fc; font-weight: 900; text-transform: uppercase;">⚛️ QUANTUM DIRAC KET VECTOR & PHASE-SPACE CONSCIOUSNESS</div>
+    <div style="font-size: 10.5px; font-weight: 900; color: #f8fafc;">|Ψ⟩ = {alpha}|Red⟩ + {beta}|Green⟩</div>
+    <div style="font-size: 8.5px; color: #cbd5e1; font-weight: 700; margin-top: 2px; display:flex; gap: 8px; flex-wrap: wrap;">
+        <span>📐 Curvature κ: <b>{curvature_k}</b></span>
+        <span>🌀 Lyapunov λ: <b>{lyapunov_lambda}</b></span>
+        <span>⚡ TD(λ) Yield: <b>{td_yield:+.3f}</b></span>
     </div>
 </div>
 
-<div style="display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap;">
-    <div style="flex: 1; background: rgba(2, 6, 23, 0.8); border: 1.5px solid #f59e0b; border-radius: 10px; padding: 10px 14px; text-align: left;">
-        <div style="font-size: 10px; color: #fbbf24; font-weight: 800; text-transform: uppercase;">📜 1000-ROUND HISTORICAL PATTERN MATCH</div>
-        <div style="font-size: 13px; font-weight: 900; color: #f8fafc; margin-top: 2px;">Pattern [{ngram_pattern}] → {ngram_matches} Historical Matches</div>
-        <div style="font-size: 11px; color: #cbd5e1; font-weight: 700; margin-top: 1px;">Historical Red Rate: <span style="color:#f59e0b;">{ngram_red_prob:.1f}%</span></div>
+<div style="display: flex; gap: 6px; margin-bottom: 8px; width: 100%;">
+    <div style="flex: 1; min-width: 0; background: rgba(2, 6, 23, 0.8); border: 1px solid #f59e0b; border-radius: 8px; padding: 6px; text-align: left;">
+        <div style="font-size: 8px; color: #fbbf24; font-weight: 800; text-transform: uppercase;">📜 1000-ROUND PATTERN</div>
+        <div style="font-size: 9.5px; font-weight: 900; color: #f8fafc; margin-top: 1px;">[{ngram_pattern}] → {ngram_matches} Matches</div>
+        <div style="font-size: 8.5px; color: #cbd5e1; font-weight: 700;">Red Rate: <span style="color:#f59e0b;">{ngram_red_prob:.1f}%</span></div>
     </div>
-    <div style="flex: 1; background: rgba(2, 6, 23, 0.8); border: 1.5px solid #38bdf8; border-radius: 10px; padding: 10px 14px; text-align: left;">
-        <div style="font-size: 10px; color: #38bdf8; font-weight: 800; text-transform: uppercase;">🧠 PERSISTENT DISK MEMORY BANK</div>
-        <div style="font-size: 13px; font-weight: 900; color: #f8fafc; margin-top: 2px;">{memory_bank_count} Pattern Signatures Stored</div>
-        <div style="font-size: 11px; color: #cbd5e1; font-weight: 700; margin-top: 1px;">Status: <span style="color:#38bdf8;">Auto-Tuned & Saved on Disk</span></div>
-    </div>
-</div>
-
-<div style="background: rgba(2, 6, 23, 0.7); border: 1.5px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 14px; margin-bottom: 16px;">
-    <div style="font-size: 11px; font-weight: 800; color: #cbd5e1; margin-bottom: 6px; display:flex; justify-content: space-between;">
-        <span>🔴 RED PROBABILITY: {red_pct_bar}%</span>
-        <span>🟢 GREEN PROBABILITY: {green_pct_bar}%</span>
-    </div>
-    <div style="width: 100%; height: 12px; background: rgba(15, 23, 42, 0.9); border-radius: 6px; overflow: hidden; display: flex;">
-        <div style="width: {red_pct_bar}%; height: 100%; background: linear-gradient(90deg, #dc2626, #ef4444); box-shadow: 0 0 10px #ef4444;"></div>
-        <div style="width: {green_pct_bar}%; height: 100%; background: linear-gradient(90deg, #16a34a, #22c55e); box-shadow: 0 0 10px #22c55e;"></div>
+    <div style="flex: 1; min-width: 0; background: rgba(2, 6, 23, 0.8); border: 1px solid #38bdf8; border-radius: 8px; padding: 6px; text-align: left;">
+        <div style="font-size: 8px; color: #38bdf8; font-weight: 800; text-transform: uppercase;">🧠 MEMORY BANK</div>
+        <div style="font-size: 9.5px; font-weight: 900; color: #f8fafc; margin-top: 1px;">{memory_bank_count} Signatures</div>
+        <div style="font-size: 8.5px; color: #cbd5e1; font-weight: 700;">Status: <span style="color:#38bdf8;">Auto-Tuned</span></div>
     </div>
 </div>
 
-<div style="margin-top: 10px; margin-bottom: 16px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
-    <div style="background: rgba(2, 6, 23, 0.7); border: 1.5px solid #ef4444; border-radius: 8px; padding: 8px 14px; text-align: center; min-width: 130px;">
-        <span style="font-size: 10px; color: #fca5a5; font-weight: 800; display:block; text-transform: uppercase;">🌊 FFT Wavelet Cycle</span>
-        <span style="font-size: 13px; font-weight: 900; color: #fca5a5;">{periodicity} Rounds</span>
+<div style="background: rgba(2, 6, 23, 0.7); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; padding: 8px; margin-bottom: 8px;">
+    <div style="font-size: 8.5px; font-weight: 800; color: #cbd5e1; margin-bottom: 4px; display:flex; justify-content: space-between;">
+        <span>🔴 RED: {red_pct_bar}%</span>
+        <span>🟢 GREEN: {green_pct_bar}%</span>
     </div>
-        <span style="font-size: 10px; color: #c084fc; font-weight: 800; display:block; text-transform: uppercase;">📊 Monte Carlo Dev</span>
-        <span style="font-size: 13px; font-weight: 900; color: #c084fc;">σ = ±{mc_std:.4f}</span>
-    </div>
-    <div style="background: rgba(2, 6, 23, 0.7); border: 1.5px solid #22c55e; border-radius: 8px; padding: 8px 14px; text-align: center; min-width: 130px;">
-        <span style="font-size: 10px; color: #86efac; font-weight: 800; display:block; text-transform: uppercase;">💰 Kelly Stake</span>
-        <span style="font-size: 13px; font-weight: 900; color: #86efac;">{kelly_pct}% Bankroll</span>
+    <div style="width: 100%; height: 8px; background: rgba(15, 23, 42, 0.9); border-radius: 4px; overflow: hidden; display: flex;">
+        <div style="width: {red_pct_bar}%; height: 100%; background: linear-gradient(90deg, #dc2626, #ef4444);"></div>
+        <div style="width: {green_pct_bar}%; height: 100%; background: linear-gradient(90deg, #16a34a, #22c55e);"></div>
     </div>
 </div>
 
-<div style="margin-top: 10px; margin-bottom: 16px; display: flex; justify-content: center;">
-    <div style="background: rgba(2, 6, 23, 0.7); border: 1.5px solid {col_color}; border-radius: 8px; padding: 8px 24px; min-width: 220px; text-align: center;">
-        <span style="font-size: 11px; color: {col_color}; font-weight: 800; display:block; text-transform: uppercase;">🎨 Color Score Record</span>
-        <span style="font-size: 15px; font-weight: 900; color: {col_color};">{col_sahi} Sahi | {col_galat} Galat</span>
+<div style="margin-top: 4px; margin-bottom: 8px; display: flex; justify-content: space-between; gap: 4px; width: 100%;">
+    <div style="flex: 1; min-width: 0; background: rgba(2, 6, 23, 0.7); border: 1px solid #ef4444; border-radius: 6px; padding: 3px 2px; text-align: center;">
+        <span style="font-size: 7.5px; color: #fca5a5; font-weight: 800; display:block; text-transform: uppercase;">🌊 Wavelet Cycle</span>
+        <span style="font-size: 9px; font-weight: 900; color: #fca5a5;">{periodicity} Rounds</span>
+    </div>
+    <div style="flex: 1; min-width: 0; background: rgba(2, 6, 23, 0.7); border: 1px solid #c084fc; border-radius: 6px; padding: 3px 2px; text-align: center;">
+        <span style="font-size: 7.5px; color: #c084fc; font-weight: 800; display:block; text-transform: uppercase;">📊 Monte Carlo Dev</span>
+        <span style="font-size: 9px; font-weight: 900; color: #c084fc;">σ = ±{mc_std:.4f}</span>
+    </div>
+    <div style="flex: 1; min-width: 0; background: rgba(2, 6, 23, 0.7); border: 1px solid #22c55e; border-radius: 6px; padding: 3px 2px; text-align: center;">
+        <span style="font-size: 7.5px; color: #86efac; font-weight: 800; display:block; text-transform: uppercase;">💰 Kelly Stake</span>
+        <span style="font-size: 9px; font-weight: 900; color: #86efac;">{kelly_pct}% Bankroll</span>
     </div>
 </div>
 
-<div style="background: rgba(2, 6, 23, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; padding: 14px; margin-bottom: 15px;">
-    <div style="font-size: 11px; font-weight: 800; color: #fbbf24; text-transform: uppercase; margin-bottom: 4px;">🧠 CHROMATIC GOD-MODE RATIONALE (गहन उच्च-गणितीय हिंदी विश्लेषण)</div>
-    <div style="font-size: 12px; color: #e2e8f0; font-weight: 600; line-height: 1.5;">{rationale}</div>
+<div style="margin-top: 4px; margin-bottom: 8px; display: flex; justify-content: center; width: 100%;">
+    <div style="width: 100%; background: rgba(2, 6, 23, 0.7); border: 1px solid {col_color}; border-radius: 6px; padding: 4px 6px; text-align: center;">
+        <span style="font-size: 8px; color: {col_color}; font-weight: 800; display:block; text-transform: uppercase;">🎨 COLOR SCORE RECORD</span>
+        <span style="font-size: 10px; font-weight: 900; color: {col_color};">{col_sahi} Sahi | {col_galat} Galat</span>
+    </div>
+</div>
+
+<div style="background: rgba(2, 6, 23, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; padding: 8px; margin-bottom: 8px;">
+    <div style="font-size: 8.5px; font-weight: 800; color: #fbbf24; text-transform: uppercase; margin-bottom: 2px;">🧠 CHROMATIC GOD-MODE RATIONALE (गहन उच्च-गणितीय हिंदी विश्लेषण)</div>
+    <div style="font-size: 9.5px; color: #e2e8f0; font-weight: 600; line-height: 1.3;">{rationale}</div>
 </div>
 </div>"""
 
@@ -7090,54 +7091,21 @@ def render_titan_duo_brain_17_card(res_dict, engines_dict, df_history, cache_inf
     big_pct_bar = int(round(p_big * 100))
     small_pct_bar = 100 - big_pct_bar
 
-    card_html = f"""<div style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.99), rgba(6, 182, 212, 0.15), rgba(2, 6, 23, 1.0)); border: 3.5px solid #06b6d4; border-radius: 20px; padding: 24px; box-shadow: 0 0 50px rgba(6, 182, 212, 0.4); margin-bottom: 25px; position: relative;">
-<div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid rgba(255, 255, 255, 0.15); padding-bottom: 14px; margin-bottom: 16px;">
+    card_html = f"""<div style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.99), rgba(6, 182, 212, 0.15), rgba(2, 6, 23, 1.0)); border: 2.5px solid #06b6d4; border-radius: 12px; padding: 10px; box-shadow: 0 0 25px rgba(6, 182, 212, 0.3); margin-bottom: 16px; position: relative;">
+<div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255, 255, 255, 0.15); padding-bottom: 8px; margin-bottom: 10px; flex-wrap: wrap; gap: 4px;">
     <div>
-        <div style="font-size: 22px; font-weight: 900; color: #f8fafc; letter-spacing: 0.5px; display: flex; align-items: center; gap: 10px;">
-            🌌 TITAN DUO-BRAIN 17.0 <span style="font-size: 10px; background: linear-gradient(90deg, #06b6d4, #3b82f6, #a855f7); color: #ffffff; padding: 3px 12px; border-radius: 20px; font-weight: 900; text-transform: uppercase;">AUTONOMOUS COLOR & SIZE AGI</span>
+        <div style="font-size: 14px; font-weight: 900; color: #f8fafc; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+            🌌 TITAN DUO-BRAIN 17.0 <span style="font-size: 8px; background: linear-gradient(90deg, #06b6d4, #3b82f6, #a855f7); color: #ffffff; padding: 2px 8px; border-radius: 12px; font-weight: 900; text-transform: uppercase;">DUAL AGI</span>
         </div>
-        <div style="font-size: 11px; color: #94a3b8; font-weight: 800; margin-top: 3px;">THE WORLD'S MOST ADVANCED DUAL-TARGET COGNITIVE REASONER (ISSUE #{target_issue})</div>
+        <div style="font-size: 9.5px; color: #94a3b8; font-weight: 800; margin-top: 2px;">DUAL-TARGET COGNITIVE REASONER (ISSUE #{target_issue})</div>
     </div>
-    <div style="text-align: right;">
-        <span style="background: rgba(6, 182, 212, 0.2); border: 2px solid #06b6d4; color: #67e8f9; padding: 8px 18px; border-radius: 14px; font-size: 14px; font-weight: 900; text-transform: uppercase; box-shadow: 0 0 20px rgba(6, 182, 212, 0.3);">
+    <div>
+        <span style="background: rgba(6, 182, 212, 0.2); border: 1.5px solid #06b6d4; color: #67e8f9; padding: 4px 10px; border-radius: 8px; font-size: 9.5px; font-weight: 900; text-transform: uppercase;">
             🎯 DUAL TARGET
         </span>
     </div>
 </div>
 
-<div style="display: flex; gap: 16px; margin-bottom: 18px; flex-wrap: wrap;">
-    <div style="flex: 1; background: rgba(15, 23, 42, 0.9); border: 2.5px solid {col_color}; border-radius: 14px; padding: 18px; text-align: center; box-shadow: 0 0 25px {col_bg};">
-        <div style="font-size: 11px; font-weight: 800; color: #cbd5e1; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">🎨 COLOR TARGET</div>
-        <div style="font-size: 42px; font-weight: 900; color: {col_color}; text-shadow: 0 0 25px {col_color}; margin: 4px 0;">{pred_col.upper()}</div>
-        <div style="font-size: 13px; font-weight: 800; color: #e2e8f0;">Color Confidence: <span style="color: {col_color}; font-weight:900;">{confidence_col:.1f}%</span></div>
-    </div>
-    <div style="flex: 1; background: rgba(15, 23, 42, 0.9); border: 2.5px solid {size_color}; border-radius: 14px; padding: 18px; text-align: center; box-shadow: 0 0 25px {size_bg};">
-        <div style="font-size: 11px; font-weight: 800; color: #cbd5e1; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">📏 SIZE TARGET</div>
-        <div style="font-size: 42px; font-weight: 900; color: {size_color}; text-shadow: 0 0 25px {size_color}; margin: 4px 0;">{pred_size.upper()}</div>
-        <div style="font-size: 13px; font-weight: 800; color: #e2e8f0;">Size Confidence: <span style="color: {size_color}; font-weight:900;">{confidence_size:.1f}%</span></div>
-    </div>
-</div>
-
-<div style="background: rgba(2, 6, 23, 0.85); border: 1.5px solid #06b6d4; border-radius: 12px; padding: 12px 16px; margin-bottom: 16px;">
-    <div style="font-size: 10px; color: #67e8f9; font-weight: 900; text-transform: uppercase; margin-bottom: 4px;">⚛️ DUAL QUANTUM DIRAC KET VECTOR & JOINT CONSCIOUSNESS</div>
-    <div style="font-size: 13px; font-weight: 900; color: #f8fafc;">|Ψ_Duo⟩ = {alpha_rb}|Red,Big⟩ + {alpha_rs}|Red,Small⟩ + {alpha_gb}|Green,Big⟩ + {alpha_gs}|Green,Small⟩</div>
-    <div style="font-size: 11px; color: #cbd5e1; font-weight: 700; margin-top: 3px; display:flex; gap: 15px; flex-wrap: wrap;">
-        <span>📐 Joint Curvature κ: <b>{curvature_k}</b></span>
-        <span>🌀 Lyapunov Index λ: <b>{lyapunov_lambda}</b></span>
-        <span>⚡ TD Dual Yield Vs: <b>{td_yield:+.3f}</b></span>
-    </div>
-</div>
-
-<div style="display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap;">
-    <div style="flex: 1; background: rgba(2, 6, 23, 0.8); border: 1.5px solid #f59e0b; border-radius: 10px; padding: 10px 14px; text-align: left;">
-        <div style="font-size: 10px; color: #fbbf24; font-weight: 800; text-transform: uppercase;">📜 1000-ROUND HISTORICAL JOINT MATCH</div>
-        <div style="font-size: 12px; font-weight: 900; color: #f8fafc; margin-top: 2px;">Pattern [{joint_pattern}] → {joint_matches} Matches</div>
-        <div style="font-size: 11px; color: #cbd5e1; font-weight: 700; margin-top: 1px;">Win Rates: <span style="color:#ef4444;">Red {ngram_red_prob:.1f}%</span> | <span style="color:#38bdf8;">Big {ngram_big_prob:.1f}%</span></div>
-    </div>
-    <div style="flex: 1; background: rgba(2, 6, 23, 0.8); border: 1.5px solid #06b6d4; border-radius: 10px; padding: 10px 14px; text-align: left;">
-        <div style="font-size: 10px; color: #67e8f9; font-weight: 800; text-transform: uppercase;">💾 DUAL-TARGET DISK MEMORY BANK</div>
-        <div style="font-size: 12px; font-weight: 900; color: #f8fafc; margin-top: 2px;">{memory_bank_count} Joint Signatures Stored</div>
-        <div style="font-size: 11px; color: #cbd5e1; font-weight: 700; margin-top: 1px;">File: <span style="color:#67e8f9;">titan_duo_memory_bank.json</span></div>
     </div>
 </div>
 
@@ -7475,60 +7443,60 @@ def render_sentinel_phoenix_card(target_name, prediction, confidence, rationale,
 {god_mode_banner}
 <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid rgba(255, 255, 255, 0.15); padding-bottom: 14px; margin-bottom: 16px; flex-wrap: wrap; gap: 8px;">
     <div>
-        <div style="font-size: 22px; font-weight: 900; color: #f8fafc; letter-spacing: 0.5px; display: flex; align-items: center; gap: 10px;">
-            😤 SENTINEL PHOENIX <span style="font-size: 10px; background: {banner_bg}; color: #020617; padding: 3px 12px; border-radius: 20px; font-weight: 900; text-transform: uppercase;">I DON'T LOSE</span>
+        <div style="font-size: 14px; font-weight: 900; color: #f8fafc; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+            😤 SENTINEL PHOENIX <span style="font-size: 8px; background: {banner_bg}; color: #020617; padding: 2px 8px; border-radius: 12px; font-weight: 900; text-transform: uppercase;">I DON'T LOSE</span>
         </div>
-        <div style="font-size: 11px; color: #facc15; font-weight: 800; margin-top: 3px;">"ERROR IS NOT IN MY VOCABULARY. I AM MATHEMATICALLY SUPERIOR." (ISSUE #{target_issue})</div>
+        <div style="font-size: 9.5px; color: #facc15; font-weight: 800; margin-top: 2px;">"ERROR IS NOT IN MY VOCABULARY. I AM MATHEMATICALLY SUPERIOR." (ISSUE #{target_issue})</div>
     </div>
-    <div style="text-align: right;">
-        <span style="background: rgba(245, 158, 11, 0.25); border: 2px solid #f59e0b; color: #fbbf24; padding: 8px 18px; border-radius: 14px; font-size: 14px; font-weight: 900; text-transform: uppercase;">
+    <div>
+        <span style="background: rgba(245, 158, 11, 0.25); border: 1.5px solid #f59e0b; color: #fbbf24; padding: 4px 10px; border-radius: 8px; font-size: 9.5px; font-weight: 900; text-transform: uppercase;">
             🎯 TARGET: COLOR & SIZE
         </span>
     </div>
 </div>
 
-<div style="display: flex; gap: 16px; margin-bottom: 18px; flex-wrap: wrap;">
-    <div style="flex: 1; background: rgba(15, 23, 42, 0.9); border: 2.5px solid {col_color}; border-radius: 14px; padding: 18px; text-align: center;">
-        <div style="font-size: 11px; font-weight: 800; color: #cbd5e1; text-transform: uppercase;">🎨 COLOR PREDICTION</div>
-        <div style="font-size: 42px; font-weight: 900; color: {col_color}; margin: 4px 0;">{pred_col.upper()}</div>
-        <div style="font-size: 13px; font-weight: 800; color: #e2e8f0;">Confidence: <span style="color: {col_color}; font-weight:900;">{confidence_col:.1f}%</span></div>
+<div style="display: flex; gap: 6px; margin-bottom: 8px; width: 100%;">
+    <div style="flex: 1; min-width: 0; background: rgba(15, 23, 42, 0.9); border: 1.5px solid {col_color}; border-radius: 10px; padding: 6px 3px; text-align: center;">
+        <div style="font-size: 8.5px; font-weight: 800; color: #cbd5e1; text-transform: uppercase;">🎨 COLOR PREDICTION</div>
+        <div style="font-size: 18px; font-weight: 900; color: {col_color}; margin: 1px 0;">{pred_col.upper()}</div>
+        <div style="font-size: 9px; font-weight: 800; color: #e2e8f0;">Confidence: <span style="color: {col_color}; font-weight:900;">{confidence_col:.1f}%</span></div>
     </div>
-    <div style="flex: 1; background: rgba(15, 23, 42, 0.9); border: 2.5px solid {size_color}; border-radius: 14px; padding: 18px; text-align: center;">
-        <div style="font-size: 11px; font-weight: 800; color: #cbd5e1; text-transform: uppercase;">📏 SIZE PREDICTION</div>
-        <div style="font-size: 42px; font-weight: 900; color: {size_color}; margin: 4px 0;">{pred_size.upper()}</div>
-        <div style="font-size: 13px; font-weight: 800; color: #e2e8f0;">Confidence: <span style="color: {size_color}; font-weight:900;">{confidence_size:.1f}%</span></div>
-    </div>
-</div>
-
-<div style="background: rgba(2, 6, 23, 0.85); border: 1.5px solid #f59e0b; border-radius: 12px; padding: 12px 16px; margin-bottom: 16px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
-    <div>
-        <div style="font-size: 10px; color: #ef4444; font-weight: 900; text-transform: uppercase;">❌ CONSECUTIVE ERRORS</div>
-        <div style="font-size: 16px; font-weight: 900; color: #f8fafc;">{consecutive_errors} / 4</div>
-    </div>
-    <div>
-        <div style="font-size: 10px; color: #fbbf24; font-weight: 900; text-transform: uppercase;">🤖 ACTIVE MODE</div>
-        <div style="font-size: 14px; font-weight: 900; color: #fbbf24;">{mode_name}</div>
-    </div>
-    <div>
-        <div style="font-size: 10px; color: #86efac; font-weight: 900; text-transform: uppercase;">💰 KELLY STAKE</div>
-        <div style="font-size: 14px; font-weight: 900; color: #86efac;">{bet_size_pct}% Bankroll</div>
+    <div style="flex: 1; min-width: 0; background: rgba(15, 23, 42, 0.9); border: 1.5px solid {size_color}; border-radius: 10px; padding: 6px 3px; text-align: center;">
+        <div style="font-size: 8.5px; font-weight: 800; color: #cbd5e1; text-transform: uppercase;">📏 SIZE PREDICTION</div>
+        <div style="font-size: 18px; font-weight: 900; color: {size_color}; margin: 1px 0;">{pred_size.upper()}</div>
+        <div style="font-size: 9px; font-weight: 800; color: #e2e8f0;">Confidence: <span style="color: {size_color}; font-weight:900;">{confidence_size:.1f}%</span></div>
     </div>
 </div>
 
-<div style="margin-top: 10px; margin-bottom: 16px; display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;">
-    <div style="background: rgba(2, 6, 23, 0.7); border: 1.5px solid #22c55e; border-radius: 8px; padding: 8px 16px; min-width: 150px; text-align: center;">
-        <span style="font-size: 10px; color: #86efac; font-weight: 800; display:block; text-transform: uppercase;">🎨 Color Score Record</span>
-        <span style="font-size: 13px; font-weight: 900; color: #86efac;">{col_sahi} Sahi | {col_galat} Galat</span>
+<div style="background: rgba(2, 6, 23, 0.85); border: 1px solid #f59e0b; border-radius: 8px; padding: 6px 8px; margin-bottom: 8px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:4px;">
+    <div>
+        <div style="font-size: 8px; color: #ef4444; font-weight: 900; text-transform: uppercase;">❌ ERRORS</div>
+        <div style="font-size: 11px; font-weight: 900; color: #f8fafc;">{consecutive_errors} / 4</div>
     </div>
-    <div style="background: rgba(2, 6, 23, 0.7); border: 1.5px solid #38bdf8; border-radius: 8px; padding: 8px 16px; min-width: 150px; text-align: center;">
-        <span style="font-size: 10px; color: #7dd3fc; font-weight: 800; display:block; text-transform: uppercase;">📏 Size Score Record</span>
-        <span style="font-size: 13px; font-weight: 900; color: #7dd3fc;">{size_sahi} Sahi | {size_galat} Galat</span>
+    <div>
+        <div style="font-size: 8px; color: #fbbf24; font-weight: 900; text-transform: uppercase;">🤖 MODE</div>
+        <div style="font-size: 10px; font-weight: 900; color: #fbbf24;">{mode_name}</div>
+    </div>
+    <div>
+        <div style="font-size: 8px; color: #86efac; font-weight: 900; text-transform: uppercase;">💰 KELLY</div>
+        <div style="font-size: 10px; font-weight: 900; color: #86efac;">{bet_size_pct}%</div>
     </div>
 </div>
 
-<div style="background: rgba(2, 6, 23, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; padding: 14px; margin-bottom: 15px;">
-    <div style="font-size: 11px; font-weight: 800; color: #fbbf24; text-transform: uppercase; margin-bottom: 4px;">😤 ARROGANT RATIONALE</div>
-    <div style="font-size: 12px; color: #e2e8f0; font-weight: 600; line-height: 1.5;">{rationale}</div>
+<div style="margin-top: 4px; margin-bottom: 8px; display: flex; justify-content: space-between; gap: 4px; width: 100%;">
+    <div style="flex: 1; min-width: 0; background: rgba(2, 6, 23, 0.7); border: 1px solid #22c55e; border-radius: 6px; padding: 3px 2px; text-align: center;">
+        <span style="font-size: 7.5px; color: #86efac; font-weight: 800; display:block; text-transform: uppercase;">🎨 COLOR SCORE</span>
+        <span style="font-size: 9px; font-weight: 900; color: #86efac;">{col_sahi} Sahi | {col_galat} Galat</span>
+    </div>
+    <div style="flex: 1; min-width: 0; background: rgba(2, 6, 23, 0.7); border: 1px solid #38bdf8; border-radius: 6px; padding: 3px 2px; text-align: center;">
+        <span style="font-size: 7.5px; color: #7dd3fc; font-weight: 800; display:block; text-transform: uppercase;">📏 SIZE SCORE</span>
+        <span style="font-size: 9px; font-weight: 900; color: #7dd3fc;">{size_sahi} Sahi | {size_galat} Galat</span>
+    </div>
+</div>
+
+<div style="background: rgba(2, 6, 23, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; padding: 8px; margin-bottom: 8px;">
+    <div style="font-size: 8.5px; font-weight: 800; color: #fbbf24; text-transform: uppercase; margin-bottom: 2px;">😤 ARROGANT RATIONALE</div>
+    <div style="font-size: 9.5px; color: #e2e8f0; font-weight: 600; line-height: 1.3;">{rationale}</div>
 </div>
 </div>
 """
@@ -7866,37 +7834,21 @@ def render_nexus_omnisapient_card(res_dict, engines_dict, df_history, cache_info
     100% {{ box-shadow: 0 0 25px rgba(168, 85, 247, 0.5), 0 0 25px rgba(6, 182, 212, 0.3); }}
 }}
 </style>
-<div style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.99), rgba(168, 85, 247, 0.18), rgba(6, 182, 212, 0.18), rgba(2, 6, 23, 1.0)); border: 3.5px solid #a855f7; border-radius: 20px; padding: 24px; animation: pulse_border 3s infinite ease-in-out; margin-bottom: 25px; position: relative;">
-<div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid rgba(255, 255, 255, 0.15); padding-bottom: 14px; margin-bottom: 16px; flex-wrap: wrap; gap: 8px;">
+<div style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.99), rgba(168, 85, 247, 0.18), rgba(6, 182, 212, 0.18), rgba(2, 6, 23, 1.0)); border: 2px solid #a855f7; border-radius: 16px; padding: 16px; animation: pulse_border 3s infinite ease-in-out; margin-bottom: 20px;">
+<div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 8px; margin-bottom: 12px; flex-wrap: wrap; gap: 6px;">
     <div>
-        <div style="font-size: 22px; font-weight: 900; color: #f8fafc; letter-spacing: 0.5px; display: flex; align-items: center; gap: 10px;">
-            🧠 NEXUS OMNI-SAPIENT <span style="font-size: 10px; background: linear-gradient(90deg, #a855f7, #06b6d4); color: #ffffff; padding: 3px 12px; border-radius: 20px; font-weight: 900; text-transform: uppercase;">ALL-IN-ONE LOCAL AGENT</span>
+        <div style="font-size: 14px; font-weight: 900; color: #f8fafc; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+            🧠 NEXUS OMNISAPIENT 15.0 <span style="font-size: 8px; background: rgba(168, 85, 247, 0.25); color: #c084fc; padding: 2px 8px; border-radius: 12px; font-weight: 900; text-transform: uppercase;">AGI</span>
         </div>
-        <div style="font-size: 11px; color: #94a3b8; font-weight: 800; margin-top: 3px; display:flex; gap:6px; flex-wrap:wrap;">
-            <span style="background:rgba(168,85,247,0.2); color:#c084fc; padding:2px 8px; border-radius:8px; border:1px solid #a855f7;">LLM</span>
-            <span style="background:rgba(6,182,212,0.2); color:#67e8f9; padding:2px 8px; border-radius:8px; border:1px solid #06b6d4;">ReAct</span>
-            <span style="background:rgba(34,197,94,0.2); color:#86efac; padding:2px 8px; border-radius:8px; border:1px solid #22c55e;">Memory</span>
-            <span style="background:rgba(245,158,11,0.2); color:#fde047; padding:2px 8px; border-radius:8px; border:1px solid #f59e0b;">Tools</span>
-            <span style="background:rgba(239,68,68,0.2); color:#fca5a5; padding:2px 8px; border-radius:8px; border:1px solid #ef4444;">Safety</span>
-        </div>
+        <div style="font-size: 9.5px; color: #94a3b8; font-weight: 800; margin-top: 2px;">UNIVERSAL COGNITIVE REASONER & QUANTUM MARKOV AGENT (ISSUE #{target_issue})</div>
     </div>
-    <div style="text-align: right;">
-        <span style="background: rgba(168, 85, 247, 0.25); border: 2px solid #06b6d4; color: #67e8f9; padding: 8px 18px; border-radius: 14px; font-size: 14px; font-weight: 900; text-transform: uppercase;">
+    <div>
+        <span style="background: rgba(168, 85, 247, 0.25); border: 1.5px solid #06b6d4; color: #67e8f9; padding: 4px 10px; border-radius: 8px; font-size: 9.5px; font-weight: 900; text-transform: uppercase;">
             🎯 TARGET: COLOR & SIZE
         </span>
     </div>
 </div>
 
-<div style="display: flex; gap: 16px; margin-bottom: 18px; flex-wrap: wrap;">
-    <div style="flex: 1; background: rgba(15, 23, 42, 0.9); border: 2.5px solid {col_color}; border-radius: 14px; padding: 18px; text-align: center; box-shadow: 0 0 25px {col_bg};">
-        <div style="font-size: 11px; font-weight: 800; color: #cbd5e1; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">🎨 COLOR PREDICTION</div>
-        <div style="font-size: 42px; font-weight: 900; color: {col_color}; text-shadow: 0 0 25px {col_color}; margin: 4px 0;">{pred_col.upper()}</div>
-        <div style="font-size: 13px; font-weight: 800; color: #e2e8f0;">Confidence: <span style="color: {col_color}; font-weight:900;">{confidence_col:.1f}%</span></div>
-    </div>
-    <div style="flex: 1; background: rgba(15, 23, 42, 0.9); border: 2.5px solid {size_color}; border-radius: 14px; padding: 18px; text-align: center; box-shadow: 0 0 25px {size_bg};">
-        <div style="font-size: 11px; font-weight: 800; color: #cbd5e1; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">📏 SIZE PREDICTION</div>
-        <div style="font-size: 42px; font-weight: 900; color: {size_color}; text-shadow: 0 0 25px {size_color}; margin: 4px 0;">{pred_size.upper()}</div>
-        <div style="font-size: 13px; font-weight: 800; color: #e2e8f0;">Confidence: <span style="color: {size_color}; font-weight:900;">{confidence_size:.1f}%</span></div>
     </div>
 </div>
 
@@ -8222,46 +8174,46 @@ def render_nexus_atlas_card(target_name, color_pred, size_pred, color_conf, size
 </div>
 </div>
 
-<div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-bottom: 20px;">
-<div style="background: rgba(2, 6, 23, 0.85); border: 2.5px solid {col_color}; border-radius: 16px; padding: 18px; min-width: 220px; flex: 1; text-align: center; box-shadow: 0 0 25px {col_bg};">
-<div style="font-size: 11px; color: #94a3b8; font-weight: 800; text-transform: uppercase; margin-bottom: 6px;">🎨 COLOR PREDICTION</div>
-<div style="display: inline-block; width: 70px; height: 70px; border-radius: 50%; background: {col_bg}; border: 3px solid {col_color}; margin: 8px auto; line-height: 64px; font-size: 26px; font-weight: 900; color: {col_color}; animation: orb_pulse 2s infinite ease-in-out; box-shadow: 0 0 30px {col_color};">
+<div style="display: flex; justify-content: center; gap: 6px; margin-bottom: 10px; width: 100%;">
+<div style="background: rgba(2, 6, 23, 0.85); border: 1.5px solid {col_color}; border-radius: 10px; padding: 8px 4px; min-width: 0; flex: 1; text-align: center; box-shadow: 0 0 15px {col_bg};">
+<div style="font-size: 8.5px; color: #94a3b8; font-weight: 800; text-transform: uppercase;">🎨 COLOR PREDICTION</div>
+<div style="display: inline-block; width: 44px; height: 44px; border-radius: 50%; background: {col_bg}; border: 2px solid {col_color}; margin: 4px auto; line-height: 40px; font-size: 18px; font-weight: 900; color: {col_color}; animation: orb_pulse 2s infinite ease-in-out; box-shadow: 0 0 15px {col_color};">
 {color_pred[0]}
 </div>
-<div style="font-size: 24px; font-weight: 900; color: {col_color}; text-shadow: 0 0 14px {col_color};">{color_pred}</div>
-<div style="font-size: 13px; color: #fbbf24; font-weight: 800; margin-top: 4px;">Confidence: {round(float(color_conf), 1)}%</div>
-<div style="font-size: 11px; color: #cbd5e1; margin-top: 2px;">P(Red): {round(p_red*100, 1)}% | P(Green): {round(p_green*100, 1)}%</div>
-<div style="font-size: 11px; color: #86efac; font-weight: 800; margin-top: 4px;">Stats: {col_sahi} Sahi | {col_galat} Galat</div>
+<div style="font-size: 18px; font-weight: 900; color: {col_color}; text-shadow: 0 0 10px {col_color};">{color_pred}</div>
+<div style="font-size: 9px; color: #fbbf24; font-weight: 800; margin-top: 2px;">Confidence: {round(float(color_conf), 1)}%</div>
+<div style="font-size: 8px; color: #cbd5e1;">P(R): {round(p_red*100, 1)}% | P(G): {round(p_green*100, 1)}%</div>
+<div style="font-size: 8.5px; color: #86efac; font-weight: 800; margin-top: 2px;">Stats: {col_sahi} Sahi | {col_galat} Galat</div>
 </div>
 
-<div style="background: rgba(2, 6, 23, 0.85); border: 2.5px solid {size_color}; border-radius: 16px; padding: 18px; min-width: 220px; flex: 1; text-align: center; box-shadow: 0 0 25px {size_bg};">
-<div style="font-size: 11px; color: #94a3b8; font-weight: 800; text-transform: uppercase; margin-bottom: 6px;">📏 SIZE PREDICTION</div>
-<div style="display: inline-block; width: 70px; height: 70px; border-radius: 50%; background: {size_bg}; border: 3px solid {size_color}; margin: 8px auto; line-height: 64px; font-size: 26px; font-weight: 900; color: {size_color}; animation: orb_pulse 2s infinite ease-in-out; box-shadow: 0 0 30px {size_color};">
+<div style="background: rgba(2, 6, 23, 0.85); border: 1.5px solid {size_color}; border-radius: 10px; padding: 8px 4px; min-width: 0; flex: 1; text-align: center; box-shadow: 0 0 15px {size_bg};">
+<div style="font-size: 8.5px; color: #94a3b8; font-weight: 800; text-transform: uppercase;">📏 SIZE PREDICTION</div>
+<div style="display: inline-block; width: 44px; height: 44px; border-radius: 50%; background: {size_bg}; border: 2px solid {size_color}; margin: 4px auto; line-height: 40px; font-size: 18px; font-weight: 900; color: {size_color}; animation: orb_pulse 2s infinite ease-in-out; box-shadow: 0 0 15px {size_color};">
 {size_pred[0]}
 </div>
-<div style="font-size: 24px; font-weight: 900; color: {size_color}; text-shadow: 0 0 14px {size_color};">{size_pred}</div>
-<div style="font-size: 13px; color: #fbbf24; font-weight: 800; margin-top: 4px;">Confidence: {round(float(size_conf), 1)}%</div>
-<div style="font-size: 11px; color: #cbd5e1; margin-top: 2px;">P(Big): {round(p_big*100, 1)}% | P(Small): {round(p_small*100, 1)}%</div>
-<div style="font-size: 11px; color: #d8b4fe; font-weight: 800; margin-top: 4px;">Stats: {size_sahi} Sahi | {size_galat} Galat</div>
+<div style="font-size: 18px; font-weight: 900; color: {size_color}; text-shadow: 0 0 10px {size_color};">{size_pred}</div>
+<div style="font-size: 9px; color: #fbbf24; font-weight: 800; margin-top: 2px;">Confidence: {round(float(size_conf), 1)}%</div>
+<div style="font-size: 8px; color: #cbd5e1;">P(B): {round(p_big*100, 1)}% | P(S): {round(p_small*100, 1)}%</div>
+<div style="font-size: 8.5px; color: #d8b4fe; font-weight: 800; margin-top: 2px;">Stats: {size_sahi} Sahi | {size_galat} Galat</div>
 </div>
 </div>
 
-<div style="background: rgba(2, 6, 23, 0.9); border: 1.5px solid rgba(0, 242, 254, 0.3); border-radius: 14px; padding: 16px; margin-bottom: 16px;">
-<div style="font-size: 13px; font-weight: 900; color: #00f2fe; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px;">
+<div style="background: rgba(2, 6, 23, 0.9); border: 1px solid rgba(0, 242, 254, 0.3); border-radius: 8px; padding: 8px; margin-bottom: 8px;">
+<div style="font-size: 10px; font-weight: 900; color: #00f2fe; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">
 🛸 ATLAS COMMAND CENTER (LIVE DIAGNOSTICS)
 </div>
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; font-size: 11px; color: #e2e8f0;">
-<div style="background: rgba(15, 23, 42, 0.8); padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(0, 242, 254, 0.2);">
-<strong style="color: #67e8f9;">👑 Top Contributor:</strong> {list(top_contrib.keys())[0] if top_contrib else 'E1'} ({list(top_contrib.values())[0] if top_contrib else '1.0'}x UCB)
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 6px; font-size: 9px; color: #e2e8f0;">
+<div style="background: rgba(15, 23, 42, 0.8); padding: 4px 6px; border-radius: 6px; border: 1px solid rgba(0, 242, 254, 0.2);">
+<strong style="color: #67e8f9;">👑 Top:</strong> {list(top_contrib.keys())[0] if top_contrib else 'E1'} ({list(top_contrib.values())[0] if top_contrib else '1.0'}x UCB)
 </div>
-<div style="background: rgba(15, 23, 42, 0.8); padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(168, 85, 247, 0.2);">
-<strong style="color: #c084fc;">⚖️ Nash Regret Trend:</strong> Regret Minimization Converged (0.012 Error)
+<div style="background: rgba(15, 23, 42, 0.8); padding: 4px 6px; border-radius: 6px; border: 1px solid rgba(168, 85, 247, 0.2);">
+<strong style="color: #c084fc;">⚖️ Nash Regret:</strong> Converged (0.012)
 </div>
-<div style="background: rgba(15, 23, 42, 0.8); padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(245, 158, 11, 0.2);">
-<strong style="color: #fde047;">⚔️ Debate Verdict:</strong> {debate_verdict[:45]}...
+<div style="background: rgba(15, 23, 42, 0.8); padding: 4px 6px; border-radius: 6px; border: 1px solid rgba(245, 158, 11, 0.2);">
+<strong style="color: #fde047;">⚔️ Debate:</strong> {debate_verdict[:35]}...
 </div>
-<div style="background: rgba(15, 23, 42, 0.8); padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(34, 197, 94, 0.2);">
-<strong style="color: #86efac;">🧬 Evolved Agents:</strong> {evolved_count} Active Evolved Symbolic Rules
+<div style="background: rgba(15, 23, 42, 0.8); padding: 4px 6px; border-radius: 6px; border: 1px solid rgba(34, 197, 94, 0.2);">
+<strong style="color: #86efac;">🧬 Evolved:</strong> {evolved_count} Rules
 </div>
 </div>
 </div>

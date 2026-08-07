@@ -441,12 +441,12 @@ if not st.session_state.get("import_only") and not st.session_state.get("page_co
         }
 
         /* ============================================================ */
-        /* 📱 ULTRA-COMPACT MOBILE OPTIMIZATION (Smartphones & Tablets) */
+        /* 📱 ALL-ENFORCING ULTRA-COMPACT MOBILE ENGINE SYSTEM         */
         /* ============================================================ */
         @media (max-width: 768px) {
             html, body, [class*="css"], div[data-testid="stMarkdownContainer"] p, div[data-testid="stMarkdownContainer"] span {
-                font-size: 10.5px !important;
-                line-height: 1.2 !important;
+                font-size: 10px !important;
+                line-height: 1.25 !important;
             }
             header[data-testid="stHeader"] {
                 display: none !important;
@@ -455,6 +455,29 @@ if not st.session_state.get("import_only") and not st.session_state.get("page_co
                 padding: 0.15rem 0.2rem !important;
                 max-width: 100% !important;
             }
+
+            /* Override all inline large font-sizes across the ENTIRE codebase on mobile */
+            [style*="font-size: 20px"], [style*="font-size: 21px"], [style*="font-size: 22px"], 
+            [style*="font-size: 24px"], [style*="font-size: 26px"], [style*="font-size: 28px"] {
+                font-size: 14px !important;
+            }
+            [style*="font-size: 30px"], [style*="font-size: 32px"], [style*="font-size: 34px"], 
+            [style*="font-size: 38px"], [style*="font-size: 42px"], [style*="font-size: 52px"] {
+                font-size: 18px !important;
+            }
+
+            /* Override all inline large paddings on mobile */
+            [style*="padding: 14px"], [style*="padding: 16px"], [style*="padding: 18px"], 
+            [style*="padding: 20px"], [style*="padding: 22px"], [style*="padding: 24px"] {
+                padding: 6px 8px !important;
+            }
+
+            /* Override all inline large margins on mobile */
+            [style*="margin-bottom: 20px"], [style*="margin-bottom: 24px"], [style*="margin-bottom: 25px"] {
+                margin-bottom: 8px !important;
+            }
+
+            /* Header Card */
             .header-card {
                 padding: 6px 8px !important;
                 border-radius: 6px !important;
@@ -496,6 +519,22 @@ if not st.session_state.get("import_only") and not st.session_state.get("page_co
                 width: 100% !important;
             }
 
+            /* Expanders, Tabs & Controls Mobile Overrides */
+            div[data-testid="stExpander"] {
+                border-radius: 6px !important;
+                margin-bottom: 4px !important;
+            }
+            div[data-testid="stExpander"] details summary {
+                font-size: 10px !important;
+                font-weight: 800 !important;
+                padding: 4px 6px !important;
+            }
+            button[data-baseweb="tab"] {
+                padding: 3px 6px !important;
+                font-size: 9.5px !important;
+                min-height: 28px !important;
+            }
+
             /* Engine Cards & Metrics on Mobile */
             .engine-card {
                 padding: 3px 2px !important;
@@ -503,61 +542,62 @@ if not st.session_state.get("import_only") and not st.session_state.get("page_co
                 border-radius: 4px !important;
             }
             .engine-name {
-                font-size: 8.5px !important;
+                font-size: 8px !important;
             }
             .engine-pred {
-                font-size: 10.5px !important;
+                font-size: 10px !important;
                 margin: 1px 0 !important;
             }
             .engine-pts {
-                font-size: 7.5px !important;
+                font-size: 7px !important;
             }
             .metric-box {
                 padding: 3px 2px !important;
                 border-radius: 5px !important;
             }
             .metric-val {
-                font-size: 11.5px !important;
+                font-size: 11px !important;
             }
             .metric-label {
-                font-size: 7.5px !important;
+                font-size: 7px !important;
             }
             .decision-banner {
-                padding: 6px 8px !important;
-                font-size: 10.5px !important;
+                padding: 5px 6px !important;
+                font-size: 10px !important;
                 margin-bottom: 5px !important;
                 border-radius: 6px !important;
             }
             .hindi-panel {
-                padding: 6px 8px !important;
-                font-size: 9.5px !important;
+                padding: 5px 6px !important;
+                font-size: 9px !important;
                 border-radius: 6px !important;
             }
             .hindi-header {
-                font-size: 11px !important;
+                font-size: 10.5px !important;
                 padding-bottom: 2px !important;
-                margin-bottom: 5px !important;
+                margin-bottom: 4px !important;
             }
-            /* Compact Mobile Buttons */
+            /* Compact Mobile Buttons & Inputs */
             .stButton button {
                 width: 100% !important;
-                min-height: 34px !important;
-                font-size: 11px !important;
+                min-height: 32px !important;
+                font-size: 10.5px !important;
                 font-weight: 700 !important;
                 padding: 2px 4px !important;
                 border-radius: 5px !important;
             }
             /* Compact DataFrames */
             .stDataFrame, div[data-testid="stTable"] {
-                font-size: 8.5px !important;
+                font-size: 8px !important;
                 overflow-x: auto !important;
             }
             [data-testid="stDataFrameResizable"] {
-                max-height: 250px !important;
+                max-height: 220px !important;
             }
         }
     </style>
     """, unsafe_allow_html=True)
+
 
 
 

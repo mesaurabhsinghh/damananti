@@ -9694,13 +9694,13 @@ def generate_last_8_boxes_html(agent_key, current_issue):
         size_border = "#22c55e" if size_ok else "#ef4444"
         size_color = "#86efac" if size_ok else "#fca5a5"
         
-        num_badges.append(f'<span style="background: {num_bg}; border: 1px solid {num_border}; color: {num_color}; padding: 2px 6px; border-radius: 5px; font-size: 11px; font-weight: 800; display: inline-block;">{issue_str} {"&#10003;" if num_ok else "&#10007;"}</span>')
-        col_badges.append(f'<span style="background: {col_bg}; border: 1px solid {col_border}; color: {col_color}; padding: 2px 6px; border-radius: 5px; font-size: 11px; font-weight: 800; display: inline-block;">{issue_str} {"&#10003;" if col_ok else "&#10007;"}</span>')
-        size_badges.append(f'<span style="background: {size_bg}; border: 1px solid {size_border}; color: {size_color}; padding: 2px 6px; border-radius: 5px; font-size: 11px; font-weight: 800; display: inline-block;">{issue_str} {"&#10003;" if size_ok else "&#10007;"}</span>')
+        num_badges.append(f'<span style="background: {num_bg}; border: 1px solid {num_border}; color: {num_color}; padding: 1px 4px; border-radius: 4px; font-size: 8.5px; font-weight: 800; display: inline-block;">{issue_str} {"&#10003;" if num_ok else "&#10007;"}</span>')
+        col_badges.append(f'<span style="background: {col_bg}; border: 1px solid {col_border}; color: {col_color}; padding: 1px 4px; border-radius: 4px; font-size: 8.5px; font-weight: 800; display: inline-block;">{issue_str} {"&#10003;" if col_ok else "&#10007;"}</span>')
+        size_badges.append(f'<span style="background: {size_bg}; border: 1px solid {size_border}; color: {size_color}; padding: 1px 4px; border-radius: 4px; font-size: 8.5px; font-weight: 800; display: inline-block;">{issue_str} {"&#10003;" if size_ok else "&#10007;"}</span>')
         
-    num_row = "".join(num_badges) if num_badges else '<span style="color:#94a3b8; font-size:11px;">No Data</span>'
-    col_row = "".join(col_badges) if col_badges else '<span style="color:#94a3b8; font-size:11px;">No Data</span>'
-    size_row = "".join(size_badges) if size_badges else '<span style="color:#94a3b8; font-size:11px;">No Data</span>'
+    num_row = "".join(num_badges) if num_badges else '<span style="color:#94a3b8; font-size:9px;">No Data</span>'
+    col_row = "".join(col_badges) if col_badges else '<span style="color:#94a3b8; font-size:9px;">No Data</span>'
+    size_row = "".join(size_badges) if size_badges else '<span style="color:#94a3b8; font-size:9px;">No Data</span>'
 
     # Build full historical rows for up to 1000 stored rounds inside the small inner expander box
     history_items_html = []
@@ -9720,38 +9720,38 @@ def generate_last_8_boxes_html(agent_key, current_issue):
         col_badge_h = f'<span style="color:{"#22c55e" if h_col_ok else "#ef4444"}; font-weight:800;">{h_p_col} vs {h_a_col} {"✓" if h_col_ok else "✗"}</span>'
         sz_badge_h = f'<span style="color:{"#22c55e" if h_sz_ok else "#ef4444"}; font-weight:800;">{h_p_sz} vs {h_a_sz} {"✓" if h_sz_ok else "✗"}</span>'
         
-        history_items_html.append(f'<div style="background: rgba(2, 6, 23, 0.7); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 4px 8px; font-size: 10px; display: flex; justify-content: space-between; align-items: center; gap: 8px;"><span style="color: #fbbf24; font-weight: 800;">#{h_iss}</span> {num_badge_h} {col_badge_h} {sz_badge_h}</div>')
+        history_items_html.append(f'<div style="background: rgba(2, 6, 23, 0.7); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; padding: 2px 6px; font-size: 8.5px; display: flex; justify-content: space-between; align-items: center; gap: 4px;"><span style="color: #fbbf24; font-weight: 800;">#{h_iss}</span> {num_badge_h} {col_badge_h} {sz_badge_h}</div>')
         
-    full_history_scrollable = "".join(history_items_html) if history_items_html else '<span style="color:#94a3b8; font-size:11px;">No History Stored</span>'
+    full_history_scrollable = "".join(history_items_html) if history_items_html else '<span style="color:#94a3b8; font-size:9px;">No History Stored</span>'
 
-    return f"""<div style="margin-top: 14px; background: rgba(15, 23, 42, 0.85); border: 1.5px solid rgba(245, 158, 11, 0.4); border-radius: 10px; padding: 12px; text-align: left;">
-<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px;">
-<span style="font-size: 12px; font-weight: 800; color: #fbbf24;">📊 LAST 8 ISSUES PERFORMANCE TRACKER (pichle 8 issue ka record)</span>
+    return f"""<div style="margin-top: 6px; background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(245, 158, 11, 0.4); border-radius: 8px; padding: 6px 8px; text-align: left;">
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; flex-wrap: wrap; gap: 4px;">
+<span style="font-size: 10px; font-weight: 900; color: #fbbf24;">📊 LAST 8 ISSUES PERFORMANCE TRACKER (pichle 8 issue ka record)</span>
 <details style="cursor: pointer;">
-<summary style="font-size: 10px; font-weight: 800; background: rgba(245, 158, 11, 0.2); border: 1px solid #f59e0b; color: #facc15; padding: 3px 10px; border-radius: 12px; outline: none; user-select: none; display: inline-block;">
-📜 VIEW ALL STORED HISTORY ({total_stored} Rounds Stored) 🔽
+<summary style="font-size: 8.5px; font-weight: 800; background: rgba(245, 158, 11, 0.2); border: 1px solid #f59e0b; color: #facc15; padding: 2px 6px; border-radius: 8px; outline: none; user-select: none; display: inline-block;">
+📜 ALL HISTORY ({total_stored}) 🔽
 </summary>
-<div style="margin-top: 8px; max-height: 220px; overflow-y: auto; background: rgba(2, 6, 23, 0.9); border: 1px solid #f59e0b; border-radius: 8px; padding: 8px; display: flex; flex-direction: column; gap: 4px;">
-<div style="font-size: 11px; font-weight: 800; color: #67e8f9; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 4px; margin-bottom: 4px;">
-📦 Complete History Storage (Up to 1000 Rounds Capacity):
+<div style="margin-top: 4px; max-height: 180px; overflow-y: auto; background: rgba(2, 6, 23, 0.9); border: 1px solid #f59e0b; border-radius: 6px; padding: 4px; display: flex; flex-direction: column; gap: 3px;">
+<div style="font-size: 9px; font-weight: 800; color: #67e8f9; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 2px; margin-bottom: 2px;">
+📦 Complete History Storage (Up to 1000 Rounds):
 </div>
 {full_history_scrollable}
 </div>
 </details>
 </div>
 
-<div style="display: flex; flex-direction: column; gap: 8px;">
-<div style="background: rgba(2, 6, 23, 0.6); border: 1px solid #f59e0b; border-radius: 8px; padding: 6px 10px; text-align: left;">
-<span style="font-size: 11px; color: #fbbf24; font-weight: 800; margin-right: 8px; display: inline-block; min-width: 130px;">📌 NUMBER (अंक):</span>
-<div style="display: inline-flex; gap: 5px; flex-wrap: wrap; align-items: center;">{num_row}</div>
+<div style="display: flex; flex-direction: column; gap: 4px;">
+<div style="background: rgba(2, 6, 23, 0.6); border: 1px solid #f59e0b; border-radius: 6px; padding: 3px 6px; text-align: left; display: flex; align-items: center; flex-wrap: wrap; gap: 3px;">
+<span style="font-size: 8.5px; color: #fbbf24; font-weight: 800; min-width: 75px; flex-shrink: 0;">📌 NUMBER:</span>
+<div style="display: inline-flex; gap: 3px; flex-wrap: wrap; align-items: center;">{num_row}</div>
 </div>
-<div style="background: rgba(2, 6, 23, 0.6); border: 1px solid #22c55e; border-radius: 8px; padding: 6px 10px; text-align: left;">
-<span style="font-size: 11px; color: #86efac; font-weight: 800; margin-right: 8px; display: inline-block; min-width: 130px;">🎨 COLOR (रंग):</span>
-<div style="display: inline-flex; gap: 5px; flex-wrap: wrap; align-items: center;">{col_row}</div>
+<div style="background: rgba(2, 6, 23, 0.6); border: 1px solid #22c55e; border-radius: 6px; padding: 3px 6px; text-align: left; display: flex; align-items: center; flex-wrap: wrap; gap: 3px;">
+<span style="font-size: 8.5px; color: #86efac; font-weight: 800; min-width: 75px; flex-shrink: 0;">🎨 COLOR:</span>
+<div style="display: inline-flex; gap: 3px; flex-wrap: wrap; align-items: center;">{col_row}</div>
 </div>
-<div style="background: rgba(2, 6, 23, 0.6); border: 1px solid #a855f7; border-radius: 8px; padding: 6px 10px; text-align: left;">
-<span style="font-size: 11px; color: #c084fc; font-weight: 800; margin-right: 8px; display: inline-block; min-width: 130px;">📏 BIG / SMALL (आकार):</span>
-<div style="display: inline-flex; gap: 5px; flex-wrap: wrap; align-items: center;">{size_row}</div>
+<div style="background: rgba(2, 6, 23, 0.6); border: 1px solid #a855f7; border-radius: 6px; padding: 3px 6px; text-align: left; display: flex; align-items: center; flex-wrap: wrap; gap: 3px;">
+<span style="font-size: 8.5px; color: #c084fc; font-weight: 800; min-width: 75px; flex-shrink: 0;">📏 SIZE:</span>
+<div style="display: inline-flex; gap: 3px; flex-wrap: wrap; align-items: center;">{size_row}</div>
 </div>
 </div>
 </div>"""
@@ -10003,116 +10003,116 @@ render_nexus_atlas_card(
 st.markdown(generate_last_8_boxes_html('nexus_atlas', latest_issue), unsafe_allow_html=True)
 
 st.markdown(f"""
-<div style="background: linear-gradient(135deg, #1e1b4b 0%, #311b92 50%, #0f172a 100%); border: 3.5px solid #8b5cf6; border-radius: 16px; padding: 22px; text-align: center; margin-bottom: 20px; box-shadow: 0 0 35px rgba(139, 92, 246, 0.6);">
-    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+<div style="background: linear-gradient(135deg, #1e1b4b 0%, #311b92 50%, #0f172a 100%); border: 2.5px solid #8b5cf6; border-radius: 12px; padding: 10px; text-align: center; margin-bottom: 16px; box-shadow: 0 0 25px rgba(139, 92, 246, 0.4);">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px;">
         <div style="text-align: left;">
-            <span style="font-size: 22px; font-weight: 900; color: #c4b5fd; text-shadow: 0 0 14px rgba(196, 181, 253, 0.9);">
-                &#127942; TOP ENGINE RANK #1: {top_rank_1_key} ({top_rank_1_name})
+            <span style="font-size: 14px; font-weight: 900; color: #c4b5fd; text-shadow: 0 0 10px rgba(196, 181, 253, 0.9);">
+                &#127942; RANK #1: {top_rank_1_key} ({top_rank_1_name})
             </span>
-            <div style="font-size: 12px; color: #ddd6fe; margin-top: 2px;">
-                59 इंजनों में से सर्वोच्च UCB स्कोर (UCB Score: {round(float(top_rank_1_ucb), 2)}) प्राप्त करने वाला Rank #1 सर्वश्रेष्ठ इंजन
+            <div style="font-size: 9.5px; color: #ddd6fe; margin-top: 1px;">
+                59 इंजनों में सर्वश्रेष्ठ UCB (Score: {round(float(top_rank_1_ucb), 2)})
             </div>
         </div>
-        <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
-            <span style="background: rgba(15, 23, 42, 0.85); border: 1.5px solid #8b5cf6; border-radius: 8px; padding: 4px 12px; font-size: 10px; font-weight: 800; color: #a7f3d0; display: inline-flex; align-items: center; gap: 6px;">
-                &#127919; TARGET ISSUE: <span style="color: #facc15; font-size: 12px; font-weight: 900;">#{target_issue}</span>
-                <span style="background: #10b981; color: #020617; font-size: 8px; font-weight: 900; padding: 2px 6px; border-radius: 10px;">LIVE SYNC</span>
+        <div style="display: flex; gap: 4px; align-items: center; flex-wrap: wrap;">
+            <span style="background: rgba(15, 23, 42, 0.85); border: 1px solid #8b5cf6; border-radius: 6px; padding: 2px 6px; font-size: 8.5px; font-weight: 800; color: #a7f3d0; display: inline-flex; align-items: center; gap: 4px;">
+                &#127919; TARGET: <span style="color: #facc15; font-size: 10px; font-weight: 900;">#{target_issue}</span>
+                <span style="background: #10b981; color: #020617; font-size: 7.5px; font-weight: 900; padding: 1px 4px; border-radius: 8px;">LIVE</span>
             </span>
-            <span style="background: #8b5cf6; color: #ffffff; font-size: 10px; font-weight: 900; padding: 5px 14px; border-radius: 20px;">
-                &#129351; RANK 1 CHAMPION
+            <span style="background: #8b5cf6; color: #ffffff; font-size: 8.5px; font-weight: 900; padding: 3px 8px; border-radius: 12px;">
+                &#129351; RANK 1
             </span>
         </div>
     </div>
-    <div style="margin-top: 16px; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
-        <div style="background: rgba(2, 6, 23, 0.8); border: 2px solid #8b5cf6; border-radius: 12px; padding: 12px 24px; min-width: 150px;">
-            <span style="font-size: 11px; color: #c4b5fd; font-weight: 700; display:block;">&#128302; PREDICTED NUMBER (अंक)</span>
-            <span style="font-size: 32px; font-weight: 900; color: #a78bfa; text-shadow: 0 0 16px rgba(167, 139, 250, 0.9);">{top_rank_1_num}</span>
+    <div style="margin-top: 8px; display: flex; justify-content: center; gap: 6px; width: 100%;">
+        <div style="background: rgba(2, 6, 23, 0.8); border: 1.5px solid #8b5cf6; border-radius: 8px; padding: 6px 3px; flex: 1; min-width: 0;">
+            <span style="font-size: 8.5px; color: #c4b5fd; font-weight: 700; display:block;">&#128302; NUMBER</span>
+            <span style="font-size: 18px; font-weight: 900; color: #a78bfa; text-shadow: 0 0 10px rgba(167, 139, 250, 0.9);">{top_rank_1_num}</span>
         </div>
-        <div style="background: rgba(2, 6, 23, 0.8); border: 2px solid {top_rank_1_col_hex}; border-radius: 12px; padding: 12px 24px; min-width: 120px;">
-            <span style="font-size: 11px; color: #94a3b8; font-weight: 700; display:block;">&#127912; COLOR (रंग)</span>
-            <span style="font-size: 22px; font-weight: 900; color: {top_rank_1_col_hex};">{top_rank_1_col}</span>
+        <div style="background: rgba(2, 6, 23, 0.8); border: 1.5px solid {top_rank_1_col_hex}; border-radius: 8px; padding: 6px 3px; flex: 1; min-width: 0;">
+            <span style="font-size: 8.5px; color: #94a3b8; font-weight: 700; display:block;">&#127912; COLOR</span>
+            <span style="font-size: 18px; font-weight: 900; color: {top_rank_1_col_hex};">{top_rank_1_col}</span>
         </div>
-        <div style="background: rgba(2, 6, 23, 0.8); border: 2px solid #38bdf8; border-radius: 12px; padding: 12px 24px; min-width: 120px;">
-            <span style="font-size: 11px; color: #bae6fd; font-weight: 700; display:block;">&#128207; SIZE (आकार)</span>
-            <span style="font-size: 22px; font-weight: 900; color: #38bdf8;">{top_rank_1_size}</span>
-        </div>
-    </div>
-    <div style="margin-top: 14px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
-        <div style="background: rgba(2, 6, 23, 0.7); border: 1px solid #8b5cf6; border-radius: 6px; padding: 6px 12px; min-width: 140px; text-align: center;">
-            <span style="font-size: 10px; color: #c4b5fd; font-weight: 700; display:block; text-transform: uppercase;">&#128204; Number (अंक)</span>
-            <span style="font-size: 12px; font-weight: 800; color: #ffffff;">{top1_num_sahi} Sahi | {top1_num_galat} Galat</span>
-        </div>
-        <div style="background: rgba(2, 6, 23, 0.7); border: 1px solid #22c55e; border-radius: 6px; padding: 6px 12px; min-width: 140px; text-align: center;">
-            <span style="font-size: 10px; color: #86efac; font-weight: 700; display:block; text-transform: uppercase;">&#127912; Color (रंग)</span>
-            <span style="font-size: 12px; font-weight: 800; color: #86efac;">{top1_col_sahi} Sahi | {top1_col_galat} Galat</span>
-        </div>
-        <div style="background: rgba(2, 6, 23, 0.7); border: 1px solid #a855f7; border-radius: 6px; padding: 6px 12px; min-width: 140px; text-align: center;">
-            <span style="font-size: 10px; color: #c084fc; font-weight: 700; display:block; text-transform: uppercase;">&#128207; Size (आकार)</span>
-            <span style="font-size: 12px; font-weight: 800; color: #d8b4fe;">{top1_size_sahi} Sahi | {top1_size_galat} Galat</span>
+        <div style="background: rgba(2, 6, 23, 0.8); border: 1.5px solid #38bdf8; border-radius: 8px; padding: 6px 3px; flex: 1; min-width: 0;">
+            <span style="font-size: 8.5px; color: #bae6fd; font-weight: 700; display:block;">&#128207; SIZE</span>
+            <span style="font-size: 18px; font-weight: 900; color: #38bdf8;">{top_rank_1_size}</span>
         </div>
     </div>
-    <div style="margin-top: 14px; display: flex; justify-content: space-around; align-items: center; font-size: 12px; color: #e2e8f0; background: rgba(2, 6, 23, 0.6); padding: 8px 16px; border-radius: 8px; border: 1px solid rgba(139, 92, 246, 0.4); flex-wrap: wrap; gap: 10px;">
-        <span>&#128202; <strong>UCB Score:</strong> <span style="color: #a78bfa;">{round(float(top_rank_1_ucb), 2)}</span></span>
-        <span>&#128200; <strong>Win Rate:</strong> <span style="color: #4ade80;">{top_rank_1_winrate}%</span></span>
-        <span>&#9878; <strong>Engine Weight:</strong> <span style="color: #facc15;">{top_rank_1_weight}x</span></span>
-        <span>&#127942; <strong>Points:</strong> <span style="color: #38bdf8;">{top_rank_1_pts} Pts</span></span>
+    <div style="margin-top: 6px; display: flex; justify-content: space-between; gap: 4px; width: 100%;">
+        <div style="background: rgba(2, 6, 23, 0.7); border: 1px solid #8b5cf6; border-radius: 6px; padding: 3px 2px; flex: 1; min-width: 0; text-align: center;">
+            <span style="font-size: 7.5px; color: #c4b5fd; font-weight: 700; display:block; text-transform: uppercase;">📌 NUMBER</span>
+            <span style="font-size: 9px; font-weight: 800; color: #ffffff;">{top1_num_sahi} Sahi | {top1_num_galat} Galat</span>
+        </div>
+        <div style="background: rgba(2, 6, 23, 0.7); border: 1px solid #22c55e; border-radius: 6px; padding: 3px 2px; flex: 1; min-width: 0; text-align: center;">
+            <span style="font-size: 7.5px; color: #86efac; font-weight: 700; display:block; text-transform: uppercase;">🎨 COLOR</span>
+            <span style="font-size: 9px; font-weight: 800; color: #86efac;">{top1_col_sahi} Sahi | {top1_col_galat} Galat</span>
+        </div>
+        <div style="background: rgba(2, 6, 23, 0.7); border: 1px solid #a855f7; border-radius: 6px; padding: 3px 2px; flex: 1; min-width: 0; text-align: center;">
+            <span style="font-size: 7.5px; color: #c084fc; font-weight: 700; display:block; text-transform: uppercase;">📏 SIZE</span>
+            <span style="font-size: 9px; font-weight: 800; color: #d8b4fe;">{top1_size_sahi} Sahi | {top1_size_galat} Galat</span>
+        </div>
+    </div>
+    <div style="margin-top: 6px; display: flex; justify-content: space-around; align-items: center; font-size: 9.5px; color: #e2e8f0; background: rgba(2, 6, 23, 0.6); padding: 4px 8px; border-radius: 6px; border: 1px solid rgba(139, 92, 246, 0.4); flex-wrap: wrap; gap: 4px;">
+        <span><strong>UCB:</strong> <span style="color: #a78bfa;">{round(float(top_rank_1_ucb), 2)}</span></span>
+        <span><strong>Win:</strong> <span style="color: #4ade80;">{top_rank_1_winrate}%</span></span>
+        <span><strong>Wt:</strong> <span style="color: #facc15;">{top_rank_1_weight}x</span></span>
+        <span><strong>Pts:</strong> <span style="color: #38bdf8;">{top_rank_1_pts}</span></span>
     </div>
     {generate_last_8_boxes_html('top1', latest_issue)}
 </div>
 
-<div style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0369a1 100%); border: 3.5px solid #06b6d4; border-radius: 16px; padding: 22px; text-align: center; margin-bottom: 24px; box-shadow: 0 0 35px rgba(6, 182, 212, 0.6);">
-    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+<div style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0369a1 100%); border: 2.5px solid #06b6d4; border-radius: 12px; padding: 10px; text-align: center; margin-bottom: 16px; box-shadow: 0 0 25px rgba(6, 182, 212, 0.4);">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px;">
         <div style="text-align: left;">
-            <span style="font-size: 22px; font-weight: 900; color: #67e8f9; text-shadow: 0 0 14px rgba(103, 232, 249, 0.9);">
-                &#129352; TOP ENGINE RANK #2: {top_rank_2_key} ({top_rank_2_name})
+            <span style="font-size: 14px; font-weight: 900; color: #67e8f9; text-shadow: 0 0 10px rgba(103, 232, 249, 0.9);">
+                &#129352; RANK #2: {top_rank_2_key} ({top_rank_2_name})
             </span>
-            <div style="font-size: 12px; color: #bae6fd; margin-top: 2px;">
-                59 इंजनों में से द्वितीय UCB स्कोर (UCB Score: {round(float(top_rank_2_ucb), 2)}) प्राप्त करने वाला Rank #2 सर्वश्रेष्ठ रनर-अप इंजन
+            <div style="font-size: 9.5px; color: #bae6fd; margin-top: 1px;">
+                59 इंजनों में द्वितीय UCB (Score: {round(float(top_rank_2_ucb), 2)})
             </div>
         </div>
-        <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
-            <span style="background: rgba(15, 23, 42, 0.85); border: 1.5px solid #06b6d4; border-radius: 8px; padding: 4px 12px; font-size: 10px; font-weight: 800; color: #67e8f9; display: inline-flex; align-items: center; gap: 6px;">
-                &#127919; TARGET ISSUE: <span style="color: #facc15; font-size: 12px; font-weight: 900;">#{target_issue}</span>
-                <span style="background: #10b981; color: #020617; font-size: 8px; font-weight: 900; padding: 2px 6px; border-radius: 10px;">LIVE SYNC</span>
+        <div style="display: flex; gap: 4px; align-items: center; flex-wrap: wrap;">
+            <span style="background: rgba(15, 23, 42, 0.85); border: 1px solid #06b6d4; border-radius: 6px; padding: 2px 6px; font-size: 8.5px; font-weight: 800; color: #67e8f9; display: inline-flex; align-items: center; gap: 4px;">
+                &#127919; TARGET: <span style="color: #facc15; font-size: 10px; font-weight: 900;">#{target_issue}</span>
+                <span style="background: #10b981; color: #020617; font-size: 7.5px; font-weight: 900; padding: 1px 4px; border-radius: 8px;">LIVE</span>
             </span>
-            <span style="background: #06b6d4; color: #ffffff; font-size: 10px; font-weight: 900; padding: 5px 14px; border-radius: 20px;">
-                &#129352; RANK 2 RUNNER-UP
+            <span style="background: #06b6d4; color: #ffffff; font-size: 8.5px; font-weight: 900; padding: 3px 8px; border-radius: 12px;">
+                &#129352; RANK 2
             </span>
         </div>
     </div>
-    <div style="margin-top: 16px; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
-        <div style="background: rgba(2, 6, 23, 0.8); border: 2px solid #06b6d4; border-radius: 12px; padding: 12px 24px; min-width: 150px;">
-            <span style="font-size: 11px; color: #67e8f9; font-weight: 700; display:block;">&#128302; PREDICTED NUMBER (अंक)</span>
-            <span style="font-size: 32px; font-weight: 900; color: #22d3ee; text-shadow: 0 0 16px rgba(34, 211, 238, 0.9);">{top_rank_2_num}</span>
+    <div style="margin-top: 8px; display: flex; justify-content: center; gap: 6px; width: 100%;">
+        <div style="background: rgba(2, 6, 23, 0.8); border: 1.5px solid #06b6d4; border-radius: 8px; padding: 6px 3px; flex: 1; min-width: 0;">
+            <span style="font-size: 8.5px; color: #67e8f9; font-weight: 700; display:block;">&#128302; NUMBER</span>
+            <span style="font-size: 18px; font-weight: 900; color: #22d3ee; text-shadow: 0 0 10px rgba(34, 211, 238, 0.9);">{top_rank_2_num}</span>
         </div>
-        <div style="background: rgba(2, 6, 23, 0.8); border: 2px solid {top_rank_2_col_hex}; border-radius: 12px; padding: 12px 24px; min-width: 120px;">
-            <span style="font-size: 11px; color: #94a3b8; font-weight: 700; display:block;">&#127912; COLOR (रंग)</span>
-            <span style="font-size: 22px; font-weight: 900; color: {top_rank_2_col_hex};">{top_rank_2_col}</span>
+        <div style="background: rgba(2, 6, 23, 0.8); border: 1.5px solid {top_rank_2_col_hex}; border-radius: 8px; padding: 6px 3px; flex: 1; min-width: 0;">
+            <span style="font-size: 8.5px; color: #94a3b8; font-weight: 700; display:block;">&#127912; COLOR</span>
+            <span style="font-size: 18px; font-weight: 900; color: {top_rank_2_col_hex};">{top_rank_2_col}</span>
         </div>
-        <div style="background: rgba(2, 6, 23, 0.8); border: 2px solid #38bdf8; border-radius: 12px; padding: 12px 24px; min-width: 120px;">
-            <span style="font-size: 11px; color: #bae6fd; font-weight: 700; display:block;">&#128207; SIZE (आकार)</span>
-            <span style="font-size: 22px; font-weight: 900; color: #38bdf8;">{top_rank_2_size}</span>
-        </div>
-    </div>
-    <div style="margin-top: 14px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
-        <div style="background: rgba(2, 6, 23, 0.7); border: 1px solid #06b6d4; border-radius: 6px; padding: 6px 12px; min-width: 140px; text-align: center;">
-            <span style="font-size: 10px; color: #67e8f9; font-weight: 700; display:block; text-transform: uppercase;">&#128204; Number (अंक)</span>
-            <span style="font-size: 12px; font-weight: 800; color: #ffffff;">{top2_num_sahi} Sahi | {top2_num_galat} Galat</span>
-        </div>
-        <div style="background: rgba(2, 6, 23, 0.7); border: 1px solid #22c55e; border-radius: 6px; padding: 6px 12px; min-width: 140px; text-align: center;">
-            <span style="font-size: 10px; color: #86efac; font-weight: 700; display:block; text-transform: uppercase;">&#127912; Color (रंग)</span>
-            <span style="font-size: 12px; font-weight: 800; color: #86efac;">{top2_col_sahi} Sahi | {top2_col_galat} Galat</span>
-        </div>
-        <div style="background: rgba(2, 6, 23, 0.7); border: 1px solid #a855f7; border-radius: 6px; padding: 6px 12px; min-width: 140px; text-align: center;">
-            <span style="font-size: 10px; color: #c084fc; font-weight: 700; display:block; text-transform: uppercase;">&#128207; Size (आकार)</span>
-            <span style="font-size: 12px; font-weight: 800; color: #d8b4fe;">{top2_size_sahi} Sahi | {top2_size_galat} Galat</span>
+        <div style="background: rgba(2, 6, 23, 0.8); border: 1.5px solid #38bdf8; border-radius: 8px; padding: 6px 3px; flex: 1; min-width: 0;">
+            <span style="font-size: 8.5px; color: #bae6fd; font-weight: 700; display:block;">&#128207; SIZE</span>
+            <span style="font-size: 18px; font-weight: 900; color: #38bdf8;">{top_rank_2_size}</span>
         </div>
     </div>
-    <div style="margin-top: 14px; display: flex; justify-content: space-around; align-items: center; font-size: 12px; color: #e2e8f0; background: rgba(2, 6, 23, 0.6); padding: 8px 16px; border-radius: 8px; border: 1px solid rgba(6, 182, 212, 0.4); flex-wrap: wrap; gap: 10px;">
-        <span>&#128202; <strong>UCB Score:</strong> <span style="color: #67e8f9;">{round(float(top_rank_2_ucb), 2)}</span></span>
-        <span>&#128200; <strong>Win Rate:</strong> <span style="color: #4ade80;">{top_rank_2_winrate}%</span></span>
-        <span>&#9878; <strong>Engine Weight:</strong> <span style="color: #facc15;">{top_rank_2_weight}x</span></span>
-        <span>&#127942; <strong>Points:</strong> <span style="color: #38bdf8;">{top_rank_2_pts} Pts</span></span>
+    <div style="margin-top: 6px; display: flex; justify-content: space-between; gap: 4px; width: 100%;">
+        <div style="background: rgba(2, 6, 23, 0.7); border: 1px solid #06b6d4; border-radius: 6px; padding: 3px 2px; flex: 1; min-width: 0; text-align: center;">
+            <span style="font-size: 7.5px; color: #67e8f9; font-weight: 700; display:block; text-transform: uppercase;">📌 NUMBER</span>
+            <span style="font-size: 9px; font-weight: 800; color: #ffffff;">{top2_num_sahi} Sahi | {top2_num_galat} Galat</span>
+        </div>
+        <div style="background: rgba(2, 6, 23, 0.7); border: 1px solid #22c55e; border-radius: 6px; padding: 3px 2px; flex: 1; min-width: 0; text-align: center;">
+            <span style="font-size: 7.5px; color: #86efac; font-weight: 700; display:block; text-transform: uppercase;">🎨 COLOR</span>
+            <span style="font-size: 9px; font-weight: 800; color: #86efac;">{top2_col_sahi} Sahi | {top2_col_galat} Galat</span>
+        </div>
+        <div style="background: rgba(2, 6, 23, 0.7); border: 1px solid #a855f7; border-radius: 6px; padding: 3px 2px; flex: 1; min-width: 0; text-align: center;">
+            <span style="font-size: 7.5px; color: #c084fc; font-weight: 700; display:block; text-transform: uppercase;">📏 SIZE</span>
+            <span style="font-size: 9px; font-weight: 800; color: #d8b4fe;">{top2_size_sahi} Sahi | {top2_size_galat} Galat</span>
+        </div>
+    </div>
+    <div style="margin-top: 6px; display: flex; justify-content: space-around; align-items: center; font-size: 9.5px; color: #e2e8f0; background: rgba(2, 6, 23, 0.6); padding: 4px 8px; border-radius: 6px; border: 1px solid rgba(6, 182, 212, 0.4); flex-wrap: wrap; gap: 4px;">
+        <span><strong>UCB:</strong> <span style="color: #67e8f9;">{round(float(top_rank_2_ucb), 2)}</span></span>
+        <span><strong>Win:</strong> <span style="color: #4ade80;">{top_rank_2_winrate}%</span></span>
+        <span><strong>Wt:</strong> <span style="color: #facc15;">{top_rank_2_weight}x</span></span>
+        <span><strong>Pts:</strong> <span style="color: #38bdf8;">{top_rank_2_pts}</span></span>
     </div>
         <span>&#128200; <strong>Win Rate:</strong> <span style="color: #4ade80;">{top_rank_2_winrate}%</span></span>
         <span>&#9878; <strong>Engine Weight:</strong> <span style="color: #facc15;">{top_rank_2_weight}x</span></span>

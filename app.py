@@ -300,25 +300,28 @@ def render_attributions_html(attributions, label_prefix="Lag"):
 if not st.session_state.get("import_only") and not st.session_state.get("page_config_set"):
     st.set_page_config(
         page_title="Daman / Wingo Ultra-Advanced AI Prediction Agent",
-        page_icon="",
+        page_icon="🤖",
         layout="wide",
-        initial_sidebar_state="expanded"
+        initial_sidebar_state="collapsed"
     )
     
     # Auto-refresh will be initialized after models are loaded/trained below.
     
-    # Ultra-small desktop-optimized CSS with rich visual aesthetics
+    # Ultra-responsive mobile & desktop adaptive CSS styling
     st.markdown("""
     <style>
-        /* Global desktop compact styling */
+        /* Global Base Styling */
         html, body, [class*="css"] {
             font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
             font-size: 13px !important;
         }
+        
         .main .block-container {
-            padding-top: 1rem;
-            padding-bottom: 1rem;
-            max-width: 98%;
+            padding-top: 0.8rem !important;
+            padding-bottom: 0.8rem !important;
+            padding-left: 0.8rem !important;
+            padding-right: 0.8rem !important;
+            max-width: 100% !important;
         }
         
         /* Header Card */
@@ -326,13 +329,13 @@ if not st.session_state.get("import_only") and not st.session_state.get("page_co
             background: linear-gradient(135deg, #090d16 0%, #111827 50%, #1e1b4b 100%);
             border: 1px solid #3b82f6;
             border-radius: 10px;
-            padding: 12px 20px;
+            padding: 12px 16px;
             color: #f8fafc;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
         }
         .header-title {
-            font-size: 21px !important;
+            font-size: 20px !important;
             font-weight: 900;
             background: linear-gradient(90deg, #38bdf8, #818cf8, #c084fc);
             -webkit-background-clip: text;
@@ -345,19 +348,19 @@ if not st.session_state.get("import_only") and not st.session_state.get("page_co
             background: #111827;
             border: 1px solid #1f2937;
             border-radius: 8px;
-            padding: 10px;
+            padding: 8px 6px;
             text-align: center;
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
         .metric-label {
             color: #9ca3af;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 600;
             text-transform: uppercase;
         }
         .metric-val {
             color: #f9fafb;
-            font-size: 17px;
+            font-size: 16px;
             font-weight: 700;
             margin-top: 2px;
         }
@@ -367,8 +370,8 @@ if not st.session_state.get("import_only") and not st.session_state.get("page_co
             background: #0b0f19;
             border: 1px solid #1f2937;
             border-radius: 6px;
-            padding: 8px;
-            margin-bottom: 8px;
+            padding: 6px;
+            margin-bottom: 6px;
             text-align: center;
             transition: transform 0.2s, border-color 0.2s;
         }
@@ -377,7 +380,7 @@ if not st.session_state.get("import_only") and not st.session_state.get("page_co
             transform: translateY(-2px);
         }
         .engine-name {
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 700;
             color: #cbd5e1;
             white-space: nowrap;
@@ -385,44 +388,44 @@ if not st.session_state.get("import_only") and not st.session_state.get("page_co
             text-overflow: ellipsis;
         }
         .engine-pred {
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 800;
-            margin: 4px 0;
+            margin: 2px 0;
         }
         .engine-pts {
-            font-size: 10px;
+            font-size: 9px;
             color: #64748b;
         }
         
         /* Badges */
-        .bg-red { background-color: #ef4444; color: white; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
-        .bg-green { background-color: #22c55e; color: white; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
-        .bg-big { background-color: #f59e0b; color: white; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
-        .bg-small { background-color: #3b82f6; color: white; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
+        .bg-red { background-color: #ef4444; color: white; padding: 2px 6px; border-radius: 4px; font-weight: bold; font-size: 11px; }
+        .bg-green { background-color: #22c55e; color: white; padding: 2px 6px; border-radius: 4px; font-weight: bold; font-size: 11px; }
+        .bg-big { background-color: #f59e0b; color: white; padding: 2px 6px; border-radius: 4px; font-weight: bold; font-size: 11px; }
+        .bg-small { background-color: #3b82f6; color: white; padding: 2px 6px; border-radius: 4px; font-weight: bold; font-size: 11px; }
         
         /* Hindi AI Panel */
         .hindi-panel {
             background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #2e1065 100%);
             border: 1.5px solid #818cf8;
             border-radius: 10px;
-            padding: 18px;
+            padding: 14px;
             color: #f1f5f9;
-            font-size: 13px;
-            line-height: 1.6;
+            font-size: 12px;
+            line-height: 1.5;
             box-shadow: 0 4px 15px rgba(99, 102, 241, 0.2);
         }
         .hindi-header {
-            font-size: 17px;
+            font-size: 15px;
             font-weight: 800;
             color: #a7f3d0;
             border-bottom: 1px solid #4338ca;
             padding-bottom: 6px;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
         .hindi-section-title {
             font-weight: 700;
             color: #38bdf8;
-            margin-top: 10px;
+            margin-top: 8px;
         }
         
         /* Decision Banner */
@@ -430,14 +433,70 @@ if not st.session_state.get("import_only") and not st.session_state.get("page_co
             background: linear-gradient(90deg, #064e3b 0%, #047857 50%, #065f46 100%);
             border: 2px solid #10b981;
             border-radius: 10px;
-            padding: 16px;
+            padding: 12px;
             color: white;
             text-align: center;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+        }
+
+        /* ============================================================ */
+        /* 📱 MOBILE RESPONSIVE MEDIA QUERIES (Smartphones & Tablets)   */
+        /* ============================================================ */
+        @media (max-width: 768px) {
+            html, body, [class*="css"] {
+                font-size: 12px !important;
+            }
+            .main .block-container {
+                padding: 0.3rem 0.3rem !important;
+            }
+            .header-card {
+                padding: 8px 10px !important;
+                border-radius: 8px !important;
+            }
+            .header-title {
+                font-size: 15px !important;
+                text-align: center;
+            }
+            /* Mobile Touch Buttons */
+            .stButton button {
+                width: 100% !important;
+                min-height: 42px !important;
+                font-size: 13.5px !important;
+                font-weight: 700 !important;
+                border-radius: 8px !important;
+            }
+            /* Mobile Columns Flex Wrap */
+            [data-testid="column"] {
+                min-width: 100% !important;
+                margin-bottom: 0.3rem !important;
+            }
+            /* Tables Responsive Horizontal Scroll */
+            .stDataFrame, div[data-testid="stTable"] {
+                overflow-x: auto !important;
+                max-width: 100% !important;
+            }
+            .metric-box {
+                padding: 5px 3px !important;
+            }
+            .metric-val {
+                font-size: 13.5px !important;
+            }
+            .metric-label {
+                font-size: 8.5px !important;
+            }
+            .decision-banner {
+                padding: 8px 10px !important;
+                font-size: 12px !important;
+            }
+            .hindi-panel {
+                padding: 8px 10px !important;
+                font-size: 11px !important;
+            }
         }
     </style>
     """, unsafe_allow_html=True)
+
 
 def initialize_session_state():
     defaults = {

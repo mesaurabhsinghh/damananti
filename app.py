@@ -441,61 +441,100 @@ if not st.session_state.get("import_only") and not st.session_state.get("page_co
         }
 
         /* ============================================================ */
-        /* 📱 MOBILE RESPONSIVE MEDIA QUERIES (Smartphones & Tablets)   */
+        /* 📱 ULTRA-COMPACT MOBILE OPTIMIZATION (Smartphones & Tablets) */
         /* ============================================================ */
         @media (max-width: 768px) {
-            html, body, [class*="css"] {
-                font-size: 12px !important;
+            html, body, [class*="css"], div[data-testid="stMarkdownContainer"] p, div[data-testid="stMarkdownContainer"] span {
+                font-size: 11px !important;
+                line-height: 1.25 !important;
+            }
+            header[data-testid="stHeader"] {
+                display: none !important;
             }
             .main .block-container {
-                padding: 0.3rem 0.3rem !important;
-            }
-            .header-card {
-                padding: 8px 10px !important;
-                border-radius: 8px !important;
-            }
-            .header-title {
-                font-size: 15px !important;
-                text-align: center;
-            }
-            /* Mobile Touch Buttons */
-            .stButton button {
-                width: 100% !important;
-                min-height: 42px !important;
-                font-size: 13.5px !important;
-                font-weight: 700 !important;
-                border-radius: 8px !important;
-            }
-            /* Mobile Columns Flex Wrap */
-            [data-testid="column"] {
-                min-width: 100% !important;
-                margin-bottom: 0.3rem !important;
-            }
-            /* Tables Responsive Horizontal Scroll */
-            .stDataFrame, div[data-testid="stTable"] {
-                overflow-x: auto !important;
+                padding: 0.2rem 0.3rem !important;
                 max-width: 100% !important;
             }
+            .header-card {
+                padding: 6px 8px !important;
+                border-radius: 6px !important;
+                margin-bottom: 6px !important;
+            }
+            .header-title {
+                font-size: 13px !important;
+                text-align: center;
+            }
+            /* Compact Mobile Grid for Columns (2 per row on phone) */
+            [data-testid="column"] {
+                flex: 1 1 48% !important;
+                min-width: 48% !important;
+                max-width: 50% !important;
+                margin-bottom: 0.2rem !important;
+                padding: 0 2px !important;
+            }
+            /* Engine Cards & Metrics on Mobile */
+            .engine-card {
+                padding: 4px 2px !important;
+                margin-bottom: 4px !important;
+                border-radius: 4px !important;
+            }
+            .engine-name {
+                font-size: 9px !important;
+            }
+            .engine-pred {
+                font-size: 11px !important;
+                margin: 1px 0 !important;
+            }
+            .engine-pts {
+                font-size: 8px !important;
+            }
             .metric-box {
-                padding: 5px 3px !important;
+                padding: 4px 2px !important;
+                border-radius: 6px !important;
             }
             .metric-val {
-                font-size: 13.5px !important;
-            }
-            .metric-label {
-                font-size: 8.5px !important;
-            }
-            .decision-banner {
-                padding: 8px 10px !important;
                 font-size: 12px !important;
             }
-            .hindi-panel {
-                padding: 8px 10px !important;
+            .metric-label {
+                font-size: 8px !important;
+            }
+            .decision-banner {
+                padding: 6px 8px !important;
                 font-size: 11px !important;
+                margin-bottom: 6px !important;
+                border-radius: 6px !important;
+            }
+            .hindi-panel {
+                padding: 6px 8px !important;
+                font-size: 10px !important;
+                border-radius: 6px !important;
+            }
+            .hindi-header {
+                font-size: 12px !important;
+                padding-bottom: 3px !important;
+                margin-bottom: 6px !important;
+            }
+            /* Compact Mobile Buttons */
+            .stButton button {
+                width: 100% !important;
+                min-height: 36px !important;
+                font-size: 12px !important;
+                font-weight: 700 !important;
+                padding: 4px 8px !important;
+                border-radius: 6px !important;
+            }
+            /* Compact DataFrames */
+            .stDataFrame, div[data-testid="stTable"] {
+                font-size: 9px !important;
+                overflow-x: auto !important;
+            }
+            [data-testid="stDataFrameResizable"] {
+                max-height: 300px !important;
             }
         }
     </style>
     """, unsafe_allow_html=True)
+
 
 
 def initialize_session_state():

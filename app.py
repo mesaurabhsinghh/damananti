@@ -445,95 +445,120 @@ if not st.session_state.get("import_only") and not st.session_state.get("page_co
         /* ============================================================ */
         @media (max-width: 768px) {
             html, body, [class*="css"], div[data-testid="stMarkdownContainer"] p, div[data-testid="stMarkdownContainer"] span {
-                font-size: 11px !important;
-                line-height: 1.25 !important;
+                font-size: 10.5px !important;
+                line-height: 1.2 !important;
             }
             header[data-testid="stHeader"] {
                 display: none !important;
             }
             .main .block-container {
-                padding: 0.2rem 0.3rem !important;
+                padding: 0.15rem 0.2rem !important;
                 max-width: 100% !important;
             }
             .header-card {
                 padding: 6px 8px !important;
                 border-radius: 6px !important;
-                margin-bottom: 6px !important;
+                margin-bottom: 5px !important;
             }
             .header-title {
                 font-size: 13px !important;
                 text-align: center;
             }
-            /* Compact Mobile Grid for Columns (2 per row on phone) */
-            [data-testid="column"] {
-                flex: 1 1 48% !important;
-                min-width: 48% !important;
-                max-width: 50% !important;
-                margin-bottom: 0.2rem !important;
-                padding: 0 2px !important;
+
+            /* FORCE Streamlit Horizontal Row Containers to stay flex-row on Mobile */
+            div[data-testid="stHorizontalBlock"],
+            div[data-testid="horizontal-block"],
+            div[class*="stHorizontalBlock"],
+            .stHorizontalBlock {
+                display: flex !important;
+                flex-direction: row !important;
+                flex-wrap: wrap !important;
+                gap: 4px !important;
+                width: 100% !important;
             }
+            
+            /* FORCE Streamlit Columns to stay SIDE-BY-SIDE (2 per row: 48% width) on Mobile */
+            div[data-testid="column"],
+            div[data-testid="stColumn"],
+            div[class*="stColumn"],
+            .stColumn {
+                flex: 0 0 calc(50% - 4px) !important;
+                min-width: calc(50% - 4px) !important;
+                max-width: calc(50% - 4px) !important;
+                width: calc(50% - 4px) !important;
+                margin-bottom: 4px !important;
+                padding: 0 !important;
+            }
+
+            /* Override inner column children */
+            div[data-testid="column"] > div,
+            div[data-testid="stColumn"] > div {
+                width: 100% !important;
+            }
+
             /* Engine Cards & Metrics on Mobile */
             .engine-card {
-                padding: 4px 2px !important;
-                margin-bottom: 4px !important;
+                padding: 3px 2px !important;
+                margin-bottom: 3px !important;
                 border-radius: 4px !important;
             }
             .engine-name {
-                font-size: 9px !important;
+                font-size: 8.5px !important;
             }
             .engine-pred {
-                font-size: 11px !important;
+                font-size: 10.5px !important;
                 margin: 1px 0 !important;
             }
             .engine-pts {
-                font-size: 8px !important;
+                font-size: 7.5px !important;
             }
             .metric-box {
-                padding: 4px 2px !important;
-                border-radius: 6px !important;
+                padding: 3px 2px !important;
+                border-radius: 5px !important;
             }
             .metric-val {
-                font-size: 12px !important;
+                font-size: 11.5px !important;
             }
             .metric-label {
-                font-size: 8px !important;
+                font-size: 7.5px !important;
             }
             .decision-banner {
                 padding: 6px 8px !important;
-                font-size: 11px !important;
-                margin-bottom: 6px !important;
+                font-size: 10.5px !important;
+                margin-bottom: 5px !important;
                 border-radius: 6px !important;
             }
             .hindi-panel {
                 padding: 6px 8px !important;
-                font-size: 10px !important;
+                font-size: 9.5px !important;
                 border-radius: 6px !important;
             }
             .hindi-header {
-                font-size: 12px !important;
-                padding-bottom: 3px !important;
-                margin-bottom: 6px !important;
+                font-size: 11px !important;
+                padding-bottom: 2px !important;
+                margin-bottom: 5px !important;
             }
             /* Compact Mobile Buttons */
             .stButton button {
                 width: 100% !important;
-                min-height: 36px !important;
-                font-size: 12px !important;
+                min-height: 34px !important;
+                font-size: 11px !important;
                 font-weight: 700 !important;
-                padding: 4px 8px !important;
-                border-radius: 6px !important;
+                padding: 2px 4px !important;
+                border-radius: 5px !important;
             }
             /* Compact DataFrames */
             .stDataFrame, div[data-testid="stTable"] {
-                font-size: 9px !important;
+                font-size: 8.5px !important;
                 overflow-x: auto !important;
             }
             [data-testid="stDataFrameResizable"] {
-                max-height: 300px !important;
+                max-height: 250px !important;
             }
         }
     </style>
     """, unsafe_allow_html=True)
+
 
 
 

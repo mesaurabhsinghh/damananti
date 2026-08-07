@@ -518,7 +518,17 @@ def check_size_hit(pred_size, act_num, act_size):
             return True
     return p_s == a_s
 
-def get_file_hash(file_path):
+def get_history_file_path():
+    win_path = r"C:\damanAi\dashboard\history.csv"
+    if os.name == 'nt' and os.path.exists(r"C:\damanAi\dashboard"):
+        return win_path
+    local_dir = os.path.join(os.getcwd(), "data")
+    os.makedirs(local_dir, exist_ok=True)
+    return os.path.join(local_dir, "history.csv")
+
+def get_file_hash(file_path=None):
+    if file_path is None:
+        file_path = get_history_file_path()
     if not os.path.exists(file_path):
         return "not_exists"
     try:
@@ -528,8 +538,10 @@ def get_file_hash(file_path):
 
 @st.cache_data(ttl=5)
 def sync_and_load_live_data():
-    file_path = r"C:\damanAi\dashboard\history.csv"
-    os.makedirs(os.path.dirname(file_path), exist_ok=True)
+    file_path = get_history_file_path()
+    dir_name = os.path.dirname(file_path)
+    if dir_name:
+        os.makedirs(dir_name, exist_ok=True)
     
     now = datetime.datetime.now()
     seconds_in_day = now.hour * 3600 + now.minute * 60 + now.second
@@ -8885,7 +8897,7 @@ run_model_training_page = render_advanced_model_training_page
 CACHE_FILE = "trained_models.pkl"
 
 df_history = sync_and_load_live_data()
-st.session_state["file_hash"] = get_file_hash(r"C:\damanAi\dashboard\history.csv")
+st.session_state["file_hash"] = get_file_hash(get_history_file_path())
 
 if "training_status" not in st.session_state or "cache_info" not in st.session_state:
     if os.path.exists(CACHE_FILE):

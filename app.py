@@ -476,7 +476,16 @@ if not st.session_state.get("import_only") and not st.session_state.get("page_co
             [style*="min-width: 140px"], [style*="min-width: 150px"], [style*="min-width: 160px"],
             [style*="min-width: 180px"], [style*="min-width: 220px"], [style*="min-width: 120px"], [style*="min-width: 130px"] {
                 min-width: 0 !important;
-                flex: 1 1 0% !important;
+                flex: 1 1 30% !important;
+                white-space: nowrap !important;
+                text-align: center !important;
+                padding: 4px 2px !important;
+            }
+
+            /* Prevent inner span elements in boxes from line-wrapping vertically */
+            [style*="min-width"] span {
+                white-space: nowrap !important;
+                word-break: keep-all !important;
             }
 
             /* Override all inline large margins on mobile */
@@ -7153,9 +7162,6 @@ def render_titan_duo_brain_17_card(res_dict, engines_dict, df_history, cache_inf
     </div>
 </div>
 
-    </div>
-</div>
-
 <div style="display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap;">
     <div style="flex: 1; background: rgba(2, 6, 23, 0.7); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; padding: 10px 14px;">
         <div style="font-size: 10px; font-weight: 800; color: #cbd5e1; margin-bottom: 4px; display:flex; justify-content: space-between;">
@@ -7893,9 +7899,6 @@ def render_nexus_omnisapient_card(res_dict, engines_dict, df_history, cache_info
         <span style="background: rgba(168, 85, 247, 0.25); border: 1.5px solid #06b6d4; color: #67e8f9; padding: 4px 10px; border-radius: 8px; font-size: 9.5px; font-weight: 900; text-transform: uppercase;">
             🎯 TARGET: COLOR & SIZE
         </span>
-    </div>
-</div>
-
     </div>
 </div>
 
@@ -9747,18 +9750,18 @@ def generate_last_8_boxes_html(agent_key, current_issue):
 </details>
 </div>
 
-<div style="display: flex; flex-direction: column; gap: 4px;">
-<div style="background: rgba(2, 6, 23, 0.6); border: 1px solid #f59e0b; border-radius: 6px; padding: 3px 6px; text-align: left; display: flex; align-items: center; flex-wrap: wrap; gap: 3px;">
-<span style="font-size: 8.5px; color: #fbbf24; font-weight: 800; min-width: 75px; flex-shrink: 0;">📌 NUMBER:</span>
-<div style="display: inline-flex; gap: 3px; flex-wrap: wrap; align-items: center;">{num_row}</div>
+<div style="display: flex; flex-direction: column; gap: 4px; width: 100%;">
+<div style="background: rgba(2, 6, 23, 0.6); border: 1px solid #f59e0b; border-radius: 6px; padding: 3px 6px; text-align: left; display: flex; align-items: center; gap: 4px; overflow: hidden; width: 100%;">
+<span style="font-size: 8.5px; color: #fbbf24; font-weight: 800; width: 45px; flex-shrink: 0;">📌 NUM:</span>
+<div style="display: flex; gap: 3px; overflow-x: auto; flex-wrap: nowrap; width: 100%; -webkit-overflow-scrolling: touch; padding-bottom: 1px;">{num_row}</div>
 </div>
-<div style="background: rgba(2, 6, 23, 0.6); border: 1px solid #22c55e; border-radius: 6px; padding: 3px 6px; text-align: left; display: flex; align-items: center; flex-wrap: wrap; gap: 3px;">
-<span style="font-size: 8.5px; color: #86efac; font-weight: 800; min-width: 75px; flex-shrink: 0;">🎨 COLOR:</span>
-<div style="display: inline-flex; gap: 3px; flex-wrap: wrap; align-items: center;">{col_row}</div>
+<div style="background: rgba(2, 6, 23, 0.6); border: 1px solid #22c55e; border-radius: 6px; padding: 3px 6px; text-align: left; display: flex; align-items: center; gap: 4px; overflow: hidden; width: 100%;">
+<span style="font-size: 8.5px; color: #86efac; font-weight: 800; width: 45px; flex-shrink: 0;">🎨 COL:</span>
+<div style="display: flex; gap: 3px; overflow-x: auto; flex-wrap: nowrap; width: 100%; -webkit-overflow-scrolling: touch; padding-bottom: 1px;">{col_row}</div>
 </div>
-<div style="background: rgba(2, 6, 23, 0.6); border: 1px solid #a855f7; border-radius: 6px; padding: 3px 6px; text-align: left; display: flex; align-items: center; flex-wrap: wrap; gap: 3px;">
-<span style="font-size: 8.5px; color: #c084fc; font-weight: 800; min-width: 75px; flex-shrink: 0;">📏 SIZE:</span>
-<div style="display: inline-flex; gap: 3px; flex-wrap: wrap; align-items: center;">{size_row}</div>
+<div style="background: rgba(2, 6, 23, 0.6); border: 1px solid #a855f7; border-radius: 6px; padding: 3px 6px; text-align: left; display: flex; align-items: center; gap: 4px; overflow: hidden; width: 100%;">
+<span style="font-size: 8.5px; color: #c084fc; font-weight: 800; width: 45px; flex-shrink: 0;">📏 SIZE:</span>
+<div style="display: flex; gap: 3px; overflow-x: auto; flex-wrap: nowrap; width: 100%; -webkit-overflow-scrolling: touch; padding-bottom: 1px;">{size_row}</div>
 </div>
 </div>
 </div>"""
@@ -11745,26 +11748,26 @@ with d_col1:
         <div style="font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:#a7f3d0;">
             ð¯ AI TARGET DECISION FOR ISSUE #{target_issue}
         </div>
-        <div style="display:flex; justify-content:space-around; align-items:center; margin-top:10px;">
-            <div>
-                <span style="font-size:12px; color:#cbd5e1;">Predicted Number:</span><br/>
-                <span style="font-size:32px; font-weight:900; color:#fef08a;"> {final_pred_num}</span>
+        <div style="display: flex; justify-content: space-around; align-items: center; margin-top: 6px; gap: 4px; width: 100%;">
+            <div style="flex: 1; text-align: center;">
+                <span style="font-size: 8.5px; color: #cbd5e1; display: block;">NUM</span>
+                <span style="font-size: 18px; font-weight: 900; color: #fef08a;">{final_pred_num}</span>
             </div>
-            <div>
-                <span style="font-size:12px; color:#cbd5e1;">Predicted Color:</span><br/>
-                <span style="font-size:24px; font-weight:800; color: {'#34d399' if final_pred_col=='Green' else '#f87171'}; text-shadow: 0 0 10px {'rgba(52, 211, 153, 0.4)' if final_pred_col=='Green' else 'rgba(248, 113, 113, 0.4)'};">
-                    {" GREEN" if final_pred_col=="Green" else " RED"}
+            <div style="flex: 1; text-align: center;">
+                <span style="font-size: 8.5px; color: #cbd5e1; display: block;">COLOR</span>
+                <span style="font-size: 14px; font-weight: 800; color: {'#34d399' if final_pred_col=='Green' else '#f87171'};">
+                    {final_pred_col}
                 </span>
             </div>
-            <div>
-                <span style="font-size:12px; color:#cbd5e1;">Predicted Size:</span><br/>
-                <span style="font-size:24px; font-weight:800; color: {'#38bdf8' if final_pred_size=='Big' else '#c084fc'}; text-shadow: 0 0 10px {'rgba(56, 189, 248, 0.4)' if final_pred_size=='Big' else 'rgba(192, 132, 252, 0.4)'};">
-                    {" BIG" if final_pred_size=="Big" else " SMALL"}
+            <div style="flex: 1; text-align: center;">
+                <span style="font-size: 8.5px; color: #cbd5e1; display: block;">SIZE</span>
+                <span style="font-size: 14px; font-weight: 800; color: {'#38bdf8' if final_pred_size=='Big' else '#c084fc'};">
+                    {final_pred_size}
                 </span>
             </div>
-            <div>
-                <span style="font-size:12px; color:#cbd5e1;">Recommendation:</span><br/>
-                <span style="font-size:20px; font-weight:900; color:#5eead4;">{rec_action}</span>
+            <div style="flex: 1; text-align: center;">
+                <span style="font-size: 8.5px; color: #cbd5e1; display: block;">REC</span>
+                <span style="font-size: 13px; font-weight: 900; color: #5eead4;">{rec_action}</span>
             </div>
         </div>
         {generate_last_8_boxes_html('top1', target_issue)}

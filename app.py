@@ -472,6 +472,13 @@ if not st.session_state.get("import_only") and not st.session_state.get("page_co
                 padding: 6px 8px !important;
             }
 
+            /* Universal Mobile Min-Width Flex Override for all cards and score boxes */
+            [style*="min-width: 140px"], [style*="min-width: 150px"], [style*="min-width: 160px"],
+            [style*="min-width: 180px"], [style*="min-width: 220px"], [style*="min-width: 120px"], [style*="min-width: 130px"] {
+                min-width: 0 !important;
+                flex: 1 1 0% !important;
+            }
+
             /* Override all inline large margins on mobile */
             [style*="margin-bottom: 20px"], [style*="margin-bottom: 24px"], [style*="margin-bottom: 25px"] {
                 margin-bottom: 8px !important;
@@ -7172,18 +7179,18 @@ def render_titan_duo_brain_17_card(res_dict, engines_dict, df_history, cache_inf
     </div>
 </div>
 
-<div style="margin-top: 10px; margin-bottom: 16px; display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;">
-    <div style="background: rgba(2, 6, 23, 0.7); border: 1.5px solid #22c55e; border-radius: 8px; padding: 8px 16px; min-width: 150px; text-align: center;">
-        <span style="font-size: 10px; color: #86efac; font-weight: 800; display:block; text-transform: uppercase;">🎨 Color Score Record</span>
-        <span style="font-size: 13px; font-weight: 900; color: #86efac;">{col_sahi} Sahi | {col_galat} Galat</span>
+<div style="margin-top: 6px; margin-bottom: 8px; display: flex; justify-content: space-between; gap: 4px; width: 100%;">
+    <div style="flex: 1; min-width: 0; background: rgba(2, 6, 23, 0.7); border: 1px solid #22c55e; border-radius: 6px; padding: 3px 2px; text-align: center;">
+        <span style="font-size: 7.5px; color: #86efac; font-weight: 800; display:block; text-transform: uppercase;">🎨 COLOR SCORE</span>
+        <span style="font-size: 9px; font-weight: 900; color: #86efac;">{col_sahi} Sahi | {col_galat} Galat</span>
     </div>
-    <div style="background: rgba(2, 6, 23, 0.7); border: 1.5px solid #38bdf8; border-radius: 8px; padding: 8px 16px; min-width: 150px; text-align: center;">
-        <span style="font-size: 10px; color: #7dd3fc; font-weight: 800; display:block; text-transform: uppercase;">📏 Size Score Record</span>
-        <span style="font-size: 13px; font-weight: 900; color: #7dd3fc;">{size_sahi} Sahi | {size_galat} Galat</span>
+    <div style="flex: 1; min-width: 0; background: rgba(2, 6, 23, 0.7); border: 1px solid #38bdf8; border-radius: 6px; padding: 3px 2px; text-align: center;">
+        <span style="font-size: 7.5px; color: #7dd3fc; font-weight: 800; display:block; text-transform: uppercase;">📏 SIZE SCORE</span>
+        <span style="font-size: 9px; font-weight: 900; color: #7dd3fc;">{size_sahi} Sahi | {size_galat} Galat</span>
     </div>
-    <div style="background: rgba(2, 6, 23, 0.7); border: 1.5px solid #a855f7; border-radius: 8px; padding: 8px 16px; min-width: 150px; text-align: center;">
-        <span style="font-size: 10px; color: #c084fc; font-weight: 800; display:block; text-transform: uppercase;">💰 Dual Kelly Stake</span>
-        <span style="font-size: 13px; font-weight: 900; color: #c084fc;">{kelly_pct}% Bankroll</span>
+    <div style="flex: 1; min-width: 0; background: rgba(2, 6, 23, 0.7); border: 1px solid #a855f7; border-radius: 6px; padding: 3px 2px; text-align: center;">
+        <span style="font-size: 7.5px; color: #c084fc; font-weight: 800; display:block; text-transform: uppercase;">💰 KELLY STAKE</span>
+        <span style="font-size: 9px; font-weight: 900; color: #c084fc;">{kelly_pct}% Bankroll</span>
     </div>
 </div>
 
@@ -7930,14 +7937,14 @@ def render_nexus_omnisapient_card(res_dict, engines_dict, df_history, cache_info
     </div>
 </div>
 
-<div style="margin-top: 10px; margin-bottom: 16px; display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;">
-    <div style="background: rgba(2, 6, 23, 0.7); border: 1.5px solid #22c55e; border-radius: 8px; padding: 8px 16px; min-width: 150px; text-align: center;">
-        <span style="font-size: 10px; color: #86efac; font-weight: 800; display:block; text-transform: uppercase;">🎨 Color Score Record</span>
-        <span style="font-size: 13px; font-weight: 900; color: #86efac;">{col_sahi} Sahi | {col_galat} Galat</span>
+<div style="margin-top: 6px; margin-bottom: 8px; display: flex; justify-content: space-between; gap: 4px; width: 100%;">
+    <div style="flex: 1; min-width: 0; background: rgba(2, 6, 23, 0.7); border: 1px solid #22c55e; border-radius: 6px; padding: 3px 2px; text-align: center;">
+        <span style="font-size: 7.5px; color: #86efac; font-weight: 800; display:block; text-transform: uppercase;">🎨 COLOR SCORE</span>
+        <span style="font-size: 9px; font-weight: 900; color: #86efac;">{col_sahi} Sahi | {col_galat} Galat</span>
     </div>
-    <div style="background: rgba(2, 6, 23, 0.7); border: 1.5px solid #38bdf8; border-radius: 8px; padding: 8px 16px; min-width: 150px; text-align: center;">
-        <span style="font-size: 10px; color: #7dd3fc; font-weight: 800; display:block; text-transform: uppercase;">📏 Size Score Record</span>
-        <span style="font-size: 13px; font-weight: 900; color: #7dd3fc;">{size_sahi} Sahi | {size_galat} Galat</span>
+    <div style="flex: 1; min-width: 0; background: rgba(2, 6, 23, 0.7); border: 1px solid #38bdf8; border-radius: 6px; padding: 3px 2px; text-align: center;">
+        <span style="font-size: 7.5px; color: #7dd3fc; font-weight: 800; display:block; text-transform: uppercase;">📏 SIZE SCORE</span>
+        <span style="font-size: 9px; font-weight: 900; color: #7dd3fc;">{size_sahi} Sahi | {size_galat} Galat</span>
     </div>
 </div>
 
@@ -10131,40 +10138,40 @@ st.markdown(f"""
     <div style="font-size: 12px; color: #cbd5e1; margin-top: 4px;">
         Math, Data Analysis, and Singularity Pattern Engine. यह सुपर-इंटेलिजेंट एजेंट 100% निश्चितता वाले एकल लक्ष्य को चुनता है:
     </div>
-    <div style="margin-top: 12px; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
-        <div style="background: rgba(2, 6, 23, 0.6); border: 1.5px solid #06b6d4; border-radius: 8px; padding: 8px 16px; min-width: 220px;">
-            <span style="font-size: 11px; color: #67e8f9; font-weight: 700; display:block;">&#127919; CALIBRATED SINGULAR TARGET (विलक्षण लक्ष्य)</span>
-            <span style="font-size: 18px; font-weight: 900; color: #e0f7fa;">{asi_target}</span>
+    <div style="margin-top: 8px; display: flex; justify-content: center; gap: 6px; width: 100%;">
+        <div style="background: rgba(2, 6, 23, 0.6); border: 1.5px solid #06b6d4; border-radius: 8px; padding: 6px 3px; flex: 1; min-width: 0; text-align: center;">
+            <span style="font-size: 8.5px; color: #67e8f9; font-weight: 700; display:block;">&#127919; SINGULAR TARGET</span>
+            <span style="font-size: 16px; font-weight: 900; color: #e0f7fa;">{asi_target}</span>
         </div>
-        <div style="background: rgba(2, 6, 23, 0.6); border: 1.5px solid #22c55e; border-radius: 8px; padding: 8px 16px; min-width: 220px;">
-            <span style="font-size: 11px; color: #86efac; font-weight: 700; display:block;">&#128302; ASI ULTIMATE PREDICTION (सर्वोच्च भविष्यवाणी)</span>
-            <span style="font-size: 20px; font-weight: 900; color: #4ade80; text-shadow: 0 0 10px rgba(74, 222, 128, 0.5);">{asi_prediction}</span>
-        </div>
-    </div>
-    <div style="margin-top: 12px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
-        <div style="background: rgba(2, 6, 23, 0.6); border: 1px solid #06b6d4; border-radius: 6px; padding: 6px 12px; min-width: 140px; text-align: center;">
-            <span style="font-size: 10px; color: #67e8f9; font-weight: 700; display:block; text-transform: uppercase;">&#128204; Number (अंक)</span>
-            <span style="font-size: 12px; font-weight: 800; color: #e0f7fa;">N: {asi3_num_sahi} Sahi | {asi3_num_galat} Galat</span>
-        </div>
-        <div style="background: rgba(2, 6, 23, 0.6); border: 1px solid #22c55e; border-radius: 6px; padding: 6px 12px; min-width: 140px; text-align: center;">
-            <span style="font-size: 10px; color: #86efac; font-weight: 700; display:block; text-transform: uppercase;">&#127912; Color (रंग)</span>
-            <span style="font-size: 12px; font-weight: 800; color: #4ade80;">C: {asi3_col_sahi} Sahi | {asi3_col_galat} Galat</span>
-        </div>
-        <div style="background: rgba(2, 6, 23, 0.6); border: 1px solid #a855f7; border-radius: 6px; padding: 6px 12px; min-width: 140px; text-align: center;">
-            <span style="font-size: 10px; color: #d8b4fe; font-weight: 700; display:block; text-transform: uppercase;">&#128207; Size (आकार)</span>
-            <span style="font-size: 12px; font-weight: 800; color: #c084fc;">S: {asi3_size_sahi} Sahi | {asi3_size_galat} Galat</span>
+        <div style="background: rgba(2, 6, 23, 0.6); border: 1.5px solid #22c55e; border-radius: 8px; padding: 6px 3px; flex: 1; min-width: 0; text-align: center;">
+            <span style="font-size: 8.5px; color: #86efac; font-weight: 700; display:block;">&#128302; PREDICTION</span>
+            <span style="font-size: 16px; font-weight: 900; color: #4ade80; text-shadow: 0 0 10px rgba(74, 222, 128, 0.5);">{asi_prediction}</span>
         </div>
     </div>
-    <div style="font-size: 12px; color: #22d3ee; font-weight: 800; margin-top: 10px;">
-        &#128737; ASI Mathematical Certainty: {round(float(asi_confidence), 2)}% (Calibrated Singularity Bounds)
+    <div style="margin-top: 6px; display: flex; justify-content: space-between; gap: 4px; width: 100%;">
+        <div style="background: rgba(2, 6, 23, 0.6); border: 1px solid #06b6d4; border-radius: 6px; padding: 3px 2px; flex: 1; min-width: 0; text-align: center;">
+            <span style="font-size: 7.5px; color: #67e8f9; font-weight: 700; display:block; text-transform: uppercase;">📌 NUMBER</span>
+            <span style="font-size: 9px; font-weight: 800; color: #e0f7fa;">{asi3_num_sahi} Sahi | {asi3_num_galat} Galat</span>
+        </div>
+        <div style="background: rgba(2, 6, 23, 0.6); border: 1px solid #22c55e; border-radius: 6px; padding: 3px 2px; flex: 1; min-width: 0; text-align: center;">
+            <span style="font-size: 7.5px; color: #86efac; font-weight: 700; display:block; text-transform: uppercase;">🎨 COLOR</span>
+            <span style="font-size: 9px; font-weight: 800; color: #4ade80;">{asi3_col_sahi} Sahi | {asi3_col_galat} Galat</span>
+        </div>
+        <div style="background: rgba(2, 6, 23, 0.6); border: 1px solid #a855f7; border-radius: 6px; padding: 3px 2px; flex: 1; min-width: 0; text-align: center;">
+            <span style="font-size: 7.5px; color: #d8b4fe; font-weight: 700; display:block; text-transform: uppercase;">📏 SIZE</span>
+            <span style="font-size: 9px; font-weight: 800; color: #c084fc;">{asi3_size_sahi} Sahi | {asi3_size_galat} Galat</span>
+        </div>
     </div>
-    <div style="font-size: 11px; color: #cbd5e1; font-style: italic; margin-top: 4px;">
+    <div style="font-size: 9.5px; color: #22d3ee; font-weight: 800; margin-top: 6px;">
+        &#128737; ASI Certainty: {round(float(asi_confidence), 2)}%
+    </div>
+    <div style="font-size: 9px; color: #cbd5e1; font-style: italic; margin-top: 2px;">
         &#128161; ASI Analysis: {asi_rationale}
     </div>
-    <details style="background: rgba(2, 6, 23, 0.4); border: 1px solid #06b6d4; border-radius: 8px; padding: 10px; margin-top: 12px; text-align: left; cursor: pointer;">
-        <summary style="color: #22d3ee; font-weight: 700; font-size: 12px;">&#129504; ASI 10x Thinking Process (10x गहन विचार प्रक्रिया)</summary>
-        <div style="font-size: 11px; color: #e2e8f0; line-height: 1.6; margin-top: 8px; max-height: 180px; overflow-y: auto; padding-right: 5px; font-family: monospace;">
-            <div style='margin-bottom:4px;'>{asi_thinking_steps[0]}</div><br/><div style='margin-bottom:4px;'>{asi_thinking_steps[1]}</div><br/><div style='margin-bottom:4px;'>{asi_thinking_steps[2]}</div><br/><div style='margin-bottom:4px;'>{asi_thinking_steps[3]}</div><br/><div style='margin-bottom:4px;'>{asi_thinking_steps[4]}</div><br/><div style='margin-bottom:4px;'>{asi_thinking_steps[5]}</div><br/><div style='margin-bottom:4px;'>{asi_thinking_steps[6]}</div><br/><div style='margin-bottom:4px;'>{asi_thinking_steps[7]}</div><br/><div style='margin-bottom:4px;'>{asi_thinking_steps[8]}</div><br/><div style='margin-bottom:4px;'>{asi_thinking_steps[9]}</div>
+    <details style="background: rgba(2, 6, 23, 0.4); border: 1px solid #06b6d4; border-radius: 6px; padding: 6px; margin-top: 6px; text-align: left; cursor: pointer;">
+        <summary style="color: #22d3ee; font-weight: 700; font-size: 9.5px;">&#129504; ASI Thinking Process</summary>
+        <div style="font-size: 8.5px; color: #e2e8f0; line-height: 1.4; margin-top: 4px; max-height: 140px; overflow-y: auto; font-family: monospace;">
+            <div style='margin-bottom:2px;'>{asi_thinking_steps[0]}</div><div style='margin-bottom:2px;'>{asi_thinking_steps[1]}</div><div style='margin-bottom:2px;'>{asi_thinking_steps[2]}</div><div style='margin-bottom:2px;'>{asi_thinking_steps[3]}</div><div style='margin-bottom:2px;'>{asi_thinking_steps[4]}</div><div style='margin-bottom:2px;'>{asi_thinking_steps[5]}</div><div style='margin-bottom:2px;'>{asi_thinking_steps[6]}</div><div style='margin-bottom:2px;'>{asi_thinking_steps[7]}</div><div style='margin-bottom:2px;'>{asi_thinking_steps[8]}</div><div style='margin-bottom:2px;'>{asi_thinking_steps[9]}</div>
         </div>
     </details>
     {generate_last_8_boxes_html('asi3', latest_issue)}
@@ -10184,41 +10191,39 @@ except Exception:
     omni_regret = 0.0
 
 st.markdown(f"""
-<div style="background: linear-gradient(135deg, #0a0f1f 0%, #1a1040 50%, #0a0f1f 100%); border: 3px solid #10b981; border-radius: 12px; padding: 18px; text-align: center; margin-bottom: 18px; box-shadow: 0 0 25px rgba(16, 185, 129, 0.4);">
-    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
-        <span style="font-size: 18px; font-weight: 900; color: #10b981; text-shadow: 0 0 10px rgba(16, 185, 129, 0.6);">&#129504; OMNI AGENT 6.0 (IQ 2500+)</span>
-        <span style="background: rgba(15, 23, 42, 0.85); border: 1.5px solid #10b981; border-radius: 8px; padding: 3px 10px; font-size: 10px; font-weight: 800; color: #34d399; display: inline-flex; align-items: center; gap: 6px;">&#127919; TARGET ISSUE: <span style="color: #facc15; font-size: 11px; font-weight: 900;">#{target_issue}</span> <span style="background: #10b981; color: #020617; font-size: 8px; font-weight: 900; padding: 1px 5px; border-radius: 8px;">LIVE SYNC</span></span>
+<div style="background: linear-gradient(135deg, #0a0f1f 0%, #1a1040 50%, #0a0f1f 100%); border: 2.5px solid #10b981; border-radius: 12px; padding: 10px; text-align: center; margin-bottom: 16px; box-shadow: 0 0 25px rgba(16, 185, 129, 0.3);">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px;">
+        <span style="font-size: 14px; font-weight: 900; color: #10b981; text-shadow: 0 0 10px rgba(16, 185, 129, 0.6);">&#129504; OMNI AGENT 6.0 (IQ 2500+)</span>
+        <span style="background: rgba(15, 23, 42, 0.85); border: 1px solid #10b981; border-radius: 6px; padding: 2px 6px; font-size: 8.5px; font-weight: 800; color: #34d399; display: inline-flex; align-items: center; gap: 4px;">&#127919; TARGET: <span style="color: #facc15; font-size: 10px; font-weight: 900;">#{target_issue}</span> <span style="background: #10b981; color: #020617; font-size: 7.5px; font-weight: 900; padding: 1px 4px; border-radius: 8px;">LIVE</span></span>
     </div>
-    <div style="font-size: 12px; color: #cbd5e1; margin-top: 6px; text-align: left;">
-        Episodic Memory & Policy Gradient Reinforcement Learning.
-    </div>
-    <div style="margin-top: 12px; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
-        <div style="background: rgba(2, 6, 23, 0.6); border: 1.5px solid #10b981; border-radius: 8px; padding: 8px 16px; min-width: 120px;">
-            <span style="font-size: 11px; color: #34d399; font-weight: 700; display:block;">&#128302; OMNI PREDICTION</span>
-            <span style="font-size: 24px; font-weight: 900; color: #10b981; text-shadow: 0 0 12px rgba(16, 185, 129, 0.6);">{omni_prediction}</span>
+    <div style="margin-top: 8px; display: flex; justify-content: center; gap: 4px; width: 100%;">
+        <div style="background: rgba(2, 6, 23, 0.6); border: 1.5px solid #10b981; border-radius: 8px; padding: 6px 3px; flex: 1; min-width: 0;">
+            <span style="font-size: 8.5px; color: #34d399; font-weight: 700; display:block;">&#128302; PREDICTION</span>
+            <span style="font-size: 18px; font-weight: 900; color: #10b981; text-shadow: 0 0 10px rgba(16, 185, 129, 0.6);">{omni_prediction}</span>
         </div>
-        <div style="background: rgba(2, 6, 23, 0.6); border: 1.5px solid {'#ef4444' if omni_col == 'Red' else '#22c55e'}; border-radius: 8px; padding: 8px 16px; min-width: 100px;">
-            <span style="font-size: 11px; color: #94a3b8; font-weight: 700; display:block;">&#127912; COLOR</span>
+        <div style="background: rgba(2, 6, 23, 0.6); border: 1.5px solid {'#ef4444' if omni_col == 'Red' else '#22c55e'}; border-radius: 8px; padding: 6px 3px; flex: 1; min-width: 0;">
+            <span style="font-size: 8.5px; color: #94a3b8; font-weight: 700; display:block;">&#127912; COLOR</span>
             <span style="font-size: 18px; font-weight: 900; color: {'#ef4444' if omni_col == 'Red' else '#22c55e'};">{omni_col}</span>
         </div>
-        <div style="background: rgba(2, 6, 23, 0.6); border: 1.5px solid #a855f7; border-radius: 8px; padding: 8px 16px; min-width: 100px;">
-            <span style="font-size: 11px; color: #c084fc; font-weight: 700; display:block;">&#128207; SIZE</span>
+        <div style="background: rgba(2, 6, 23, 0.6); border: 1.5px solid #a855f7; border-radius: 8px; padding: 6px 3px; flex: 1; min-width: 0;">
+            <span style="font-size: 8.5px; color: #c084fc; font-weight: 700; display:block;">&#128207; SIZE</span>
             <span style="font-size: 18px; font-weight: 900; color: #d8b4fe;">{omni_size}</span>
         </div>
     </div>
-    <div style="margin-top: 12px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
-        <div style="background: rgba(2, 6, 23, 0.6); border: 1px solid #10b981; border-radius: 6px; padding: 6px 12px; min-width: 140px; text-align: center;">
-            <span style="font-size: 10px; color: #34d399; font-weight: 700; display:block; text-transform: uppercase;">&#128204; Number (अंक)</span>
-            <span style="font-size: 12px; font-weight: 800; color: #a7f3d0;">{omni6_num_sahi} Sahi | {omni6_num_galat} Galat</span>
+    <div style="margin-top: 6px; display: flex; justify-content: space-between; gap: 4px; width: 100%;">
+        <div style="background: rgba(2, 6, 23, 0.6); border: 1px solid #10b981; border-radius: 6px; padding: 3px 2px; flex: 1; min-width: 0; text-align: center;">
+            <span style="font-size: 7.5px; color: #34d399; font-weight: 700; display:block; text-transform: uppercase;">📌 NUMBER</span>
+            <span style="font-size: 9px; font-weight: 800; color: #a7f3d0;">{omni6_num_sahi} Sahi | {omni6_num_galat} Galat</span>
         </div>
-        <div style="background: rgba(2, 6, 23, 0.6); border: 1px solid #22c55e; border-radius: 6px; padding: 6px 12px; min-width: 140px; text-align: center;">
-            <span style="font-size: 10px; color: #86efac; font-weight: 700; display:block; text-transform: uppercase;">&#127912; Color (रंग)</span>
-            <span style="font-size: 12px; font-weight: 800; color: #86efac;">{omni6_col_sahi} Sahi | {omni6_col_galat} Galat</span>
+        <div style="background: rgba(2, 6, 23, 0.6); border: 1px solid #22c55e; border-radius: 6px; padding: 3px 2px; flex: 1; min-width: 0; text-align: center;">
+            <span style="font-size: 7.5px; color: #86efac; font-weight: 700; display:block; text-transform: uppercase;">🎨 COLOR</span>
+            <span style="font-size: 9px; font-weight: 800; color: #86efac;">{omni6_col_sahi} Sahi | {omni6_col_galat} Galat</span>
         </div>
-        <div style="background: rgba(2, 6, 23, 0.6); border: 1px solid #a855f7; border-radius: 6px; padding: 6px 12px; min-width: 140px; text-align: center;">
-            <span style="font-size: 10px; color: #c084fc; font-weight: 700; display:block; text-transform: uppercase;">&#128207; Size (आकार)</span>
-            <span style="font-size: 12px; font-weight: 800; color: #d8b4fe;">{omni6_size_sahi} Sahi | {omni6_size_galat} Galat</span>
+        <div style="background: rgba(2, 6, 23, 0.6); border: 1px solid #a855f7; border-radius: 6px; padding: 3px 2px; flex: 1; min-width: 0; text-align: center;">
+            <span style="font-size: 7.5px; color: #c084fc; font-weight: 700; display:block; text-transform: uppercase;">📏 SIZE</span>
+            <span style="font-size: 9px; font-weight: 800; color: #d8b4fe;">{omni6_size_sahi} Sahi | {omni6_size_galat} Galat</span>
         </div>
+    </div>
     </div>
     <div style="margin-top: 10px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #cbd5e1; padding: 0 10px;">
         <span>&#128737; Confidence: <strong>{round(float(omni_confidence), 2)}%</strong></span>
@@ -10269,32 +10274,32 @@ st.markdown(f"""
     <div style="font-size: 12px; color: #cbd5e1; margin-top: 6px; text-align: left;">
         Temporal Sequence Memory (LSTM) with Generalized Advantage Estimation (GAE) & Proximal Policy Optimization (PPO).
     </div>
-    <div style="margin-top: 12px; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
-        <div style="background: rgba(2, 6, 23, 0.6); border: 1.5px solid #06b6d4; border-radius: 8px; padding: 8px 16px; min-width: 120px;">
-            <span style="font-size: 11px; color: #67e8f9; font-weight: 700; display:block;">&#128302; OMNI 7.0 PREDICTION</span>
-            <span style="font-size: 24px; font-weight: 900; color: #06b6d4; text-shadow: 0 0 12px rgba(6, 182, 212, 0.6);">{omni7_prediction}</span>
+    <div style="margin-top: 8px; display: flex; justify-content: center; gap: 4px; width: 100%;">
+        <div style="background: rgba(2, 6, 23, 0.6); border: 1.5px solid #06b6d4; border-radius: 8px; padding: 6px 3px; flex: 1; min-width: 0;">
+            <span style="font-size: 8.5px; color: #67e8f9; font-weight: 700; display:block;">&#128302; PREDICTION</span>
+            <span style="font-size: 18px; font-weight: 900; color: #06b6d4; text-shadow: 0 0 10px rgba(6, 182, 212, 0.6);">{omni7_prediction}</span>
         </div>
-        <div style="background: rgba(2, 6, 23, 0.6); border: 1.5px solid {'#ef4444' if omni7_col == 'Red' else '#22c55e'}; border-radius: 8px; padding: 8px 16px; min-width: 100px;">
-            <span style="font-size: 11px; color: #94a3b8; font-weight: 700; display:block;">&#127912; COLOR</span>
+        <div style="background: rgba(2, 6, 23, 0.6); border: 1.5px solid {'#ef4444' if omni7_col == 'Red' else '#22c55e'}; border-radius: 8px; padding: 6px 3px; flex: 1; min-width: 0;">
+            <span style="font-size: 8.5px; color: #94a3b8; font-weight: 700; display:block;">&#127912; COLOR</span>
             <span style="font-size: 18px; font-weight: 900; color: {'#ef4444' if omni7_col == 'Red' else '#22c55e'};">{omni7_col}</span>
         </div>
-        <div style="background: rgba(2, 6, 23, 0.6); border: 1.5px solid #a855f7; border-radius: 8px; padding: 8px 16px; min-width: 100px;">
-            <span style="font-size: 11px; color: #c084fc; font-weight: 700; display:block;">&#128207; SIZE</span>
+        <div style="background: rgba(2, 6, 23, 0.6); border: 1.5px solid #a855f7; border-radius: 8px; padding: 6px 3px; flex: 1; min-width: 0;">
+            <span style="font-size: 8.5px; color: #c084fc; font-weight: 700; display:block;">&#128207; SIZE</span>
             <span style="font-size: 18px; font-weight: 900; color: #d8b4fe;">{omni7_size}</span>
         </div>
     </div>
-    <div style="margin-top: 12px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
-        <div style="background: rgba(2, 6, 23, 0.6); border: 1px solid #06b6d4; border-radius: 6px; padding: 6px 12px; min-width: 140px; text-align: center;">
-            <span style="font-size: 10px; color: #67e8f9; font-weight: 700; display:block; text-transform: uppercase;">&#128204; Number (अंक)</span>
-            <span style="font-size: 12px; font-weight: 800; color: #e0f7fa;">{omni7_num_sahi} Sahi | {omni7_num_galat} Galat</span>
+    <div style="margin-top: 6px; display: flex; justify-content: space-between; gap: 4px; width: 100%;">
+        <div style="background: rgba(2, 6, 23, 0.6); border: 1px solid #06b6d4; border-radius: 6px; padding: 3px 2px; flex: 1; min-width: 0; text-align: center;">
+            <span style="font-size: 7.5px; color: #67e8f9; font-weight: 700; display:block; text-transform: uppercase;">📌 NUMBER</span>
+            <span style="font-size: 9px; font-weight: 800; color: #e0f7fa;">{omni7_num_sahi} Sahi | {omni7_num_galat} Galat</span>
         </div>
-        <div style="background: rgba(2, 6, 23, 0.6); border: 1px solid #22c55e; border-radius: 6px; padding: 6px 12px; min-width: 140px; text-align: center;">
-            <span style="font-size: 10px; color: #86efac; font-weight: 700; display:block; text-transform: uppercase;">&#127912; Color (रंग)</span>
-            <span style="font-size: 12px; font-weight: 800; color: #86efac;">{omni7_col_sahi} Sahi | {omni7_col_galat} Galat</span>
+        <div style="background: rgba(2, 6, 23, 0.6); border: 1px solid #22c55e; border-radius: 6px; padding: 3px 2px; flex: 1; min-width: 0; text-align: center;">
+            <span style="font-size: 7.5px; color: #86efac; font-weight: 700; display:block; text-transform: uppercase;">🎨 COLOR</span>
+            <span style="font-size: 9px; font-weight: 800; color: #86efac;">{omni7_col_sahi} Sahi | {omni7_col_galat} Galat</span>
         </div>
-        <div style="background: rgba(2, 6, 23, 0.6); border: 1px solid #a855f7; border-radius: 6px; padding: 6px 12px; min-width: 140px; text-align: center;">
-            <span style="font-size: 10px; color: #c084fc; font-weight: 700; display:block; text-transform: uppercase;">&#128207; Size (आकार)</span>
-            <span style="font-size: 12px; font-weight: 800; color: #d8b4fe;">{omni7_size_sahi} Sahi | {omni7_size_galat} Galat</span>
+        <div style="background: rgba(2, 6, 23, 0.6); border: 1px solid #a855f7; border-radius: 6px; padding: 3px 2px; flex: 1; min-width: 0; text-align: center;">
+            <span style="font-size: 7.5px; color: #c084fc; font-weight: 700; display:block; text-transform: uppercase;">📏 SIZE</span>
+            <span style="font-size: 9px; font-weight: 800; color: #d8b4fe;">{omni7_size_sahi} Sahi | {omni7_size_galat} Galat</span>
         </div>
     </div>
     <div style="margin-top: 10px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #cbd5e1; padding: 0 10px;">
@@ -10384,29 +10389,29 @@ st.markdown(f"""
         Self-Evolving Transcendent Mind unifying Multi-Horizon Planning, Regime Transfer Learning, Meta-Meta-Ensemble, Do-Calculus, Self-Consistency, Genetic Evolution, Attention Memory, and Conformal Uncertainty.
     </div>
     <div style="margin-top: 14px; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
-        <div style="background: rgba(2, 6, 23, 0.85); border: 2px solid #10b981; border-radius: 10px; padding: 10px 22px; min-width: 140px;">
+        <div style="background: rgba(2, 6, 23, 0.85); border: 2px solid #10b981; border-radius: 10px; padding: 10px 22px; flex: 1; min-width: 0;">
             <span style="font-size: 11px; color: #a7f3d0; font-weight: 700; display:block;">&#9889; PREDICTED NUMBER</span>
             <span style="font-size: 28px; font-weight: 900; color: #34d399; text-shadow: 0 0 16px rgba(52, 211, 153, 0.9);">{absolute10_prediction}</span>
         </div>
-        <div style="background: rgba(2, 6, 23, 0.85); border: 2px solid {'#ef4444' if abs10_col == 'Red' else '#22c55e'}; border-radius: 10px; padding: 10px 22px; min-width: 110px;">
+        <div style="background: rgba(2, 6, 23, 0.85); border: 2px solid {'#ef4444' if abs10_col == 'Red' else '#22c55e'}; border-radius: 10px; padding: 10px 22px; flex: 1; min-width: 0;">
             <span style="font-size: 11px; color: #94a3b8; font-weight: 700; display:block;">&#127912; COLOR BADGE</span>
             <span style="font-size: 20px; font-weight: 900; color: {'#ef4444' if abs10_col == 'Red' else '#22c55e'};">{abs10_col}</span>
         </div>
-        <div style="background: rgba(2, 6, 23, 0.85); border: 2px solid #a855f7; border-radius: 10px; padding: 10px 22px; min-width: 110px;">
+        <div style="background: rgba(2, 6, 23, 0.85); border: 2px solid #a855f7; border-radius: 10px; padding: 10px 22px; flex: 1; min-width: 0;">
             <span style="font-size: 11px; color: #c084fc; font-weight: 700; display:block;">&#128207; SIZE BADGE</span>
             <span style="font-size: 20px; font-weight: 900; color: #d8b4fe;">{abs10_size}</span>
         </div>
     </div>
     <div style="margin-top: 12px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
-        <div style="background: rgba(2, 6, 23, 0.85); border: 1px solid #10b981; border-radius: 6px; padding: 6px 12px; min-width: 140px; text-align: center;">
+        <div style="background: rgba(2, 6, 23, 0.85); border: 1px solid #10b981; border-radius: 6px; padding: 6px 12px; flex: 1; min-width: 0; text-align: center;">
             <span style="font-size: 10px; color: #a7f3d0; font-weight: 700; display:block; text-transform: uppercase;">&#128204; Number (अंक)</span>
             <span style="font-size: 12px; font-weight: 800; color: #ffffff;">{abs10_num_sahi} Sahi | {abs10_num_galat} Galat</span>
         </div>
-        <div style="background: rgba(2, 6, 23, 0.85); border: 1px solid #22c55e; border-radius: 6px; padding: 6px 12px; min-width: 140px; text-align: center;">
+        <div style="background: rgba(2, 6, 23, 0.85); border: 1px solid #22c55e; border-radius: 6px; padding: 6px 12px; flex: 1; min-width: 0; text-align: center;">
             <span style="font-size: 10px; color: #86efac; font-weight: 700; display:block; text-transform: uppercase;">&#127912; Color (रंग)</span>
             <span style="font-size: 12px; font-weight: 800; color: #86efac;">{abs10_col_sahi} Sahi | {abs10_col_galat} Galat</span>
         </div>
-        <div style="background: rgba(2, 6, 23, 0.85); border: 1px solid #a855f7; border-radius: 6px; padding: 6px 12px; min-width: 140px; text-align: center;">
+        <div style="background: rgba(2, 6, 23, 0.85); border: 1px solid #a855f7; border-radius: 6px; padding: 6px 12px; flex: 1; min-width: 0; text-align: center;">
             <span style="font-size: 10px; color: #c084fc; font-weight: 700; display:block; text-transform: uppercase;">&#128207; Size (आकार)</span>
             <span style="font-size: 12px; font-weight: 800; color: #d8b4fe;">{abs10_size_sahi} Sahi | {abs10_size_galat} Galat</span>
         </div>
@@ -10471,29 +10476,29 @@ st.markdown(f"""
         </div>
     </div>
     <div style="margin-top: 16px; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
-        <div style="background: rgba(2, 6, 23, 0.8); border: 2px solid #a855f7; border-radius: 12px; padding: 12px 24px; min-width: 150px;">
+        <div style="background: rgba(2, 6, 23, 0.8); border: 2px solid #a855f7; border-radius: 12px; padding: 12px 24px; flex: 1; min-width: 0;">
             <span style="font-size: 11px; color: #f0abfc; font-weight: 700; display:block;">&#128302; GOD-MIND PREDICTION</span>
             <span style="font-size: 32px; font-weight: 900; color: #d8b4fe; text-shadow: 0 0 18px rgba(216, 180, 254, 0.9);">{transcendent11_prediction}</span>
         </div>
-        <div style="background: rgba(2, 6, 23, 0.8); border: 2px solid {'#ef4444' if transcendent11_col == 'Red' else ('#22c55e' if transcendent11_col == 'Green' else '#a855f7')}; border-radius: 12px; padding: 12px 24px; min-width: 120px;">
+        <div style="background: rgba(2, 6, 23, 0.8); border: 2px solid {'#ef4444' if transcendent11_col == 'Red' else ('#22c55e' if transcendent11_col == 'Green' else '#a855f7')}; border-radius: 12px; padding: 12px 24px; flex: 1; min-width: 0;">
             <span style="font-size: 11px; color: #94a3b8; font-weight: 700; display:block;">&#127912; COLOR BADGE</span>
             <span style="font-size: 22px; font-weight: 900; color: {'#ef4444' if transcendent11_col == 'Red' else ('#22c55e' if transcendent11_col == 'Green' else '#a855f7')};">{transcendent11_col}</span>
         </div>
-        <div style="background: rgba(2, 6, 23, 0.8); border: 2px solid #38bdf8; border-radius: 12px; padding: 12px 24px; min-width: 120px;">
+        <div style="background: rgba(2, 6, 23, 0.8); border: 2px solid #38bdf8; border-radius: 12px; padding: 12px 24px; flex: 1; min-width: 0;">
             <span style="font-size: 11px; color: #bae6fd; font-weight: 700; display:block;">&#128207; SIZE BADGE</span>
             <span style="font-size: 22px; font-weight: 900; color: #38bdf8;">{transcendent11_size}</span>
         </div>
     </div>
     <div style="margin-top: 14px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
-        <div style="background: rgba(2, 6, 23, 0.7); border: 1px solid #a855f7; border-radius: 6px; padding: 6px 12px; min-width: 140px; text-align: center;">
+        <div style="background: rgba(2, 6, 23, 0.7); border: 1px solid #a855f7; border-radius: 6px; padding: 6px 12px; flex: 1; min-width: 0; text-align: center;">
             <span style="font-size: 10px; color: #f0abfc; font-weight: 700; display:block; text-transform: uppercase;">&#128204; Number (अंक)</span>
             <span style="font-size: 12px; font-weight: 800; color: #ffffff;">{trans11_num_sahi} Sahi | {trans11_num_galat} Galat</span>
         </div>
-        <div style="background: rgba(2, 6, 23, 0.7); border: 1px solid #22c55e; border-radius: 6px; padding: 6px 12px; min-width: 140px; text-align: center;">
+        <div style="background: rgba(2, 6, 23, 0.7); border: 1px solid #22c55e; border-radius: 6px; padding: 6px 12px; flex: 1; min-width: 0; text-align: center;">
             <span style="font-size: 10px; color: #86efac; font-weight: 700; display:block; text-transform: uppercase;">&#127912; Color (रंग)</span>
             <span style="font-size: 12px; font-weight: 800; color: #86efac;">{trans11_col_sahi} Sahi | {trans11_col_galat} Galat</span>
         </div>
-        <div style="background: rgba(2, 6, 23, 0.7); border: 1px solid #a855f7; border-radius: 6px; padding: 6px 12px; min-width: 140px; text-align: center;">
+        <div style="background: rgba(2, 6, 23, 0.7); border: 1px solid #a855f7; border-radius: 6px; padding: 6px 12px; flex: 1; min-width: 0; text-align: center;">
             <span style="font-size: 10px; color: #c084fc; font-weight: 700; display:block; text-transform: uppercase;">&#128207; Size (आकार)</span>
             <span style="font-size: 12px; font-weight: 800; color: #d8b4fe;">{trans11_size_sahi} Sahi | {trans11_size_galat} Galat</span>
         </div>
@@ -10904,18 +10909,18 @@ st.markdown(f"""
             <span style="font-size: 20px; font-weight: 900; color: #d8b4fe;">{omni9_size}</span>
         </div>
     </div>
-    <div style="margin-top: 12px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
-        <div style="background: rgba(2, 6, 23, 0.8); border: 1px solid #06b6d4; border-radius: 6px; padding: 6px 12px; min-width: 140px; text-align: center;">
-            <span style="font-size: 10px; color: #bae6fd; font-weight: 700; display:block; text-transform: uppercase;">&#128204; Number (अंक)</span>
-            <span style="font-size: 12px; font-weight: 800; color: #ffffff;">{omni9_num_sahi} Sahi | {omni9_num_galat} Galat</span>
+    <div style="margin-top: 6px; display: flex; justify-content: space-between; gap: 4px; width: 100%;">
+        <div style="background: rgba(2, 6, 23, 0.8); border: 1px solid #06b6d4; border-radius: 6px; padding: 3px 2px; flex: 1; min-width: 0; text-align: center;">
+            <span style="font-size: 7.5px; color: #bae6fd; font-weight: 700; display:block; text-transform: uppercase;">📌 NUMBER</span>
+            <span style="font-size: 9px; font-weight: 800; color: #ffffff;">{omni9_num_sahi} Sahi | {omni9_num_galat} Galat</span>
         </div>
-        <div style="background: rgba(2, 6, 23, 0.8); border: 1px solid #22c55e; border-radius: 6px; padding: 6px 12px; min-width: 140px; text-align: center;">
-            <span style="font-size: 10px; color: #86efac; font-weight: 700; display:block; text-transform: uppercase;">&#127912; Color (रंग)</span>
-            <span style="font-size: 12px; font-weight: 800; color: #86efac;">{omni9_col_sahi} Sahi | {omni9_col_galat} Galat</span>
+        <div style="background: rgba(2, 6, 23, 0.8); border: 1px solid #22c55e; border-radius: 6px; padding: 3px 2px; flex: 1; min-width: 0; text-align: center;">
+            <span style="font-size: 7.5px; color: #86efac; font-weight: 700; display:block; text-transform: uppercase;">🎨 COLOR</span>
+            <span style="font-size: 9px; font-weight: 800; color: #86efac;">{omni9_col_sahi} Sahi | {omni9_col_galat} Galat</span>
         </div>
-        <div style="background: rgba(2, 6, 23, 0.8); border: 1px solid #a855f7; border-radius: 6px; padding: 6px 12px; min-width: 140px; text-align: center;">
-            <span style="font-size: 10px; color: #c084fc; font-weight: 700; display:block; text-transform: uppercase;">&#128207; Size (आकार)</span>
-            <span style="font-size: 12px; font-weight: 800; color: #d8b4fe;">{omni9_size_sahi} Sahi | {omni9_size_galat} Galat</span>
+        <div style="background: rgba(2, 6, 23, 0.8); border: 1px solid #a855f7; border-radius: 6px; padding: 3px 2px; flex: 1; min-width: 0; text-align: center;">
+            <span style="font-size: 7.5px; color: #c084fc; font-weight: 700; display:block; text-transform: uppercase;">📏 SIZE</span>
+            <span style="font-size: 9px; font-weight: 800; color: #d8b4fe;">{omni9_size_sahi} Sahi | {omni9_size_galat} Galat</span>
         </div>
     </div>
     <div style="margin-top: 14px; background: rgba(2, 6, 23, 0.7); border: 1px solid #0284c7; border-radius: 8px; padding: 10px; text-align: left; font-size: 11px; color: #e0f2fe; display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
@@ -10967,18 +10972,18 @@ st.markdown(f"""
             <span style="font-size: 18px; font-weight: 900; color: #d8b4fe;">{ascend_size}</span>
         </div>
     </div>
-    <div style="margin-top: 12px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
-        <div style="background: rgba(2, 6, 23, 0.6); border: 1px solid #f59e0b; border-radius: 6px; padding: 6px 12px; min-width: 140px; text-align: center;">
-            <span style="font-size: 10px; color: #fbbf24; font-weight: 700; display:block; text-transform: uppercase;">&#128204; Number (अंक)</span>
-            <span style="font-size: 12px; font-weight: 800; color: #fef08a;">{nexus9_num_sahi} Sahi | {nexus9_num_galat} Galat</span>
+    <div style="margin-top: 6px; display: flex; justify-content: space-between; gap: 4px; width: 100%;">
+        <div style="background: rgba(2, 6, 23, 0.6); border: 1px solid #f59e0b; border-radius: 6px; padding: 3px 2px; flex: 1; min-width: 0; text-align: center;">
+            <span style="font-size: 7.5px; color: #fbbf24; font-weight: 700; display:block; text-transform: uppercase;">📌 NUMBER</span>
+            <span style="font-size: 9px; font-weight: 800; color: #fef08a;">{nexus9_num_sahi} Sahi | {nexus9_num_galat} Galat</span>
         </div>
-        <div style="background: rgba(2, 6, 23, 0.6); border: 1px solid #22c55e; border-radius: 6px; padding: 6px 12px; min-width: 140px; text-align: center;">
-            <span style="font-size: 10px; color: #86efac; font-weight: 700; display:block; text-transform: uppercase;">&#127912; Color (रंग)</span>
-            <span style="font-size: 12px; font-weight: 800; color: #86efac;">{nexus9_col_sahi} Sahi | {nexus9_col_galat} Galat</span>
+        <div style="background: rgba(2, 6, 23, 0.6); border: 1px solid #22c55e; border-radius: 6px; padding: 3px 2px; flex: 1; min-width: 0; text-align: center;">
+            <span style="font-size: 7.5px; color: #86efac; font-weight: 700; display:block; text-transform: uppercase;">🎨 COLOR</span>
+            <span style="font-size: 9px; font-weight: 800; color: #86efac;">{nexus9_col_sahi} Sahi | {nexus9_col_galat} Galat</span>
         </div>
-        <div style="background: rgba(2, 6, 23, 0.6); border: 1px solid #a855f7; border-radius: 6px; padding: 6px 12px; min-width: 140px; text-align: center;">
-            <span style="font-size: 10px; color: #c084fc; font-weight: 700; display:block; text-transform: uppercase;">&#128207; Size (आकार)</span>
-            <span style="font-size: 12px; font-weight: 800; color: #d8b4fe;">{nexus9_size_sahi} Sahi | {nexus9_size_galat} Galat</span>
+        <div style="background: rgba(2, 6, 23, 0.6); border: 1px solid #a855f7; border-radius: 6px; padding: 3px 2px; flex: 1; min-width: 0; text-align: center;">
+            <span style="font-size: 7.5px; color: #c084fc; font-weight: 700; display:block; text-transform: uppercase;">📏 SIZE</span>
+            <span style="font-size: 9px; font-weight: 800; color: #d8b4fe;">{nexus9_size_sahi} Sahi | {nexus9_size_galat} Galat</span>
         </div>
     </div>
     <div style="margin-top: 10px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #cbd5e1; padding: 0 10px; flex-wrap: wrap; gap: 10px;">

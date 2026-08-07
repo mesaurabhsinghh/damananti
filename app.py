@@ -6246,14 +6246,14 @@ def render_nexus_duo_force_card(target_name, pred_col, pred_size, conf_col, conf
 </div>
 </div>
 
-<div style="margin-top: 10px; margin-bottom: 15px; display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;">
-<div style="background: rgba(2, 6, 23, 0.7); border: 1.5px solid #22c55e; border-radius: 8px; padding: 8px 16px; min-width: 160px; text-align: center;">
-<span style="font-size: 10px; color: #86efac; font-weight: 800; display:block; text-transform: uppercase;">🎨 Color Score Record</span>
-<span style="font-size: 13px; font-weight: 900; color: #86efac;">{duo_col_sahi} Sahi | {duo_col_galat} Galat</span>
+<div style="margin-top: 6px; margin-bottom: 10px; display: flex; justify-content: space-between; gap: 4px; width: 100%;">
+<div style="flex: 1; min-width: 0; background: rgba(2, 6, 23, 0.7); border: 1px solid #22c55e; border-radius: 6px; padding: 3px 2px; text-align: center;">
+<span style="font-size: 8px; color: #86efac; font-weight: 800; display:block; text-transform: uppercase;">🎨 COLOR SCORE</span>
+<span style="font-size: 10px; font-weight: 900; color: #86efac;">{duo_col_sahi} Sahi | {duo_col_galat} Galat</span>
 </div>
-<div style="background: rgba(2, 6, 23, 0.7); border: 1.5px solid #38bdf8; border-radius: 8px; padding: 8px 16px; min-width: 160px; text-align: center;">
-<span style="font-size: 10px; color: #7dd3fc; font-weight: 800; display:block; text-transform: uppercase;">📏 Size Score Record</span>
-<span style="font-size: 13px; font-weight: 900; color: #7dd3fc;">{duo_size_sahi} Sahi | {duo_size_galat} Galat</span>
+<div style="flex: 1; min-width: 0; background: rgba(2, 6, 23, 0.7); border: 1px solid #38bdf8; border-radius: 6px; padding: 3px 2px; text-align: center;">
+<span style="font-size: 8px; color: #7dd3fc; font-weight: 800; display:block; text-transform: uppercase;">📏 SIZE SCORE</span>
+<span style="font-size: 10px; font-weight: 900; color: #7dd3fc;">{duo_size_sahi} Sahi | {duo_size_galat} Galat</span>
 </div>
 </div>
 
@@ -6411,60 +6411,60 @@ def render_hyperion_omni_agi_12_card(target_name, pred_num, pred_col, pred_size,
     stats = st.session_state.get("hyperion12_stats", {})
     bet_pct = stats.get("bet_size_pct", 15.0)
 
-    card_html = f"""<div style="background: linear-gradient(135deg, rgba(147, 51, 234, 0.25) 0%, rgba(15, 23, 42, 0.98) 50%, rgba(6, 182, 212, 0.25) 100%); border: 3px solid #c084fc; border-radius: 16px; padding: 22px; margin-bottom: 24px; box-shadow: 0 0 35px rgba(192, 132, 252, 0.4), 0 0 35px rgba(6, 182, 212, 0.3);">
-<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1.5px solid rgba(192, 132, 252, 0.3); padding-bottom: 12px; flex-wrap: wrap; gap: 8px;">
-<div style="display: flex; align-items: center; gap: 10px;">
-<span style="font-size: 26px;">🌌</span>
+    card_html = f"""<div style="background: linear-gradient(135deg, rgba(147, 51, 234, 0.25) 0%, rgba(15, 23, 42, 0.98) 50%, rgba(6, 182, 212, 0.25) 100%); border: 2.5px solid #c084fc; border-radius: 12px; padding: 10px; margin-bottom: 16px; box-shadow: 0 0 20px rgba(192, 132, 252, 0.3);">
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1.5px solid rgba(192, 132, 252, 0.3); padding-bottom: 8px; flex-wrap: wrap; gap: 4px;">
+<div style="display: flex; align-items: center; gap: 6px;">
+<span style="font-size: 18px;">🌌</span>
 <div>
-<span style="font-size: 18px; font-weight: 900; color: #f8fafc; text-transform: uppercase; letter-spacing: 0.8px; text-shadow: 0 0 12px rgba(192, 132, 252, 0.8);">HYPERION OMNI-AGI 12.0</span>
-<div style="font-size: 11px; color: #a7f3d0; font-weight: 700;">(The Apex Consciousness & Meta-Cognitive Autonomous AI)</div>
+<div style="font-size: 14px; font-weight: 900; color: #f8fafc; text-transform: uppercase; letter-spacing: 0.5px; text-shadow: 0 0 10px rgba(192, 132, 252, 0.8);">HYPERION OMNI-AGI 12.0</div>
+<div style="font-size: 9.5px; color: #a7f3d0; font-weight: 700;">(The Apex Consciousness & Meta-Cognitive Autonomous AI)</div>
 </div>
 </div>
-<div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
-<span style="background: rgba(15, 23, 42, 0.85); border: 1.5px solid #c084fc; border-radius: 8px; padding: 4px 12px; font-size: 10px; font-weight: 800; color: #e9d5ff; display: inline-flex; align-items: center; gap: 6px;">🎯 TARGET ISSUE: <span style="color: #facc15; font-size: 12px; font-weight: 900;">#{target_issue_str}</span> <span style="background: #a855f7; color: #ffffff; font-size: 8px; font-weight: 900; padding: 2px 6px; border-radius: 10px;">APEX SYNC</span></span>
-<span style="background: rgba(192, 132, 252, 0.2); border: 1px solid #c084fc; color: #e9d5ff; font-size: 10px; font-weight: 800; padding: 2px 8px; border-radius: 12px;">75 Streams</span>
-<span style="background: rgba(6, 182, 212, 0.2); border: 1px solid #06b6d4; color: #67e8f9; font-size: 10px; font-weight: 800; padding: 2px 8px; border-radius: 12px;">q-PDF γ=1.6</span>
-<span style="background: rgba(16, 185, 129, 0.2); border: 1px solid #10b981; color: #6ee7b7; font-size: 10px; font-weight: 800; padding: 2px 8px; border-radius: 12px;">CFR+ Regret</span>
-</div>
-</div>
-
-<div style="display: flex; gap: 15px; margin-bottom: 15px; flex-wrap: wrap;">
-<div style="flex: 1.2; background: rgba(15, 23, 42, 0.8); border: 2px solid #c084fc; border-radius: 12px; padding: 14px; text-align: center; box-shadow: 0 0 15px rgba(192, 132, 252, 0.2);">
-<div style="font-size: 11px; font-weight: 800; color: #cbd5e1; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">🌌 APEX NUMBER PREDICTION</div>
-<div style="font-size: 38px; font-weight: 900; color: #f472b6; text-shadow: 0 0 15px #f472b6; margin: 2px 0;">DIGIT {pred_num}</div>
-<div style="font-size: 13px; font-weight: 800; color: #e2e8f0;">Overall Confidence: <span style="color: #c084fc;">{confidence:.1f}%</span></div>
-</div>
-
-<div style="flex: 1; background: rgba(15, 23, 42, 0.8); border: 1.5px solid {col_color}; border-radius: 12px; padding: 14px; text-align: center;">
-<div style="font-size: 11px; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">🎨 COLOR TARGET</div>
-<div style="font-size: 30px; font-weight: 900; color: {col_color}; text-shadow: 0 0 12px {col_color}; margin: 2px 0;">{pred_col.upper()}</div>
-<div style="font-size: 12px; font-weight: 700; color: #cbd5e1;">Quantum Collapse</div>
-</div>
-
-<div style="flex: 1; background: rgba(15, 23, 42, 0.8); border: 1.5px solid {size_color}; border-radius: 12px; padding: 14px; text-align: center;">
-<div style="font-size: 11px; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">📏 SIZE TARGET</div>
-<div style="font-size: 30px; font-weight: 900; color: {size_color}; text-shadow: 0 0 12px {size_color}; margin: 2px 0;">{pred_size.upper()}</div>
-<div style="font-size: 12px; font-weight: 700; color: #cbd5e1;">Phase Synchronized</div>
+<div style="display: flex; gap: 4px; align-items: center; flex-wrap: wrap;">
+<span style="background: rgba(15, 23, 42, 0.85); border: 1px solid #c084fc; border-radius: 6px; padding: 2px 6px; font-size: 8.5px; font-weight: 800; color: #e9d5ff; display: inline-flex; align-items: center; gap: 4px;">🎯 TARGET ISSUE: <span style="color: #facc15; font-size: 10px; font-weight: 900;">#{target_issue_str}</span> <span style="background: #a855f7; color: #ffffff; font-size: 7.5px; font-weight: 900; padding: 1px 4px; border-radius: 8px;">APEX SYNC</span></span>
+<span style="background: rgba(192, 132, 252, 0.2); border: 1px solid #c084fc; color: #e9d5ff; font-size: 8px; font-weight: 800; padding: 1px 5px; border-radius: 10px;">75 Streams</span>
+<span style="background: rgba(6, 182, 212, 0.2); border: 1px solid #06b6d4; color: #67e8f9; font-size: 8px; font-weight: 800; padding: 1px 5px; border-radius: 10px;">q-PDF γ=1.6</span>
+<span style="background: rgba(16, 185, 129, 0.2); border: 1px solid #10b981; color: #6ee7b7; font-size: 8px; font-weight: 800; padding: 1px 5px; border-radius: 10px;">CFR+ Regret</span>
 </div>
 </div>
 
-<div style="margin-top: 10px; margin-bottom: 15px; display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;">
-<div style="background: rgba(2, 6, 23, 0.7); border: 1.5px solid #c084fc; border-radius: 8px; padding: 8px 16px; min-width: 150px; text-align: center;">
-<span style="font-size: 10px; color: #e9d5ff; font-weight: 800; display:block; text-transform: uppercase;">📌 Number Score Record</span>
-<span style="font-size: 13px; font-weight: 900; color: #e9d5ff;">{num_sahi} Sahi | {num_galat} Galat</span>
+<div style="display: flex; gap: 6px; margin-bottom: 8px; width: 100%;">
+<div style="flex: 1; min-width: 0; background: rgba(15, 23, 42, 0.85); border: 1.5px solid #c084fc; border-radius: 10px; padding: 6px 3px; text-align: center; box-shadow: 0 0 10px rgba(192, 132, 252, 0.2);">
+<div style="font-size: 8.5px; font-weight: 800; color: #cbd5e1; text-transform: uppercase;">🌌 APEX NUMBER PREDICTION</div>
+<div style="font-size: 18px; font-weight: 900; color: #f472b6; text-shadow: 0 0 10px #f472b6; margin: 1px 0;">DIGIT {pred_num}</div>
+<div style="font-size: 9px; font-weight: 800; color: #e2e8f0;">Overall Confidence: <span style="color: #c084fc;">{confidence:.1f}%</span></div>
 </div>
-<div style="background: rgba(2, 6, 23, 0.7); border: 1.5px solid #22c55e; border-radius: 8px; padding: 8px 16px; min-width: 150px; text-align: center;">
-<span style="font-size: 10px; color: #86efac; font-weight: 800; display:block; text-transform: uppercase;">🎨 Color Score Record</span>
-<span style="font-size: 13px; font-weight: 900; color: #86efac;">{col_sahi} Sahi | {col_galat} Galat</span>
-</div>
-<div style="background: rgba(2, 6, 23, 0.7); border: 1.5px solid #38bdf8; border-radius: 8px; padding: 8px 16px; min-width: 150px; text-align: center;">
-<span style="font-size: 10px; color: #7dd3fc; font-weight: 800; display:block; text-transform: uppercase;">📏 Size Score Record</span>
-<span style="font-size: 13px; font-weight: 900; color: #7dd3fc;">{size_sahi} Sahi | {size_galat} Galat</span>
+
+<div style="flex: 1; min-width: 0; background: rgba(15, 23, 42, 0.85); border: 1.5px solid {col_color}; border-radius: 10px; padding: 6px 3px; text-align: center;">
+<div style="font-size: 8.5px; font-weight: 800; color: #94a3b8; text-transform: uppercase;">🎨 COLOR TARGET</div>
+<div style="font-size: 18px; font-weight: 900; color: {col_color}; text-shadow: 0 0 10px {col_color}; margin: 1px 0;">{pred_col.upper()}</div>
+<div style="font-size: 9px; font-weight: 700; color: #cbd5e1;">Quantum Collapse</div>
 </div>
 </div>
 
-<div style="text-align: center; padding: 10px 16px; border-radius: 8px; font-size: 12px; font-weight: 800; background: rgba(168, 85, 247, 0.2); border: 1.5px solid #a855f7; color: #f3e8ff; margin-bottom: 10px;">
-🔥 APEX KELLY CAPITAL ALLOCATION: {bet_pct}% OF BANKROLL RECOMMENDED
+<div style="margin-bottom: 8px; background: rgba(15, 23, 42, 0.85); border: 1.5px solid {size_color}; border-radius: 10px; padding: 6px; text-align: center; width: 100%;">
+<div style="font-size: 8.5px; font-weight: 800; color: #94a3b8; text-transform: uppercase;">📏 SIZE TARGET</div>
+<div style="font-size: 18px; font-weight: 900; color: {size_color}; text-shadow: 0 0 10px {size_color}; margin: 1px 0;">{pred_size.upper()}</div>
+<div style="font-size: 9px; font-weight: 700; color: #cbd5e1;">Phase Synchronized</div>
+</div>
+
+<div style="margin-top: 4px; margin-bottom: 8px; display: flex; justify-content: space-between; gap: 4px; width: 100%;">
+<div style="flex: 1; min-width: 0; background: rgba(2, 6, 23, 0.7); border: 1px solid #c084fc; border-radius: 6px; padding: 3px 2px; text-align: center;">
+<span style="font-size: 7.5px; color: #e9d5ff; font-weight: 800; display:block; text-transform: uppercase;">📌 NUMBER SCORE RECORD</span>
+<span style="font-size: 9px; font-weight: 900; color: #e9d5ff;">{num_sahi} Sahi | {num_galat} Galat</span>
+</div>
+<div style="flex: 1; min-width: 0; background: rgba(2, 6, 23, 0.7); border: 1px solid #22c55e; border-radius: 6px; padding: 3px 2px; text-align: center;">
+<span style="font-size: 7.5px; color: #86efac; font-weight: 800; display:block; text-transform: uppercase;">🎨 COLOR SCORE RECORD</span>
+<span style="font-size: 9px; font-weight: 900; color: #86efac;">{col_sahi} Sahi | {col_galat} Galat</span>
+</div>
+<div style="flex: 1; min-width: 0; background: rgba(2, 6, 23, 0.7); border: 1px solid #38bdf8; border-radius: 6px; padding: 3px 2px; text-align: center;">
+<span style="font-size: 7.5px; color: #7dd3fc; font-weight: 800; display:block; text-transform: uppercase;">📏 SIZE SCORE RECORD</span>
+<span style="font-size: 9px; font-weight: 900; color: #7dd3fc;">{size_sahi} Sahi | {size_galat} Galat</span>
+</div>
+</div>
+
+<div style="text-align: center; padding: 4px 6px; border-radius: 6px; font-size: 9px; font-weight: 800; background: rgba(168, 85, 247, 0.2); border: 1px solid #a855f7; color: #f3e8ff; margin-bottom: 4px;">
+🔥 APEX KELLY CAPITAL ALLOCATION: {bet_pct}% RECOMMENDED
 </div>
 </div>"""
 

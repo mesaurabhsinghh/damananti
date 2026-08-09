@@ -652,17 +652,22 @@ import torch.optim as optim
 # TrueLSTMNet and DQNCoreNet are imported from model_manager.py
 
 def helper_get_color(num):
-    if num in [2, 4, 6, 8]:
+    if num is None:
         return "Red"
-    elif num in [1, 3, 7, 9]:
-        return "Green"
-    elif num == 0:
+    try:
+        n = int(num)
+        return "Red" if n in [0, 2, 4, 6, 8] else "Green"
+    except Exception:
         return "Red"
-    else:
-        return "Green"
 
 def helper_get_size(num):
-    return "Big" if num >= 5 else "Small"
+    if num is None:
+        return "Small"
+    try:
+        n = int(num)
+        return "Big" if n >= 5 else "Small"
+    except Exception:
+        return "Small"
 
 def check_color_hit(pred_col, act_num, act_col):
     if pred_col is None:
@@ -671,16 +676,17 @@ def check_color_hit(pred_col, act_num, act_col):
     a_c = str(act_col).strip().lower() if act_col is not None else ""
     act_n = int(act_num) if (act_num is not None and str(act_num).isdigit()) else None
     
-    if "red" in p_c:
-        if (act_n is not None and act_n in [0, 2, 4, 6, 8]) or ("red" in a_c):
-            return True
-    if "green" in p_c:
-        if (act_n is not None and act_n in [1, 3, 5, 7, 9]) or ("green" in a_c):
-            return True
-    if "violet" in p_c:
-        if (act_n is not None and act_n in [0, 5]) or ("violet" in a_c):
-            return True
-    return p_c == a_c
+    if act_n is not None:
+        actual_color = "Red" if act_n in [0, 2, 4, 6, 8] else "Green"
+    elif "red" in a_c:
+        actual_color = "Red"
+    elif "green" in a_c:
+        actual_color = "Green"
+    else:
+        actual_color = a_c.capitalize()
+        
+    predicted_color = "Red" if "red" in p_c else ("Green" if "green" in p_c else p_c.capitalize())
+    return predicted_color.lower() == actual_color.lower()
 
 def check_size_hit(pred_size, act_num, act_size):
     if pred_size is None:
@@ -689,13 +695,17 @@ def check_size_hit(pred_size, act_num, act_size):
     a_s = str(act_size).strip().lower() if act_size is not None else ""
     act_n = int(act_num) if (act_num is not None and str(act_num).isdigit()) else None
     
-    if "big" in p_s:
-        if (act_n is not None and act_n >= 5) or ("big" in a_s):
-            return True
-    if "small" in p_s:
-        if (act_n is not None and act_n <= 4) or ("small" in a_s):
-            return True
-    return p_s == a_s
+    if act_n is not None:
+        actual_size = "Big" if act_n >= 5 else "Small"
+    elif "big" in a_s:
+        actual_size = "Big"
+    elif "small" in a_s:
+        actual_size = "Small"
+    else:
+        actual_size = a_s.capitalize()
+        
+    predicted_size = "Big" if "big" in p_s else ("Small" if "small" in p_s else p_s.capitalize())
+    return predicted_size.lower() == actual_size.lower()
 
 def get_history_file_path():
     win_path = r"C:\damanAi\dashboard\history.csv"
@@ -2479,7 +2489,7 @@ def run_nexus_ascend_10_0(engines_dict, ucb_scores, df_history, cache_info, maml
     final_pred_digit = int(np.argmax(meta_prob_dist))
     final_confidence = float(meta_prob_dist[final_pred_digit] * 100.0)
 
-    pred_col = "Red" if final_pred_digit in [1, 3, 7, 9, 8] else "Green"
+    pred_col = "Red" if final_pred_digit in [0, 2, 4, 6, 8] else "Green"
     pred_size = "Big" if final_pred_digit >= 5 else "Small"
 
     target_name = f"Number {final_pred_digit} ({pred_col} | {pred_size})"
@@ -2539,13 +2549,13 @@ def extract_nexus_core_features(df):
         hour_val = float((issue_val % 24))
         
         last_n = sub_nums[-1]
-        color_last = 1.0 if int(last_n) in [1, 3, 7, 9, 8] else 0.0
+        color_last = 1.0 if int(last_n) in [0, 2, 4, 6, 8] else 0.0
         size_last = 1.0 if int(last_n) >= 5 else 0.0
         
         streak_col = 1.0
         for k in range(len(sub_nums)-1, 0, -1):
-            curr_c = (int(sub_nums[k]) in [1, 3, 7, 9, 8])
-            prev_c = (int(sub_nums[k-1]) in [1, 3, 7, 9, 8])
+            curr_c = (int(sub_nums[k]) in [0, 2, 4, 6, 8])
+            prev_c = (int(sub_nums[k-1]) in [0, 2, 4, 6, 8])
             if curr_c == prev_c:
                 streak_col += 1.0
             else:
@@ -2720,7 +2730,7 @@ def run_nexus_core_agent(engines_dict, ucb_scores, df_history, cache_info):
             "conf_label": confidence_label
         }
 
-        pred_col = "Red" if chosen_digit in [1, 3, 7, 9, 8] else "Green"
+        pred_col = "Red" if chosen_digit in [0, 2, 4, 6, 8] else "Green"
         pred_size = "Big" if chosen_digit >= 5 else "Small"
         target_name = f"Number {chosen_digit} ({pred_col} | {pred_size})"
 
@@ -2746,7 +2756,7 @@ def run_nexus_core_agent(engines_dict, ucb_scores, df_history, cache_info):
     except Exception as e:
         all_votes = [engines_dict[f"E{k}"]["num"] for k in range(1, 60) if f"E{k}" in engines_dict]
         fallback_digit = Counter(all_votes).most_common(1)[0][0] if all_votes else 5
-        fb_col = "Red" if fallback_digit in [1, 3, 7, 9, 8] else "Green"
+        fb_col = "Red" if fallback_digit in [0, 2, 4, 6, 8] else "Green"
         fb_size = "Big" if fallback_digit >= 5 else "Small"
         return f"Number {fallback_digit} ({fb_col} | {fb_size})", str(fallback_digit), 65.0, f"NEXUS CORE Fallback: {str(e)}", [f"Fallback active: {str(e)}"]
 
@@ -2969,7 +2979,7 @@ def run_absolute_agent_10_0(engines_dict, ucb_scores, df_history, cache_info):
             "top_shap": top_shap_drivers
         }
 
-        pred_col = "Red" if chosen_digit in [1, 3, 7, 9, 8] else "Green"
+        pred_col = "Red" if chosen_digit in [0, 2, 4, 6, 8] else "Green"
         pred_size = "Big" if chosen_digit >= 5 else "Small"
         target_name = f"Number {chosen_digit} ({pred_col} | {pred_size})"
 
@@ -2999,7 +3009,7 @@ def run_absolute_agent_10_0(engines_dict, ucb_scores, df_history, cache_info):
     except Exception as e:
         all_votes = [engines_dict[f"E{k}"]["num"] for k in range(1, 60) if f"E{k}" in engines_dict]
         fallback_digit = Counter(all_votes).most_common(1)[0][0] if all_votes else 5
-        fb_col = "Red" if fallback_digit in [1, 3, 7, 9, 8] else "Green"
+        fb_col = "Red" if fallback_digit in [0, 2, 4, 6, 8] else "Green"
         fb_size = "Big" if fallback_digit >= 5 else "Small"
         return f"Number {fallback_digit} ({fb_col} | {fb_size})", str(fallback_digit), 75.0, f"ABSOLUTE 10.0 Fallback: {str(e)}", [f"Fallback active: {str(e)}"]
 
@@ -3192,7 +3202,7 @@ def run_transcendent_agent_11_0(engines_dict, ucb_scores, df_history, cache_info
         raw_conf = float(final_godmind_prob[chosen_digit] * 100.0)
         confidence = float(np.clip(raw_conf + 45.0, 88.0, 99.9))
 
-        pred_col = "Red" if chosen_digit in [1, 3, 7, 9, 8] else "Green"
+        pred_col = "Red" if chosen_digit in [0, 2, 4, 6, 8] else "Green"
         pred_size = "Big" if chosen_digit >= 5 else "Small"
         target_name = f"Number {chosen_digit} ({pred_col} | {pred_size})"
 
@@ -3239,7 +3249,7 @@ def run_transcendent_agent_11_0(engines_dict, ucb_scores, df_history, cache_info
     except Exception as e:
         all_votes = [engines_dict[f"E{k}"]["num"] for k in range(1, 60) if f"E{k}" in engines_dict]
         fallback_digit = Counter(all_votes).most_common(1)[0][0] if all_votes else 7
-        fb_col = "Red" if fallback_digit in [1, 3, 7, 9, 8] else "Green"
+        fb_col = "Red" if fallback_digit in [0, 2, 4, 6, 8] else "Green"
         fb_size = "Big" if fallback_digit >= 5 else "Small"
         return f"Number {fallback_digit} ({fb_col} | {fb_size})", str(fallback_digit), 88.0, f"TRANSCENDENT 11.0 Fallback: {str(e)}", [f"Fallback active: {str(e)}"]
 
@@ -3558,7 +3568,7 @@ def run_nexus_supreme_prime(engines_dict, ucb_scores, df_history, cache_info):
             else:
                 confidence = float(np.clip(conf_raw + 70.0, 70.0, 99.9))
 
-        pred_col = "Red" if chosen_digit in [1, 3, 7, 9, 8] else "Green"
+        pred_col = "Red" if chosen_digit in [0, 2, 4, 6, 8] else "Green"
         pred_size = "Big" if chosen_digit >= 5 else "Small"
         target_name = f"Number {chosen_digit} ({pred_col} | {pred_size})"
 
@@ -3601,7 +3611,7 @@ def run_nexus_supreme_prime(engines_dict, ucb_scores, df_history, cache_info):
     except Exception as e:
         all_votes = [engines_dict[f"E{k}"]["num"] for k in range(1, 60) if f"E{k}" in engines_dict]
         fallback_digit = Counter(all_votes).most_common(1)[0][0] if all_votes else 5
-        fb_col = "Red" if fallback_digit in [1, 3, 7, 9, 8] else "Green"
+        fb_col = "Red" if fallback_digit in [0, 2, 4, 6, 8] else "Green"
         fb_size = "Big" if fallback_digit >= 5 else "Small"
         return f"Number {fallback_digit} ({fb_col} | {fb_size})", str(fallback_digit), 75.0, f"NEXUS SUPREME PRIME Fallback: {str(e)}", [f"Fallback active: {str(e)}"]
 
@@ -3721,9 +3731,9 @@ def run_oracle_agent_8_0(engines_dict, ucb_scores, df_history, cache_info):
             for p in test_preds:
                 actual = p["actual_num"]
                 pred_d = int(np.argmax(prob_dist))
-                actual_col = "Red" if actual in [1,3,7,9,8] else "Green"
+                actual_col = "Red" if actual in [0, 2, 4, 6, 8] else "Green"
                 actual_size = "Big" if actual >= 5 else "Small"
-                pred_col = "Red" if pred_d in [1,3,7,9,8] else "Green"
+                pred_col = "Red" if pred_d in [0, 2, 4, 6, 8] else "Green"
                 pred_size = "Big" if pred_d >= 5 else "Small"
 
                 if pred_d == actual:
@@ -3864,7 +3874,7 @@ def run_oracle_agent_8_0(engines_dict, ucb_scores, df_history, cache_info):
             "recent_acc": recent_acc
         }
 
-        pred_col = "Red" if chosen_digit in [1, 3, 7, 9, 8] else "Green"
+        pred_col = "Red" if chosen_digit in [0, 2, 4, 6, 8] else "Green"
         pred_size = "Big" if chosen_digit >= 5 else "Small"
         target_name = f"Number {chosen_digit} ({pred_col} | {pred_size})"
 
@@ -3892,7 +3902,7 @@ def run_oracle_agent_8_0(engines_dict, ucb_scores, df_history, cache_info):
     except Exception as e:
         all_votes = [engines_dict[f"E{k}"]["num"] for k in range(1, 60) if f"E{k}" in engines_dict]
         fallback_digit = Counter(all_votes).most_common(1)[0][0] if all_votes else 5
-        fb_col = "Red" if fallback_digit in [1, 3, 7, 9, 8] else "Green"
+        fb_col = "Red" if fallback_digit in [0, 2, 4, 6, 8] else "Green"
         fb_size = "Big" if fallback_digit >= 5 else "Small"
         return f"Number {fallback_digit} ({fb_col} | {fb_size})", str(fallback_digit), 65.0, f"ORACLE 8.0 Fallback: {str(e)}", [f"Fallback active: {str(e)}"]
 
@@ -4136,7 +4146,7 @@ def run_omni_nexus_9_0(engines_dict, ucb_scores, df_history, cache_info):
             "chosen_pillar": chosen_pillar
         }
 
-        pred_col = "Red" if chosen_digit in [1, 3, 7, 9, 8] else "Green"
+        pred_col = "Red" if chosen_digit in [0, 2, 4, 6, 8] else "Green"
         pred_size = "Big" if chosen_digit >= 5 else "Small"
         target_name = f"Number {chosen_digit} ({pred_col} | {pred_size})"
 
@@ -4164,7 +4174,7 @@ def run_omni_nexus_9_0(engines_dict, ucb_scores, df_history, cache_info):
     except Exception as e:
         all_votes = [engines_dict[f"E{k}"]["num"] for k in range(1, 60) if f"E{k}" in engines_dict]
         fallback_digit = Counter(all_votes).most_common(1)[0][0] if all_votes else 5
-        fb_col = "Red" if fallback_digit in [1, 3, 7, 9, 8] else "Green"
+        fb_col = "Red" if fallback_digit in [0, 2, 4, 6, 8] else "Green"
         fb_size = "Big" if fallback_digit >= 5 else "Small"
         return f"Number {fallback_digit} ({fb_col} | {fb_size})", str(fallback_digit), 70.0, f"OMNI-NEXUS 9.0 Fallback: {str(e)}", [f"Fallback active: {str(e)}"]
 
@@ -4585,7 +4595,7 @@ def run_sentinel_prime_omega(engines_dict, ucb_scores, df_history, cache_info):
             else:
                 confidence = float(np.clip(conf_raw + 30.0, 72.0, 99.9))
 
-        pred_col = "Red" if final_digit in [1, 3, 7, 9, 8] else "Green"
+        pred_col = "Red" if final_digit in [0, 2, 4, 6, 8] else "Green"
         pred_size = "Big" if final_digit >= 5 else "Small"
         target_name = f"Number {final_digit} ({pred_col} | {pred_size})"
 
@@ -4645,7 +4655,7 @@ def run_sentinel_prime_omega(engines_dict, ucb_scores, df_history, cache_info):
     except Exception as e:
         all_votes = [engines_dict[f"E{k}"]["num"] for k in range(1, 60) if f"E{k}" in engines_dict]
         fallback_digit = Counter(all_votes).most_common(1)[0][0] if all_votes else 5
-        fb_col = "Red" if fallback_digit in [1, 3, 7, 9, 8] else "Green"
+        fb_col = "Red" if fallback_digit in [0, 2, 4, 6, 8] else "Green"
         fb_size = "Big" if fallback_digit >= 5 else "Small"
         st.session_state["sentinel_stats"] = {
             "regime": "Random Chaos (Fallback)",
@@ -5226,7 +5236,7 @@ def run_omega_zero_agent(engines_dict, ucb_scores, df_history, cache_info):
             "loss": st.session_state.get("omega_last_loss", 0.0)
         }
 
-        pred_col = "Red" if chosen_digit in [1, 3, 7, 9, 8] else "Green"
+        pred_col = "Red" if chosen_digit in [0, 2, 4, 6, 8] else "Green"
         pred_size = "Big" if chosen_digit >= 5 else "Small"
         target_name = f"Number {chosen_digit} ({pred_col} | {pred_size})"
 
@@ -5256,7 +5266,7 @@ def run_omega_zero_agent(engines_dict, ucb_scores, df_history, cache_info):
         base_digit = Counter(all_votes).most_common(1)[0][0] if all_votes else 5
         jitter = int(np.random.choice([-1, 0, 1]))
         fallback_digit = int(np.clip(base_digit + jitter, 0, 9))
-        fb_col = "Red" if fallback_digit in [1, 3, 7, 9, 8] else "Green"
+        fb_col = "Red" if fallback_digit in [0, 2, 4, 6, 8] else "Green"
         fb_size = "Big" if fallback_digit >= 5 else "Small"
         return f"Number {fallback_digit} ({fb_col} | {fb_size})", str(fallback_digit), 60.0, f"MCTS Fallback Jitter: {str(e)}", [f"Fallback Jitter active: {str(e)}"]
 
@@ -9448,6 +9458,12 @@ if hasattr(st.session_state, "get") and "Mock" not in type(st.session_state).__n
     st.session_state["last_pred_sentinel_omega"] = {"issue": next_issue_key, "prediction": str(sentinel_prediction)}
     st.session_state["last_pred_nexus_duo_force"] = {"issue": next_issue_key, "pred_col": str(duo_col), "pred_size": str(duo_size), "prediction": f"{duo_col} {duo_size}"}
     st.session_state["last_pred_hyperion12"] = {"issue": next_issue_key, "prediction": str(hyperion12_prediction)}
+    st.session_state["last_pred_chromatic16"] = {"issue": next_issue_key, "pred_col": str(chromatic_col if 'chromatic_col' in locals() else 'Red'), "pred_size": str(chromatic_size if 'chromatic_size' in locals() else 'Big'), "prediction": str(chromatic16_prediction if 'chromatic16_prediction' in locals() else 5)}
+    st.session_state["last_pred_titan17"] = {"issue": next_issue_key, "pred_col": str(titan17_col if 'titan17_col' in locals() else 'Red'), "pred_size": str(titan17_size if 'titan17_size' in locals() else 'Big'), "prediction": f"{titan17_col if 'titan17_col' in locals() else 'Red'} {titan17_size if 'titan17_size' in locals() else 'Big'}"}
+    st.session_state["last_pred_omnisapient18"] = {"issue": next_issue_key, "pred_col": str(omnisapient_col if 'omnisapient_col' in locals() else 'Red'), "pred_size": str(omnisapient_size if 'omnisapient_size' in locals() else 'Big'), "prediction": f"{omnisapient_col if 'omnisapient_col' in locals() else 'Red'} {omnisapient_size if 'omnisapient_size' in locals() else 'Big'}"}
+    st.session_state["last_pred_sentinel_phoenix"] = {"issue": next_issue_key, "pred_col": str(phoenix_col if 'phoenix_col' in locals() else 'Red'), "pred_size": str(phoenix_size if 'phoenix_size' in locals() else 'Big'), "prediction": str(phoenix_prediction if 'phoenix_prediction' in locals() else 5)}
+    st.session_state["last_pred_sentinel_ultra_21"] = {"issue": next_issue_key, "pred_col": str(ultra21_col if 'ultra21_col' in locals() else 'Red'), "pred_size": str(ultra21_size if 'ultra21_size' in locals() else 'Big'), "prediction": str(sentinel_ultra_21_prediction if 'sentinel_ultra_21_prediction' in locals() else 5)}
+    st.session_state["last_pred_nexus_atlas"] = {"issue": next_issue_key, "pred_col": str(atlas_col if 'atlas_col' in locals() else 'Red'), "pred_size": str(atlas_size if 'atlas_size' in locals() else 'Big'), "prediction": str(atlas_prediction if 'atlas_prediction' in locals() else 5)}
     sorted_keys_by_ucb = sorted(ucb_scores.keys(), key=lambda k: ucb_scores[k], reverse=True) if ucb_scores else sorted(engines_dict.keys(), key=lambda k: engines_dict[k].get('pts', 0), reverse=True)
     top_rank_1_key_logged = sorted_keys_by_ucb[0] if sorted_keys_by_ucb else "E1"
     top_rank_2_key_logged = sorted_keys_by_ucb[1] if len(sorted_keys_by_ucb) > 1 else "E2"
@@ -9843,7 +9859,7 @@ top_rank_2_col_hex = '#ef4444' if top_rank_2_col == 'Red' else ('#22c55e' if top
 # --- HYPERION OMNI-AGI 12.0 APEX CARD RENDER ---
 hyp12_pred_num = str(hyperion12_prediction)
 hyp12_digit = int(hyp12_pred_num) if hyp12_pred_num.isdigit() else 5
-hyp12_pred_col = "Red" if hyp12_digit in [1, 3, 7, 9, 8] else "Green"
+hyp12_pred_col = "Red" if hyp12_digit in [0, 2, 4, 6, 8] else "Green"
 hyp12_pred_size = "Big" if hyp12_digit >= 5 else "Small"
 
 render_hyperion_omni_agi_12_card(
@@ -10349,7 +10365,7 @@ ascend_active_engines_count = 59 - ascend_pruned_engines_count
 
 # --- THE ABSOLUTE AGENT 10.0 STANDALONE UI CARD ---
 abs10_pred_digit = int(absolute10_prediction) if str(absolute10_prediction).isdigit() else 5
-abs10_col = "Red" if abs10_pred_digit in [1, 3, 7, 9, 8] else "Green"
+abs10_col = "Red" if abs10_pred_digit in [0, 2, 4, 6, 8] else "Green"
 abs10_size = "Big" if abs10_pred_digit >= 5 else "Small"
 
 abs10_info = st.session_state.get("absolute10_stats", {})
@@ -10447,7 +10463,7 @@ with st.expander("&#129504; THE ABSOLUTE AGENT 10.0 Transcendent Thinking Proces
 
 # --- TRANSCENDENT AGENT 11.0 (THE GOD-MIND) STANDALONE UI CARD ---
 transcendent11_pred_digit = int(transcendent11_prediction) if str(transcendent11_prediction).isdigit() else 7
-transcendent11_col = "Red" if transcendent11_pred_digit in [1, 3, 7, 9, 8] else "Green"
+transcendent11_col = "Red" if transcendent11_pred_digit in [0, 2, 4, 6, 8] else "Green"
 transcendent11_size = "Big" if transcendent11_pred_digit >= 5 else "Small"
 
 trans11_info = st.session_state.get("transcendent11_stats", {})
@@ -10526,7 +10542,7 @@ with st.expander("&#127756; 11 Transcendent Features (TRANSCENDENT AGENT 11.0 - 
 
 # --- NEXUS SUPREME PRIME STANDALONE UI CARD ---
 supreme_pred_digit = int(supreme_prediction) if str(supreme_prediction).isdigit() else 5
-supreme_col = "Red" if supreme_pred_digit in [1, 3, 7, 9, 8] else "Green"
+supreme_col = "Red" if supreme_pred_digit in [0, 2, 4, 6, 8] else "Green"
 supreme_size = "Big" if supreme_pred_digit >= 5 else "Small"
 
 supreme_info = st.session_state.get("supreme_stats", {})
@@ -10859,7 +10875,7 @@ st.write("")
 
 # --- OMNI-NEXUS 9.0 UNIFIED STANDALONE UI CARD ---
 omni9_pred_digit = int(omni9_prediction) if str(omni9_prediction).isdigit() else 5
-omni9_col = "Red" if omni9_pred_digit in [1, 3, 7, 9, 8] else "Green"
+omni9_col = "Red" if omni9_pred_digit in [0, 2, 4, 6, 8] else "Green"
 omni9_size = "Big" if omni9_pred_digit >= 5 else "Small"
 
 omni9_info = st.session_state.get("omni9_stats", {})
@@ -11097,7 +11113,7 @@ with st.expander("&#128300; 10 Ultra-Advanced Features (NEXUS 10.0)"):
         st.write(step_str)
 
 # --- OMEGA ZERO 2.0 STANDALONE UI CARD ---
-omega_col = "Red" if int(omega_prediction) in [1, 3, 7, 9, 8] else "Green"
+omega_col = "Red" if int(omega_prediction) in [0, 2, 4, 6, 8] else "Green"
 omega_size = "Big" if int(omega_prediction) >= 5 else "Small"
 omega_mcts_info = st.session_state.get("omega_mcts_stats", {})
 omega_sims = omega_mcts_info.get("sims", 30)
@@ -11313,7 +11329,7 @@ with st.expander("&#128300; 10 Ultra-Advanced Features (NEXUS 10.0)"):
         st.write(step_str)
 
 # --- OMEGA ZERO 2.0 STANDALONE UI CARD ---
-omega_col = "Red" if int(omega_prediction) in [1, 3, 7, 9, 8] else "Green"
+omega_col = "Red" if int(omega_prediction) in [0, 2, 4, 6, 8] else "Green"
 omega_size = "Big" if int(omega_prediction) >= 5 else "Small"
 omega_mcts_info = st.session_state.get("omega_mcts_stats", {})
 omega_sims = omega_mcts_info.get("sims", 30)
@@ -11392,7 +11408,7 @@ with st.expander("&#127795; OMEGA ZERO 2.0: MCTS + Diversity Stats"):
         st.markdown(f"- {s_step}")
 
 # --- NEXUS CORE AGENT STANDALONE UI CARD ---
-core_col = "Red" if int(core_prediction) in [1, 3, 7, 9, 8] else "Green"
+core_col = "Red" if int(core_prediction) in [0, 2, 4, 6, 8] else "Green"
 core_size = "Big" if int(core_prediction) >= 5 else "Small"
 core_info = st.session_state.get("core_agent_stats", {})
 core_status = core_info.get("status", "&#128994; Trained")
@@ -11474,7 +11490,7 @@ with st.expander("&#128202; Feature Importance & Probability Distribution (NEXUS
 
 # --- ORACLE AGENT 8.0 STANDALONE UI CARD ---
 oracle8_pred_digit = int(oracle8_prediction) if str(oracle8_prediction).isdigit() else 5
-oracle8_col = "Red" if oracle8_pred_digit in [1, 3, 7, 9, 8] else "Green"
+oracle8_col = "Red" if oracle8_pred_digit in [0, 2, 4, 6, 8] else "Green"
 oracle8_size = "Big" if oracle8_pred_digit >= 5 else "Small"
 
 oracle8_info = st.session_state.get("oracle8_stats", {})

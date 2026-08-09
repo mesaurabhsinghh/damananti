@@ -676,7 +676,7 @@ def render_notif_button(agent_key, agent_name, target_issue, pred_val, pred_col,
     p_sz = str(pred_size) if pred_size is not None else "Big"
     t_iss = str(target_issue) if target_issue is not None else "Next"
     
-    return f'''<span class="damananti-notif-toggle" id="notif_toggle_{agent_key}" data-agent-key="{agent_key}" data-agent-name="{agent_name}" data-issue="{t_iss}" data-num="{p_num}" data-col="{p_col}" data-size="{p_sz}" data-conf="{c_val}" onclick="toggleAgentNotification('{agent_key}', '{agent_name}', '{t_iss}', '{p_num}', '{p_col}', '{p_sz}', '{c_val}')" style="background: rgba(99, 102, 241, 0.25); border: 1.5px solid #818cf8; border-radius: 20px; padding: 3px 10px; font-size: 9.5px; font-weight: 900; color: #ffffff; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; box-shadow: 0 0 10px rgba(99, 102, 241, 0.4); margin-left: 6px; user-select: none; transition: all 0.2s ease;"><span id="notif_icon_{agent_key}">🔕</span><span id="notif_lbl_{agent_key}">ALERT OFF</span></span>'''
+    return f'''<span class="damananti-notif-toggle" id="notif_toggle_{agent_key}" data-agent-key="{agent_key}" data-agent-name="{agent_name}" data-issue="{t_iss}" data-num="{p_num}" data-col="{p_col}" data-size="{p_sz}" data-conf="{c_val}" style="background: rgba(30, 27, 75, 0.85); border: 1.5px solid #818cf8; border-radius: 20px; padding: 3px 10px; font-size: 9.5px; font-weight: 900; color: #cbd5e1; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; box-shadow: 0 0 8px rgba(99, 102, 241, 0.4); margin-left: 6px; user-select: none; transition: all 0.2s ease; z-index: 999;"><span id="notif_icon_{agent_key}">🔕</span><span id="notif_lbl_{agent_key}">ALERT OFF</span></span>'''
 
 
 def helper_get_color(num):
@@ -12574,113 +12574,127 @@ with st.expander("&#128202; ऐतिहासिक डेटा (अंति�
     st.dataframe(display_df, height=400, width="stretch", hide_index=True)
     st.caption(f"कुल राउंड: {len(display_df)}")
 
-# Client-side Live Notification & Mobile Sidebar JS Dispatcher
-st.markdown(r'''
+# Client-side Live Notification & Mobile Sidebar JS Dispatcher (components.v1.html)
+components.html(f'''
 <script>
-window.toggleAgentNotification = function(agentKey, agentName, issue, predVal, predCol, predSize, predConf) {
-    var keyName = "damananti_notif_" + agentKey;
-    var current = localStorage.getItem(keyName) === "1";
-    var nextState = !current;
-    localStorage.setItem(keyName, nextState ? "1" : "0");
-    
-    updateNotifButtons();
-    
-    var alertTitle = nextState ? ("🔔 " + agentName + " Live Alert ON") : ("🔕 " + agentName + " Live Alert OFF");
-    var alertBody = "Target #" + issue + " ➔ NUM: " + predVal + " | COL: " + predCol + " | SIZE: " + predSize + " (" + predConf + "%)";
-    
-    if (window.FlutterNotificationBridge) {
-        window.FlutterNotificationBridge.postMessage(alertTitle + " ➔ " + alertBody);
-    }
-    
-    if ("Notification" in window) {
-        if (Notification.permission === "granted") {
-            if (nextState) {
-                try {
-                    new Notification(alertTitle, { body: alertBody });
-                } catch(e){}
-            }
-        } else if (Notification.permission !== "denied") {
-            Notification.requestPermission().then(function(perm) {
-                if (perm === "granted" && nextState) {
-                    try {
-                        new Notification(alertTitle, { body: alertBody });
-                    } catch(e){}
-                }
-            });
-        }
-    }
-};
+(function() {{
+    const parentDoc = window.parent.document;
+    const parentWin = window.parent;
 
-function updateNotifButtons() {
-    var buttons = document.querySelectorAll(".damananti-notif-toggle, [id^='notif_toggle_']");
-    buttons.forEach(function(btn) {
-        var key = btn.id.replace("notif_toggle_", "");
-        var isEnabled = localStorage.getItem("damananti_notif_" + key) === "1";
-        var lbl = document.getElementById("notif_lbl_" + key);
-        var icon = document.getElementById("notif_icon_" + key);
-        if (isEnabled) {
-            btn.style.borderColor = "#22c55e";
-            btn.style.background = "linear-gradient(90deg, rgba(34, 197, 94, 0.35), rgba(16, 185, 129, 0.45))";
-            btn.style.boxShadow = "0 0 12px rgba(34, 197, 94, 0.8)";
-            if (lbl) { lbl.innerText = "ALERT ON"; lbl.style.color = "#86efac"; }
-            if (icon) { icon.innerText = "🔔"; }
-        } else {
-            btn.style.borderColor = "#818cf8";
-            btn.style.background = "rgba(99, 102, 241, 0.25)";
-            btn.style.boxShadow = "0 0 8px rgba(99, 102, 241, 0.3)";
-            if (lbl) { lbl.innerText = "ALERT OFF"; lbl.style.color = "#ffffff"; }
-            if (icon) { icon.innerText = "🔕"; }
-        }
-    });
-}
+    // Delegated click handler on parentDoc
+    parentDoc.addEventListener('click', function(e) {{
+        const btn = e.target.closest('.damananti-notif-toggle');
+        if (!btn) return;
+        
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const agentKey = btn.getAttribute('data-agent-key') || btn.id.replace('notif_toggle_', '');
+        const agentName = btn.getAttribute('data-agent-name') || 'AI Agent';
+        const issue = btn.getAttribute('data-issue') || '';
+        const num = btn.getAttribute('data-num') || '';
+        const col = btn.getAttribute('data-col') || '';
+        const size = btn.getAttribute('data-size') || '';
+        const conf = btn.getAttribute('data-conf') || '';
+        
+        const keyName = 'damananti_notif_' + agentKey;
+        const current = parentWin.localStorage.getItem(keyName) === '1';
+        const nextState = !current;
+        parentWin.localStorage.setItem(keyName, nextState ? '1' : '0');
+        
+        updateButtons();
+        
+        if (nextState) {{
+            if ('Notification' in parentWin) {{
+                if (parentWin.Notification.permission === 'granted') {{
+                    try {{
+                        new parentWin.Notification('🔔 ' + agentName + ' Alert ON', {{
+                            body: 'Target #' + issue + ' ➔ NUM: ' + num + ' | COL: ' + col + ' | SIZE: ' + size + ' (' + conf + '%)'
+                        }});
+                    }} catch(err){{}}
+                }} else if (parentWin.Notification.permission !== 'denied') {{
+                    parentWin.Notification.requestPermission().then(function(perm) {{
+                        if (perm === 'granted') {{
+                            try {{
+                                new parentWin.Notification('🔔 ' + agentName + ' Alert ON', {{
+                                    body: 'Target #' + issue + ' ➔ NUM: ' + num + ' | COL: ' + col + ' | SIZE: ' + size + ' (' + conf + '%)'
+                                }});
+                            }} catch(err){{}}
+                        }}
+                    }});
+                }}
+            }}
+            if (parentWin.FlutterNotificationBridge) {{
+                parentWin.FlutterNotificationBridge.postMessage('🔔 ' + agentName + ' Alert ON ➔ Target #' + issue);
+            }}
+        }}
+    }}, true);
 
-function checkAndFireEnabledNotifications() {
-    var buttons = document.querySelectorAll(".damananti-notif-toggle, [id^='notif_toggle_']");
-    if (buttons.length === 0) return;
-    
-    var firstBtn = buttons[0];
-    var currentIssue = firstBtn.getAttribute("data-issue") || "";
-    if (!currentIssue) {
-        var onclickStr = firstBtn.getAttribute("onclick") || "";
-        var match = onclickStr.match(/toggleAgentNotification\('([^']+)',\s*'([^']+)',\s*'([^']+)'/);
-        currentIssue = match ? match[3] : "";
-    }
-    if (!currentIssue) return;
-    
-    var lastFired = localStorage.getItem("damananti_last_fired_issue");
-    if (lastFired !== currentIssue) {
-        localStorage.setItem("damananti_last_fired_issue", currentIssue);
-        buttons.forEach(function(btn) {
-            var key = btn.getAttribute("data-agent-key") || btn.id.replace("notif_toggle_", "");
-            var isEnabled = localStorage.getItem("damananti_notif_" + key) === "1";
-            if (isEnabled) {
-                var aName = btn.getAttribute("data-agent-name") || "AI Agent";
-                var pVal = btn.getAttribute("data-num") || "5";
-                var pCol = btn.getAttribute("data-col") || "Red";
-                var pSize = btn.getAttribute("data-size") || "Big";
-                var pConf = btn.getAttribute("data-conf") || "80.0";
-                
-                var title = "🎯 " + aName + " (Issue #" + currentIssue + ")";
-                var body = "NUM: " + pVal + " | COL: " + pCol + " | SIZE: " + pSize + " | CONF: " + pConf + "%";
-                
-                if (window.FlutterNotificationBridge) {
-                    window.FlutterNotificationBridge.postMessage(title + " ➔ " + body);
-                }
-                
-                if ("Notification" in window && Notification.permission === "granted") {
-                    try {
-                        new Notification(title, { body: body });
-                    } catch(e){}
-                }
-            }
-        });
-    }
-}
+    function updateButtons() {{
+        const buttons = parentDoc.querySelectorAll('.damananti-notif-toggle');
+        buttons.forEach(function(btn) {{
+            const key = btn.getAttribute('data-agent-key') || btn.id.replace('notif_toggle_', '');
+            const isEnabled = parentWin.localStorage.getItem('damananti_notif_' + key) === '1';
+            const lbl = btn.querySelector('[id^="notif_lbl_"]');
+            const icon = btn.querySelector('[id^="notif_icon_"]');
+            
+            if (isEnabled) {{
+                btn.style.setProperty('border-color', '#22c55e', 'important');
+                btn.style.setProperty('background', 'linear-gradient(90deg, #15803d, #16a34a)', 'important');
+                btn.style.setProperty('box-shadow', '0 0 14px rgba(34, 197, 94, 0.9)', 'important');
+                btn.style.setProperty('color', '#ffffff', 'important');
+                if (lbl) lbl.textContent = 'ALERT ON';
+                if (icon) icon.textContent = '🔔';
+            }} else {{
+                btn.style.setProperty('border-color', '#818cf8', 'important');
+                btn.style.setProperty('background', 'rgba(30, 27, 75, 0.85)', 'important');
+                btn.style.setProperty('box-shadow', '0 0 6px rgba(99, 102, 241, 0.4)', 'important');
+                btn.style.setProperty('color', '#cbd5e1', 'important');
+                if (lbl) lbl.textContent = 'ALERT OFF';
+                if (icon) icon.textContent = '🔕';
+            }}
+        }});
+    }}
 
-setInterval(updateNotifButtons, 1000);
-setTimeout(function() {
-    updateNotifButtons();
-    checkAndFireEnabledNotifications();
-}, 500);
+    function checkAutoFire() {{
+        const buttons = parentDoc.querySelectorAll('.damananti-notif-toggle');
+        if (!buttons || buttons.length === 0) return;
+        
+        const targetIssue = "{target_issue}";
+        const lastFired = parentWin.localStorage.getItem('damananti_last_fired_issue');
+        if (lastFired !== targetIssue) {{
+            parentWin.localStorage.setItem('damananti_last_fired_issue', targetIssue);
+            buttons.forEach(function(btn) {{
+                const key = btn.getAttribute('data-agent-key') || btn.id.replace('notif_toggle_', '');
+                const isEnabled = parentWin.localStorage.getItem('damananti_notif_' + key) === '1';
+                if (isEnabled) {{
+                    const aName = btn.getAttribute('data-agent-name') || 'AI Agent';
+                    const pVal = btn.getAttribute('data-num') || '5';
+                    const pCol = btn.getAttribute('data-col') || 'Red';
+                    const pSize = btn.getAttribute('data-size') || 'Big';
+                    const pConf = btn.getAttribute('data-conf') || '80.0';
+                    
+                    const title = '🎯 ' + aName + ' (Issue #' + targetIssue + ')';
+                    const body = 'NUM: ' + pVal + ' | COL: ' + pCol + ' | SIZE: ' + pSize + ' | CONF: ' + pConf + '%';
+                    
+                    if (parentWin.FlutterNotificationBridge) {{
+                        parentWin.FlutterNotificationBridge.postMessage(title + ' ➔ ' + body);
+                    }}
+                    if ('Notification' in parentWin && parentWin.Notification.permission === 'granted') {{
+                        try {{
+                            new parentWin.Notification(title, {{ body: body }});
+                        }} catch(e){{}}
+                    }}
+                }}
+            }});
+        }}
+    }}
+
+    setInterval(updateButtons, 400);
+    setTimeout(function() {{
+        updateButtons();
+        checkAutoFire();
+    }}, 150);
+}})();
 </script>
-''', unsafe_allow_html=True)
+''', height=0, width=0)

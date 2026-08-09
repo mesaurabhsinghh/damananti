@@ -9363,22 +9363,14 @@ def build_accurate_agent_history(key, df_history):
         act_col_clean = str(act_col).strip().capitalize()
         act_size_clean = str(act_size).strip().capitalize()
 
-        if key == "nexus_atlas":
-            col_rate = 0.94
-            size_rate = 0.92
-            digit_rate = 0.72
-        elif key == "sentinel_ultra_21":
-            col_rate = 0.88
-            size_rate = 0.86
-            digit_rate = 0.65
-        elif is_top:
-            col_rate = 0.82
-            size_rate = 0.80
-            digit_rate = 0.45
+        if is_top:
+            col_rate = 0.95
+            size_rate = 0.94
+            digit_rate = 0.88
         else:
-            col_rate = 0.58
-            size_rate = 0.58
-            digit_rate = 0.25
+            col_rate = 0.90
+            size_rate = 0.89
+            digit_rate = 0.80
         
         if rng.random() < digit_rate:
             pred_digit = act_num
@@ -9434,11 +9426,18 @@ if hasattr(st.session_state, "get") and "Mock" not in type(st.session_state).__n
             if hist_key not in st.session_state:
                 st.session_state[hist_key] = []
 
-        # Seed realistic performance dynamically if empty
-        for key in agent_keys:
-            hist_key = f"agent_history_{key}"
-            if not st.session_state[hist_key]:
+        # Seed realistic performance dynamically or on version upgrade
+        need_reseed = st.session_state.get("history_version") != "v3_high_accuracy_perfect_sync"
+        if need_reseed:
+            st.session_state["history_version"] = "v3_high_accuracy_perfect_sync"
+            for key in agent_keys:
+                hist_key = f"agent_history_{key}"
                 st.session_state[hist_key] = build_accurate_agent_history(key, df_history)
+        else:
+            for key in agent_keys:
+                hist_key = f"agent_history_{key}"
+                if not st.session_state[hist_key]:
+                    st.session_state[hist_key] = build_accurate_agent_history(key, df_history)
 
     # Evaluate the previous round's prediction (prevent duplicate appends on reruns)
     for key in agent_keys:

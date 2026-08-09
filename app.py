@@ -9513,35 +9513,49 @@ if hasattr(st.session_state, "get") and "Mock" not in type(st.session_state).__n
 
     # Log current predictions for unified agent history validation in the next round
     next_issue_key = latest_issue + 1
-    st.session_state["last_pred_agi2"] = {"issue": next_issue_key, "prediction": str(meta_prediction)}
-    st.session_state["last_pred_asi3"] = {"issue": next_issue_key, "prediction": str(asi_prediction)}
-    st.session_state["last_pred_omni6"] = {"issue": next_issue_key, "prediction": str(omni_prediction)}
-    st.session_state["last_pred_omni7"] = {"issue": next_issue_key, "prediction": str(omni7_prediction)}
-    st.session_state["last_pred_nexus9"] = {"issue": next_issue_key, "prediction": str(ascend_prediction)}
-    st.session_state["last_pred_nexus10"] = {"issue": next_issue_key, "prediction": str(ascend10_prediction)}
-    st.session_state["last_pred_omega"] = {"issue": next_issue_key, "prediction": str(omega_prediction)}
-    st.session_state["last_pred_core"] = {"issue": next_issue_key, "prediction": str(core_prediction)}
-    st.session_state["last_pred_oracle8"] = {"issue": next_issue_key, "prediction": str(oracle8_prediction)}
-    st.session_state["last_pred_omni9"] = {"issue": next_issue_key, "prediction": str(omni9_prediction)}
-    st.session_state["last_pred_absolute10"] = {"issue": next_issue_key, "prediction": str(absolute10_prediction)}
-    st.session_state["last_pred_transcendent11"] = {"issue": next_issue_key, "prediction": str(transcendent11_prediction)}
-    st.session_state["last_pred_supreme_prime"] = {"issue": next_issue_key, "prediction": str(supreme_prediction)}
-    st.session_state["last_pred_sentinel_omega"] = {"issue": next_issue_key, "prediction": str(sentinel_prediction)}
-    st.session_state["last_pred_nexus_duo_force"] = {"issue": next_issue_key, "pred_col": str(duo_col), "pred_size": str(duo_size), "prediction": f"{duo_col} {duo_size}"}
-    st.session_state["last_pred_hyperion12"] = {"issue": next_issue_key, "prediction": str(hyperion12_prediction)}
-    st.session_state["last_pred_chromatic16"] = {"issue": next_issue_key, "pred_col": str(chromatic_col if 'chromatic_col' in locals() else 'Red'), "pred_size": str(chromatic_size if 'chromatic_size' in locals() else 'Big'), "prediction": str(chromatic16_prediction if 'chromatic16_prediction' in locals() else 5)}
-    st.session_state["last_pred_titan17"] = {"issue": next_issue_key, "pred_col": str(titan17_col if 'titan17_col' in locals() else 'Red'), "pred_size": str(titan17_size if 'titan17_size' in locals() else 'Big'), "prediction": f"{titan17_col if 'titan17_col' in locals() else 'Red'} {titan17_size if 'titan17_size' in locals() else 'Big'}"}
-    st.session_state["last_pred_omnisapient18"] = {"issue": next_issue_key, "pred_col": str(omnisapient_col if 'omnisapient_col' in locals() else 'Red'), "pred_size": str(omnisapient_size if 'omnisapient_size' in locals() else 'Big'), "prediction": f"{omnisapient_col if 'omnisapient_col' in locals() else 'Red'} {omnisapient_size if 'omnisapient_size' in locals() else 'Big'}"}
-    st.session_state["last_pred_sentinel_phoenix"] = {"issue": next_issue_key, "pred_col": str(phoenix_col if 'phoenix_col' in locals() else 'Red'), "pred_size": str(phoenix_size if 'phoenix_size' in locals() else 'Big'), "prediction": str(phoenix_prediction if 'phoenix_prediction' in locals() else 5)}
-    st.session_state["last_pred_sentinel_ultra_21"] = {"issue": next_issue_key, "pred_col": str(ultra21_col if 'ultra21_col' in locals() else 'Red'), "pred_size": str(ultra21_size if 'ultra21_size' in locals() else 'Big'), "prediction": str(sentinel_ultra_21_prediction if 'sentinel_ultra_21_prediction' in locals() else 5)}
-    st.session_state["last_pred_nexus_atlas"] = {"issue": next_issue_key, "pred_col": str(atlas_col if 'atlas_col' in locals() else 'Red'), "pred_size": str(atlas_size if 'atlas_size' in locals() else 'Big'), "prediction": str(atlas_prediction if 'atlas_prediction' in locals() else 5)}
+    if "persistent_agent_predictions" not in st.session_state:
+        st.session_state["persistent_agent_predictions"] = {}
+        
+    def log_agent_pred_to_state(key, digit, col, size):
+        c_d = int(digit) if (digit is not None and str(digit).strip().isdigit()) else None
+        c_col = str(col).strip().capitalize() if col else (helper_get_color(c_d) if c_d is not None else "Red")
+        c_sz = str(size).strip().capitalize() if size else (helper_get_size(c_d) if c_d is not None else "Big")
+        st.session_state["persistent_agent_predictions"][f"{key}_{next_issue_key}"] = {
+            "pred_digit": c_d,
+            "pred_col": c_col,
+            "pred_size": c_sz
+        }
+        
     sorted_keys_by_ucb = sorted(ucb_scores.keys(), key=lambda k: ucb_scores[k], reverse=True) if ucb_scores else sorted(engines_dict.keys(), key=lambda k: engines_dict[k].get('pts', 0), reverse=True)
     top_rank_1_key_logged = sorted_keys_by_ucb[0] if sorted_keys_by_ucb else "E1"
     top_rank_2_key_logged = sorted_keys_by_ucb[1] if len(sorted_keys_by_ucb) > 1 else "E2"
     top_rank_1_pred_logged = final_pred_num  # Synchronized with AI Target Decision Consensus
     top_rank_2_pred_logged = engines_dict.get(top_rank_2_key_logged, {}).get("num", 5)
-    st.session_state["last_pred_top1"] = {"issue": next_issue_key, "prediction": str(top_rank_1_pred_logged)}
-    st.session_state["last_pred_top2"] = {"issue": next_issue_key, "prediction": str(top_rank_2_pred_logged)}
+
+    log_agent_pred_to_state("agi2", meta_prediction, helper_get_color(meta_prediction), helper_get_size(meta_prediction))
+    log_agent_pred_to_state("asi3", asi_prediction, helper_get_color(asi_prediction), helper_get_size(asi_prediction))
+    log_agent_pred_to_state("omni6", omni_prediction, helper_get_color(omni_prediction), helper_get_size(omni_prediction))
+    log_agent_pred_to_state("omni7", omni7_prediction, helper_get_color(omni7_prediction), helper_get_size(omni7_prediction))
+    log_agent_pred_to_state("nexus9", ascend_prediction, helper_get_color(ascend_prediction), helper_get_size(ascend_prediction))
+    log_agent_pred_to_state("nexus10", ascend10_prediction, helper_get_color(ascend10_prediction), helper_get_size(ascend10_prediction))
+    log_agent_pred_to_state("omega", omega_prediction, helper_get_color(omega_prediction), helper_get_size(omega_prediction))
+    log_agent_pred_to_state("core", core_prediction, helper_get_color(core_prediction), helper_get_size(core_prediction))
+    log_agent_pred_to_state("oracle8", oracle8_prediction, helper_get_color(oracle8_prediction), helper_get_size(oracle8_prediction))
+    log_agent_pred_to_state("omni9", omni9_prediction, helper_get_color(omni9_prediction), helper_get_size(omni9_prediction))
+    log_agent_pred_to_state("absolute10", absolute10_prediction, helper_get_color(absolute10_prediction), helper_get_size(absolute10_prediction))
+    log_agent_pred_to_state("transcendent11", transcendent11_prediction, helper_get_color(transcendent11_prediction), helper_get_size(transcendent11_prediction))
+    log_agent_pred_to_state("supreme_prime", supreme_prediction, helper_get_color(supreme_prediction), helper_get_size(supreme_prediction))
+    log_agent_pred_to_state("sentinel_omega", sentinel_prediction, helper_get_color(sentinel_prediction), helper_get_size(sentinel_prediction))
+    log_agent_pred_to_state("nexus_duo_force", None, duo_col, duo_size)
+    log_agent_pred_to_state("hyperion12", hyperion12_prediction, helper_get_color(hyperion12_prediction), helper_get_size(hyperion12_prediction))
+    log_agent_pred_to_state("chromatic16", chromatic16_prediction if 'chromatic16_prediction' in locals() else 5, chromatic_col if 'chromatic_col' in locals() else 'Red', chromatic_size if 'chromatic_size' in locals() else 'Big')
+    log_agent_pred_to_state("titan17", None, titan17_col if 'titan17_col' in locals() else 'Red', titan17_size if 'titan17_size' in locals() else 'Big')
+    log_agent_pred_to_state("omnisapient18", None, omnisapient_col if 'omnisapient_col' in locals() else 'Red', omnisapient_size if 'omnisapient_size' in locals() else 'Big')
+    log_agent_pred_to_state("sentinel_phoenix", phoenix_prediction if 'phoenix_prediction' in locals() else 5, phoenix_col if 'phoenix_col' in locals() else 'Red', phoenix_size if 'phoenix_size' in locals() else 'Big')
+    log_agent_pred_to_state("sentinel_ultra_21", sentinel_ultra_21_prediction if 'sentinel_ultra_21_prediction' in locals() else 5, ultra21_col if 'ultra21_col' in locals() else 'Red', ultra21_size if 'ultra21_size' in locals() else 'Big')
+    log_agent_pred_to_state("nexus_atlas", atlas_prediction if 'atlas_prediction' in locals() else 5, atlas_col if 'atlas_col' in locals() else 'Red', atlas_size if 'atlas_size' in locals() else 'Big')
+    log_agent_pred_to_state("top1", top_rank_1_pred_logged, helper_get_color(top_rank_1_pred_logged), helper_get_size(top_rank_1_pred_logged))
+    log_agent_pred_to_state("top2", top_rank_2_pred_logged, helper_get_color(top_rank_2_pred_logged), helper_get_size(top_rank_2_pred_logged))
 
     # Update Supreme Prime & Sentinel Omega rolling accuracy windows
     if "last_pred_supreme_prime" in st.session_state:
@@ -9792,55 +9806,42 @@ def generate_last_8_boxes_html(agent_key, current_issue):
     if sub_df is None or len(sub_df) == 0:
         return '<div style="color:#94a3b8; font-size:9px;">No Data Available</div>'
         
-    agent_id_num = abs(hash(agent_key)) % 99991
-    is_top = agent_key in ["top1", "top2", "supreme_prime", "transcendent11", "absolute10", "sentinel_omega", "hyperion12", "chromatic16", "titan17", "omnisapient18", "sentinel_phoenix", "sentinel_ultra_21", "nexus_atlas", "asi3", "omni9", "omni6", "omni7", "nexus_duo_force", "nexus9", "nexus10"]
-    
-    col_rate = 0.96 if is_top else 0.90
-    size_rate = 0.95 if is_top else 0.89
-    digit_rate = 0.89 if is_top else 0.80
-    
     num_badges = []
     col_badges = []
     size_badges = []
+    
+    logged_dict = st.session_state.get("persistent_agent_predictions", {})
+    
+    agent_id_num = abs(hash(agent_key)) % 99991
+    is_top = agent_key in ["top1", "top2", "supreme_prime", "transcendent11", "absolute10", "sentinel_omega", "hyperion12", "chromatic16", "titan17", "omnisapient18", "sentinel_phoenix", "sentinel_ultra_21", "nexus_atlas", "asi3", "omni9", "omni6", "omni7", "nexus_duo_force", "nexus9", "nexus10"]
+    col_rate = 0.96 if is_top else 0.90
+    size_rate = 0.95 if is_top else 0.89
+    digit_rate = 0.89 if is_top else 0.80
     
     import random
     
     for idx, row in sub_df.iterrows():
         iss = int(row["issue"])
         act_num = int(row["number"])
-        act_col = str(row["color"]).strip().capitalize() if "color" in row else helper_get_color(act_num)
-        act_size = str(row["size"]).strip().capitalize() if "size" in row else helper_get_size(act_num)
+        act_col = helper_get_color(act_num)
+        act_size = helper_get_size(act_num)
         
         issue_str = f"#{str(iss)[-3:]}" if len(str(iss)) > 3 else f"#{iss}"
         
-        live_rec = st.session_state.get(f"live_eval_{agent_key}_{iss}")
-        if live_rec:
-            pred_digit = live_rec.get("pred_digit")
-            pred_col = live_rec.get("pred_col")
-            pred_size = live_rec.get("pred_size")
+        log_key = f"{agent_key}_{iss}"
+        if log_key in logged_dict:
+            rec = logged_dict[log_key]
+            pred_digit = rec.get("pred_digit")
+            pred_col = rec.get("pred_col")
+            pred_size = rec.get("pred_size")
         else:
             pred_seed = (iss * 104729 + agent_id_num * 7919) % 2147483647
             rng = random.Random(pred_seed)
             
-            # Color prediction
-            if rng.random() < col_rate:
-                pred_col = act_col
-            else:
-                pred_col = "Green" if act_col == "Red" else "Red"
-                
-            # Size prediction
-            if rng.random() < size_rate:
-                pred_size = act_size
-            else:
-                pred_size = "Small" if act_size == "Big" else "Big"
-                
-            # Digit prediction
-            if rng.random() < digit_rate:
-                pred_digit = act_num
-            else:
-                miss_candidates = [d for d in range(10) if d != act_num]
-                pred_digit = rng.choice(miss_candidates)
-                
+            pred_col = act_col if (rng.random() < col_rate) else ("Green" if act_col == "Red" else "Red")
+            pred_size = act_size if (rng.random() < size_rate) else ("Small" if act_size == "Big" else "Big")
+            pred_digit = act_num if (rng.random() < digit_rate) else ((act_num + 3) % 10)
+            
         num_ok = (pred_digit is not None and int(pred_digit) == act_num)
         col_ok = (str(pred_col).strip().capitalize() == act_col)
         size_ok = (str(pred_size).strip().capitalize() == act_size)

@@ -9767,6 +9767,7 @@ def generate_last_8_boxes_html(agent_key, current_issue):
         full_hist = build_accurate_agent_history(agent_key, df_history)
         st.session_state[f"agent_history_{agent_key}"] = full_hist
         
+    total_stored = len(full_hist)
     hist_8 = full_hist[-8:]
     n_entries = len(hist_8)
     

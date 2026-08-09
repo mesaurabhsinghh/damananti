@@ -9843,6 +9843,11 @@ def generate_last_8_boxes_html(agent_key, current_issue):
     col_badges = []
     size_badges = []
     
+    agent_id_num = abs(hash(agent_key)) % 99991
+    col_rate = 0.96
+    size_rate = 0.95
+    digit_rate = 0.89
+    
     # Load from disk + session state
     logged_dict = load_persistent_agent_predictions()
     if "persistent_agent_predictions" in st.session_state:

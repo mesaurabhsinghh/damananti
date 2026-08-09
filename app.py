@@ -679,6 +679,36 @@ def render_notif_button(agent_key, agent_name, target_issue, pred_val, pred_col,
     return f'''<span class="damananti-notif-toggle" id="notif_toggle_{agent_key}" data-agent-key="{agent_key}" data-agent-name="{agent_name}" data-issue="{t_iss}" data-num="{p_num}" data-col="{p_col}" data-size="{p_sz}" data-conf="{c_val}" style="background: rgba(30, 27, 75, 0.85); border: 1.5px solid #818cf8; border-radius: 20px; padding: 3px 10px; font-size: 9.5px; font-weight: 900; color: #cbd5e1; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; box-shadow: 0 0 8px rgba(99, 102, 241, 0.4); margin-left: 6px; user-select: none; transition: all 0.2s ease; z-index: 999;"><span id="notif_icon_{agent_key}">🔕</span><span id="notif_lbl_{agent_key}">ALERT OFF</span></span>'''
 
 
+def extract_prediction_tuple(pred_raw, explicit_col=None, explicit_size=None):
+    raw_str = str(pred_raw).strip()
+    digit_match = re.search(r'\b([0-9])\b', raw_str)
+    pred_digit = int(digit_match.group(1)) if digit_match else None
+    
+    if explicit_col and str(explicit_col).strip().lower() in ["red", "green"]:
+        pred_col = str(explicit_col).strip().capitalize()
+    elif "red" in raw_str.lower():
+        pred_col = "Red"
+    elif "green" in raw_str.lower():
+        pred_col = "Green"
+    elif pred_digit is not None:
+        pred_col = helper_get_color(pred_digit)
+    else:
+        pred_col = "Red"
+        
+    if explicit_size and str(explicit_size).strip().lower() in ["big", "small"]:
+        pred_size = str(explicit_size).strip().capitalize()
+    elif "big" in raw_str.lower():
+        pred_size = "Big"
+    elif "small" in raw_str.lower():
+        pred_size = "Small"
+    elif pred_digit is not None:
+        pred_size = helper_get_size(pred_digit)
+    else:
+        pred_size = "Big"
+        
+    return pred_digit, pred_col, pred_size
+
+
 def helper_get_color(num):
     if num is None:
         return "Red"
@@ -9438,25 +9468,10 @@ if hasattr(st.session_state, "get") and "Mock" not in type(st.session_state).__n
                     pred_col_eval = last_pred.get("pred_col")
                     pred_sz_eval = last_pred.get("pred_size")
                     
-                    if pred_val_str.isdigit() or ("pred_digit" in last_pred and last_pred["pred_digit"] is not None):
-                        pred_num = int(last_pred["pred_digit"]) if "pred_digit" in last_pred and last_pred["pred_digit"] is not None else int(pred_val_str)
-                        if not pred_col_eval or key != "sentinel_ultra_21":
-                            pred_col_eval = helper_get_color(pred_num)
-                        if not pred_sz_eval or key != "sentinel_ultra_21":
-                            pred_sz_eval = helper_get_size(pred_num)
-                        num_hit_val = (pred_num == actual_num)
-                    else:
-                        pred_num = None
-                        num_hit_val = False
-                        if not pred_col_eval:
-                            if "red" in pred_val_str.lower(): pred_col_eval = "Red"
-                            elif "green" in pred_val_str.lower(): pred_col_eval = "Green"
-                        if not pred_sz_eval:
-                            if "big" in pred_val_str.lower(): pred_sz_eval = "Big"
-                            elif "small" in pred_val_str.lower(): pred_sz_eval = "Small"
-
-                    col_hit_val = check_color_hit(pred_col_eval, actual_num, actual_col)
-                    size_hit_val = check_size_hit(pred_sz_eval, actual_num, actual_size)
+                    pred_num, pred_col_eval, pred_sz_eval = extract_prediction_tuple(pred_val, pred_col_eval, pred_sz_eval)
+                    num_hit_val = (pred_num is not None and pred_num == actual_num)
+                    col_hit_val = (str(pred_col_eval).strip().lower() == str(actual_col).strip().lower())
+                    size_hit_val = (str(pred_sz_eval).strip().lower() == str(actual_size).strip().lower())
 
                     st.session_state[hist_key].append({
                         "issue": latest_issue,
@@ -9714,11 +9729,11 @@ if st.session_state.get("emergency_evolution_active", False):
 # Unified stats pre-computation for AGI / ASI agents
 def compute_agent_stats_tuple(key):
     hist = st.session_state.get(f"agent_history_{key}", [])
-    num_s = sum(1 for x in hist if x.get("num_hit"))
+    num_s = sum(1 for x in hist if (x.get("pred_digit") is not None and x.get("actual_num") is not None and str(x.get("pred_digit")).isdigit() and str(x.get("actual_num")).isdigit() and int(x.get("pred_digit")) == int(x.get("actual_num"))))
     num_g = len(hist) - num_s
-    col_s = sum(1 for x in hist if x.get("col_hit"))
+    col_s = sum(1 for x in hist if (x.get("pred_col") is not None and x.get("actual_col") is not None and str(x.get("pred_col")).strip().lower() == str(x.get("actual_col")).strip().lower()))
     col_g = len(hist) - col_s
-    size_s = sum(1 for x in hist if x.get("size_hit"))
+    size_s = sum(1 for x in hist if (x.get("pred_size") is not None and x.get("actual_size") is not None and str(x.get("pred_size")).strip().lower() == str(x.get("actual_size")).strip().lower()))
     size_g = len(hist) - size_s
     return num_s, num_g, col_s, col_g, size_s, size_g
 
@@ -9736,9 +9751,17 @@ def generate_last_8_boxes_html(agent_key, current_issue):
         issue_num = item.get("issue", current_issue - (n_entries - 1 - i))
         issue_str = f"#{str(issue_num)[-3:]}" if len(str(issue_num)) > 3 else f"#{issue_num}"
         
-        num_ok = item.get("num_hit", False)
-        col_ok = item.get("col_hit", False)
-        size_ok = item.get("size_hit", False)
+        # Real-time robust re-evaluation of exact hits
+        p_d = item.get("pred_digit")
+        p_c = item.get("pred_col")
+        p_s = item.get("pred_size")
+        a_n = item.get("actual_num")
+        a_c = item.get("actual_col")
+        a_s = item.get("actual_size")
+        
+        num_ok = (p_d is not None and a_n is not None and int(p_d) == int(a_n))
+        col_ok = (p_c is not None and a_c is not None and str(p_c).strip().lower() == str(a_c).strip().lower())
+        size_ok = (p_s is not None and a_s is not None and str(p_s).strip().lower() == str(a_s).strip().lower())
         
         num_bg = "rgba(34, 197, 94, 0.25)" if num_ok else "rgba(239, 68, 68, 0.25)"
         num_border = "#22c55e" if num_ok else "#ef4444"
@@ -9764,15 +9787,16 @@ def generate_last_8_boxes_html(agent_key, current_issue):
     history_items_html = []
     for h_item in reversed(full_hist):
         h_iss = h_item.get("issue", "N/A")
-        h_num_ok = h_item.get("num_hit", False)
-        h_col_ok = h_item.get("col_hit", False)
-        h_sz_ok = h_item.get("size_hit", False)
         h_p_num = h_item.get("pred_digit", "-")
         h_p_col = h_item.get("pred_col", "-")
         h_p_sz = h_item.get("pred_size", "-")
         h_a_num = h_item.get("actual_num", "-")
         h_a_col = h_item.get("actual_col", "-")
         h_a_sz = h_item.get("actual_size", "-")
+        
+        h_num_ok = (h_p_num is not None and h_a_num is not None and str(h_p_num).isdigit() and str(h_a_num).isdigit() and int(h_p_num) == int(h_a_num))
+        h_col_ok = (h_p_col is not None and h_a_col is not None and str(h_p_col).strip().lower() == str(h_a_col).strip().lower())
+        h_sz_ok = (h_p_sz is not None and h_a_sz is not None and str(h_p_sz).strip().lower() == str(h_a_sz).strip().lower())
         
         num_badge_h = f'<span style="color:{"#22c55e" if h_num_ok else "#ef4444"}; font-weight:800;">Pred: {h_p_num} | Act: {h_a_num} {"✓" if h_num_ok else "✗"}</span>'
         col_badge_h = f'<span style="color:{"#22c55e" if h_col_ok else "#ef4444"}; font-weight:800;">{h_p_col} vs {h_a_col} {"✓" if h_col_ok else "✗"}</span>'

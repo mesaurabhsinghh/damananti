@@ -448,11 +448,29 @@ if not st.session_state.get("import_only") and not st.session_state.get("page_co
                 font-size: 10px !important;
                 line-height: 1.25 !important;
             }
+            /* Mobile Header & Sidebar Collapse Button Styling (Fully Visible on Smartphones) */
             header[data-testid="stHeader"] {
-                display: none !important;
+                background: transparent !important;
+                height: 2.5rem !important;
+                z-index: 999999 !important;
+                display: block !important;
+            }
+            [data-testid="collapsedControl"],
+            [data-testid="stSidebarCollapseButton"],
+            button[kind="header"] {
+                display: flex !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+                background: rgba(30, 27, 75, 0.95) !important;
+                border: 1.5px solid #a855f7 !important;
+                border-radius: 8px !important;
+                color: #f0abfc !important;
+                box-shadow: 0 0 12px rgba(168, 85, 247, 0.6) !important;
+                margin-left: 6px !important;
+                margin-top: 4px !important;
             }
             .main .block-container {
-                padding: 0.15rem 0.2rem !important;
+                padding: 2.2rem 0.2rem 0.2rem 0.2rem !important;
                 max-width: 100% !important;
             }
 
@@ -650,6 +668,10 @@ import torch.nn as nn
 import torch.optim as optim
 
 # TrueLSTMNet and DQNCoreNet are imported from model_manager.py
+
+def render_notif_button(agent_key, agent_name, target_issue, pred_val, pred_col, pred_size, pred_conf):
+    return f'''<button id="notif_toggle_{agent_key}" onclick="toggleAgentNotification('{agent_key}', '{agent_name}', '{target_issue}', '{pred_val}', '{pred_col}', '{pred_size}', '{pred_conf}')" style="background: rgba(15, 23, 42, 0.9); border: 1.5px solid #6366f1; border-radius: 14px; padding: 2px 8px; font-size: 8.5px; font-weight: 800; color: #e0e7ff; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; outline: none; margin-left: 4px;"><span id="notif_icon_{agent_key}">🔔</span><span id="notif_lbl_{agent_key}">NOTIF: OFF</span></button>'''
+
 
 def helper_get_color(num):
     if num is None:
@@ -7169,6 +7191,7 @@ def render_titan_duo_brain_17_card(res_dict, engines_dict, df_history, cache_inf
         <span style="background: rgba(6, 182, 212, 0.2); border: 1.5px solid #06b6d4; color: #67e8f9; padding: 4px 10px; border-radius: 8px; font-size: 9.5px; font-weight: 900; text-transform: uppercase;">
             🎯 DUAL TARGET
         </span>
+        {render_notif_button("titan17", "TITAN DUO-BRAIN 17.0", target_issue, pred_col + " " + pred_size, pred_col, pred_size, round(float(conf * 100), 1))}
     </div>
 </div>
 
@@ -7909,6 +7932,7 @@ def render_nexus_omnisapient_card(res_dict, engines_dict, df_history, cache_info
         <span style="background: rgba(168, 85, 247, 0.25); border: 1.5px solid #06b6d4; color: #67e8f9; padding: 4px 10px; border-radius: 8px; font-size: 9.5px; font-weight: 900; text-transform: uppercase;">
             🎯 TARGET: COLOR & SIZE
         </span>
+        {render_notif_button("omnisapient18", "NEXUS OMNISAPIENT 15.0", target_issue, pred_col + " " + pred_size, pred_col, pred_size, round(float(conf * 100), 1))}
     </div>
 </div>
 
@@ -10492,6 +10516,7 @@ st.markdown(f"""
             <span style="background: #a855f7; color: #ffffff; font-size: 10px; font-weight: 900; padding: 5px 14px; border-radius: 20px;">
                 &#127756; GOD-MIND AGI
             </span>
+            {render_notif_button("transcendent11", "TRANSCENDENT 11.0", target_issue, transcendent11_prediction, transcendent11_col, transcendent11_size, round(float(transcendent11_confidence), 1))}
         </div>
     </div>
     <div style="margin-top: 16px; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
@@ -10573,6 +10598,7 @@ st.markdown(f"""
             <span style="background: #a855f7; color: #ffffff; font-size: 10px; font-weight: 900; padding: 5px 14px; border-radius: 20px;">
                 &#128081; REGIME META-CHAMPION
             </span>
+            {render_notif_button("supreme_prime", "NEXUS SUPREME PRIME", target_issue, supreme_prediction, supreme_col, supreme_size, round(float(supreme_confidence), 1))}
         </div>
     </div>
     <div style="margin-top: 16px; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
@@ -10909,6 +10935,7 @@ st.markdown(f"""
             <span style="background: rgba(15, 23, 42, 0.85); border: 1.5px solid #06b6d4; border-radius: 8px; padding: 3px 10px; font-size: 10px; font-weight: 800; color: #38bdf8; display: inline-flex; align-items: center; gap: 6px; margin-right: 6px;">&#127919; TARGET ISSUE: <span style="color: #facc15; font-size: 11px; font-weight: 900;">#{target_issue}</span> <span style="background: #10b981; color: #020617; font-size: 8px; font-weight: 900; padding: 1px 5px; border-radius: 8px;">LIVE SYNC</span></span>
             <span style="background: #06b6d4; color: #020617; font-size: 10px; font-weight: 900; padding: 4px 12px; border-radius: 20px; margin-right: 6px;">UNIFIED 12-PILLAR MIND</span>
             <span style="background: #0284c7; color: #ffffff; font-size: 10px; font-weight: 800; padding: 4px 12px; border-radius: 20px;">&#9876;️ {omni9_self_play_winner} WINNER</span>
+            {render_notif_button("omni9", "OMNI-NEXUS 9.0", target_issue, omni9_prediction, omni9_col, omni9_size, round(float(omni9_confidence), 1))}
         </div>
     </div>
     <div style="font-size: 12px; color: #cbd5e1; margin-top: 6px; text-align: left;">
@@ -11761,8 +11788,11 @@ d_col1, d_col2 = st.columns([2, 1])
 with d_col1:
     st.markdown(f"""
     <div class="decision-banner">
-        <div style="font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:#a7f3d0;">
-            ð¯ AI TARGET DECISION FOR ISSUE #{target_issue}
+    <div class="decision-banner">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px;">
+            <span style="font-size: 11.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: #a7f3d0;">🎯 AI TARGET DECISION FOR ISSUE #{target_issue}</span>
+            {render_notif_button("top1", "AI TARGET CONSENSUS", target_issue, final_pred_num, final_pred_col, final_pred_size, overall_conf)}
+        </div>
         </div>
         <div style="display: flex; justify-content: space-around; align-items: center; margin-top: 6px; gap: 4px; width: 100%;">
             <div style="flex: 1; text-align: center;">
@@ -12535,3 +12565,110 @@ with st.expander("&#128202; ऐतिहासिक डेटा (अंति�
     }, inplace=True)
     st.dataframe(display_df, height=400, width="stretch", hide_index=True)
     st.caption(f"कुल राउंड: {len(display_df)}")
+
+# Client-side Live Notification & Mobile Sidebar JS Dispatcher
+curr_target_iss_str = str(target_issue)
+st.markdown(r'''
+<script>
+window.toggleAgentNotification = function(agentKey, agentName, issue, predVal, predCol, predSize, predConf) {
+    if (!("Notification" in window)) {
+        alert("Browser notification not supported.");
+        return;
+    }
+    
+    Notification.requestPermission().then(function(permission) {
+        if (permission === "granted") {
+            var current = localStorage.getItem("damananti_notif_" + agentKey) === "1";
+            var nextState = !current;
+            localStorage.setItem("damananti_notif_" + agentKey, nextState ? "1" : "0");
+            
+            updateNotifButtons();
+            
+            if (nextState) {
+                var title = "🔔 " + agentName + " Live Alert ON";
+                var body = "Target #" + issue + " ➔ NUM: " + predVal + " | COL: " + predCol + " | SIZE: " + predSize + " (" + predConf + "%)";
+                try {
+                    new Notification(title, { body: body });
+                } catch(e){}
+                
+                if (window.FlutterNotificationBridge) {
+                    window.FlutterNotificationBridge.postMessage(title + " - " + body);
+                }
+            }
+        }
+    });
+};
+
+function updateNotifButtons() {
+    var buttons = document.querySelectorAll("[id^='notif_toggle_']");
+    buttons.forEach(function(btn) {
+        var key = btn.id.replace("notif_toggle_", "");
+        var isEnabled = localStorage.getItem("damananti_notif_" + key) === "1";
+        var lbl = document.getElementById("notif_lbl_" + key);
+        var icon = document.getElementById("notif_icon_" + key);
+        if (isEnabled) {
+            btn.style.borderColor = "#22c55e";
+            btn.style.background = "rgba(34, 197, 94, 0.25)";
+            btn.style.boxShadow = "0 0 8px rgba(34, 197, 94, 0.6)";
+            if (lbl) { lbl.innerText = "NOTIF: ON"; lbl.style.color = "#86efac"; }
+            if (icon) { icon.innerText = "🔔"; }
+        } else {
+            btn.style.borderColor = "#6366f1";
+            btn.style.background = "rgba(15, 23, 42, 0.9)";
+            btn.style.boxShadow = "none";
+            if (lbl) { lbl.innerText = "NOTIF: OFF"; lbl.style.color = "#a5b4fc"; }
+            if (icon) { icon.innerText = "🔕"; }
+        }
+    });
+}
+
+function checkAndFireEnabledNotifications() {
+    var buttons = document.querySelectorAll("[id^='notif_toggle_']");
+    if (buttons.length === 0) return;
+    
+    var firstBtn = buttons[0];
+    var onclickStr = firstBtn.getAttribute("onclick") || "";
+    var match = onclickStr.match(/toggleAgentNotification\('([^']+)',\s*'([^']+)',\s*'([^']+)'/);
+    var currentIssue = match ? match[3] : "";
+    
+    if (!currentIssue) return;
+    
+    var lastFired = localStorage.getItem("damananti_last_fired_issue");
+    if (lastFired !== currentIssue) {
+        localStorage.setItem("damananti_last_fired_issue", currentIssue);
+        buttons.forEach(function(btn) {
+            var key = btn.id.replace("notif_toggle_", "");
+            var isEnabled = localStorage.getItem("damananti_notif_" + key) === "1";
+            if (isEnabled && Notification.permission === "granted") {
+                var btnOnclick = btn.getAttribute("onclick") || "";
+                var bMatch = btnOnclick.match(/toggleAgentNotification\('([^']+)',\s*'([^']+)',\s*'([^']+)',\s*'([^']+)',\s*'([^']+)',\s*'([^']+)',\s*'([^']+)'\)/);
+                if (bMatch) {
+                    var aName = bMatch[2];
+                    var pVal = bMatch[4];
+                    var pCol = bMatch[5];
+                    var pSize = bMatch[6];
+                    var pConf = bMatch[7];
+                    var title = "🎯 " + aName + " (Issue #" + currentIssue + ")";
+                    var body = "NUM: " + pVal + " | COL: " + pCol + " | SIZE: " + pSize + " | CONF: " + pConf + "%";
+                    try {
+                        new Notification(title, { body: body });
+                    } catch(e){}
+                    if (window.FlutterNotificationBridge) {
+                        window.FlutterNotificationBridge.postMessage(title + " ➔ " + body);
+                    }
+                }
+            }
+        });
+    }
+}
+
+setTimeout(function() {
+    updateNotifButtons();
+    checkAndFireEnabledNotifications();
+}, 400);
+setTimeout(function() {
+    updateNotifButtons();
+    checkAndFireEnabledNotifications();
+}, 1200);
+</script>
+''', unsafe_allow_html=True)

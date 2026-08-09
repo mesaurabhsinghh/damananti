@@ -6324,6 +6324,7 @@ def render_nexus_duo_force_card(target_name, pred_col, pred_size, conf_col, conf
 <span style="background: rgba(168, 85, 247, 0.2); border: 1px solid #a855f7; color: #c084fc; font-size: 8px; font-weight: 800; padding: 1px 5px; border-radius: 10px;">HMM Regime</span>
 <span style="background: rgba(234, 179, 8, 0.2); border: 1px solid #eab308; color: #fde047; font-size: 8px; font-weight: 800; padding: 1px 5px; border-radius: 10px;">Platt Calibrated</span>
 <span style="background: rgba(16, 185, 129, 0.2); border: 1px solid #10b981; color: #6ee7b7; font-size: 8px; font-weight: 800; padding: 1px 5px; border-radius: 10px;">Kelly Bets</span>
+{render_notif_button("nexus_duo_force", "NEXUS DUO FORCE", target_issue_str, pred_col + " " + pred_size, pred_col, pred_size, round(float((conf_col + conf_sz)/2), 1))}
 </div>
 </div>
 
@@ -6519,6 +6520,7 @@ def render_hyperion_omni_agi_12_card(target_name, pred_num, pred_col, pred_size,
 <span style="background: rgba(192, 132, 252, 0.2); border: 1px solid #c084fc; color: #e9d5ff; font-size: 8px; font-weight: 800; padding: 1px 5px; border-radius: 10px;">75 Streams</span>
 <span style="background: rgba(6, 182, 212, 0.2); border: 1px solid #06b6d4; color: #67e8f9; font-size: 8px; font-weight: 800; padding: 1px 5px; border-radius: 10px;">q-PDF γ=1.6</span>
 <span style="background: rgba(16, 185, 129, 0.2); border: 1px solid #10b981; color: #6ee7b7; font-size: 8px; font-weight: 800; padding: 1px 5px; border-radius: 10px;">CFR+ Regret</span>
+{render_notif_button("hyperion12", "HYPERION 12.0", target_issue_str, pred_num, pred_col, pred_size, round(float(confidence), 1))}
 </div>
 </div>
 
@@ -7197,7 +7199,7 @@ def render_titan_duo_brain_17_card(res_dict, engines_dict, df_history, cache_inf
         <span style="background: rgba(6, 182, 212, 0.2); border: 1.5px solid #06b6d4; color: #67e8f9; padding: 4px 10px; border-radius: 8px; font-size: 9.5px; font-weight: 900; text-transform: uppercase;">
             🎯 DUAL TARGET
         </span>
-        {render_notif_button("titan17", "TITAN DUO-BRAIN 17.0", target_issue, pred_col + " " + pred_size, pred_col, pred_size, round(float((conf_col + conf_size) / 2), 1))}
+        {render_notif_button("titan17", "TITAN DUO-BRAIN 17.0", target_issue, pred_col + " " + pred_size, pred_col, pred_size, round(float((confidence_col + confidence_size) / 2), 1))}
     </div>
 </div>
 
@@ -7938,7 +7940,7 @@ def render_nexus_omnisapient_card(res_dict, engines_dict, df_history, cache_info
         <span style="background: rgba(168, 85, 247, 0.25); border: 1.5px solid #06b6d4; color: #67e8f9; padding: 4px 10px; border-radius: 8px; font-size: 9.5px; font-weight: 900; text-transform: uppercase;">
             🎯 TARGET: COLOR & SIZE
         </span>
-        {render_notif_button("omnisapient18", "NEXUS OMNISAPIENT 15.0", target_issue, pred_col + " " + pred_size, pred_col, pred_size, round(float((conf_col + conf_size) / 2), 1))}
+        {render_notif_button("omnisapient18", "NEXUS OMNISAPIENT 15.0", target_issue, pred_col + " " + pred_size, pred_col, pred_size, round(float((confidence_col + confidence_size) / 2), 1))}
     </div>
 </div>
 

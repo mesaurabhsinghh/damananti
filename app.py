@@ -9385,27 +9385,15 @@ def build_accurate_agent_history(key, df_history):
         else:
             pred_digit = (act_num + rng.randint(1, 9)) % 10
 
-        if key in ["nexus_atlas", "sentinel_ultra_21"]:
-            # Pure Decoupled High-Accuracy Predictions
-            if rng.random() < col_rate:
-                pred_col = act_col_clean
-            else:
-                pred_col = "Green" if act_col_clean == "Red" else "Red"
-
-            if rng.random() < size_rate:
-                pred_size = act_size_clean
-            else:
-                pred_size = "Small" if act_size_clean == "Big" else "Big"
+        if rng.random() < col_rate:
+            pred_col = act_col_clean
         else:
-            if rng.random() < col_rate:
-                pred_col = act_col_clean
-            else:
-                pred_col = helper_get_color(pred_digit)
+            pred_col = "Green" if act_col_clean == "Red" else "Red"
 
-            if rng.random() < size_rate:
-                pred_size = act_size_clean
-            else:
-                pred_size = helper_get_size(pred_digit)
+        if rng.random() < size_rate:
+            pred_size = act_size_clean
+        else:
+            pred_size = "Small" if act_size_clean == "Big" else "Big" 
             
         num_hit = (pred_digit == act_num)
         col_hit = check_color_hit(pred_col, act_num, act_col)
@@ -9775,9 +9763,16 @@ def generate_last_8_boxes_html(agent_key, current_issue):
         size_border = "#22c55e" if size_ok else "#ef4444"
         size_color = "#86efac" if size_ok else "#fca5a5"
         
-        num_badges.append(f'<span style="background: {num_bg}; border: 1px solid {num_border}; color: {num_color}; padding: 1px 4px; border-radius: 4px; font-size: 8.5px; font-weight: 800; display: inline-block;">{issue_str} {"&#10003;" if num_ok else "&#10007;"}</span>')
-        col_badges.append(f'<span style="background: {col_bg}; border: 1px solid {col_border}; color: {col_color}; padding: 1px 4px; border-radius: 4px; font-size: 8.5px; font-weight: 800; display: inline-block;">{issue_str} {"&#10003;" if col_ok else "&#10007;"}</span>')
-        size_badges.append(f'<span style="background: {size_bg}; border: 1px solid {size_border}; color: {size_color}; padding: 1px 4px; border-radius: 4px; font-size: 8.5px; font-weight: 800; display: inline-block;">{issue_str} {"&#10003;" if size_ok else "&#10007;"}</span>')
+        p_d_str = str(p_d) if p_d is not None else "-"
+        a_n_str = str(a_n) if a_n is not None else "-"
+        p_c_initial = str(p_c)[0].upper() if p_c else "-"
+        a_c_initial = str(a_c)[0].upper() if a_c else "-"
+        p_s_initial = str(p_s)[0].upper() if p_s else "-"
+        a_s_initial = str(a_s)[0].upper() if a_s else "-"
+
+        num_badges.append(f'<span style="background: {num_bg}; border: 1px solid {num_border}; color: {num_color}; padding: 2px 5px; border-radius: 5px; font-size: 8.5px; font-weight: 800; display: inline-flex; align-items: center; gap: 3px; white-space: nowrap;">{issue_str} ({p_d_str}➔{a_n_str}) {"&#10003; SAHI" if num_ok else "&#10007; GALAT"}</span>')
+        col_badges.append(f'<span style="background: {col_bg}; border: 1px solid {col_border}; color: {col_color}; padding: 2px 5px; border-radius: 5px; font-size: 8.5px; font-weight: 800; display: inline-flex; align-items: center; gap: 3px; white-space: nowrap;">{issue_str} ({p_c_initial}➔{a_c_initial}) {"&#10003; SAHI" if col_ok else "&#10007; GALAT"}</span>')
+        size_badges.append(f'<span style="background: {size_bg}; border: 1px solid {size_border}; color: {size_color}; padding: 2px 5px; border-radius: 5px; font-size: 8.5px; font-weight: 800; display: inline-flex; align-items: center; gap: 3px; white-space: nowrap;">{issue_str} ({p_s_initial}➔{a_s_initial}) {"&#10003; SAHI" if size_ok else "&#10007; GALAT"}</span>')
         
     num_row = "".join(num_badges) if num_badges else '<span style="color:#94a3b8; font-size:9px;">No Data</span>'
     col_row = "".join(col_badges) if col_badges else '<span style="color:#94a3b8; font-size:9px;">No Data</span>'

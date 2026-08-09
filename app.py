@@ -669,8 +669,14 @@ import torch.optim as optim
 
 # TrueLSTMNet and DQNCoreNet are imported from model_manager.py
 
-def render_notif_button(agent_key, agent_name, target_issue, pred_val, pred_col, pred_size, pred_conf):
-    return f'''<button id="notif_toggle_{agent_key}" onclick="toggleAgentNotification('{agent_key}', '{agent_name}', '{target_issue}', '{pred_val}', '{pred_col}', '{pred_size}', '{pred_conf}')" style="background: rgba(15, 23, 42, 0.9); border: 1.5px solid #6366f1; border-radius: 14px; padding: 2px 8px; font-size: 8.5px; font-weight: 800; color: #e0e7ff; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; outline: none; margin-left: 4px;"><span id="notif_icon_{agent_key}">🔔</span><span id="notif_lbl_{agent_key}">NOTIF: OFF</span></button>'''
+def render_notif_button(agent_key, agent_name, target_issue, pred_val, pred_col, pred_size, pred_conf=80.0):
+    c_val = str(round(float(pred_conf), 1)) if pred_conf is not None else "80.0"
+    p_num = str(pred_val) if pred_val is not None else "5"
+    p_col = str(pred_col) if pred_col is not None else "Red"
+    p_sz = str(pred_size) if pred_size is not None else "Big"
+    t_iss = str(target_issue) if target_issue is not None else "Next"
+    
+    return f'''<span class="damananti-notif-toggle" id="notif_toggle_{agent_key}" data-agent-key="{agent_key}" data-agent-name="{agent_name}" data-issue="{t_iss}" data-num="{p_num}" data-col="{p_col}" data-size="{p_sz}" data-conf="{c_val}" onclick="toggleAgentNotification('{agent_key}', '{agent_name}', '{t_iss}', '{p_num}', '{p_col}', '{p_sz}', '{c_val}')" style="background: rgba(99, 102, 241, 0.25); border: 1.5px solid #818cf8; border-radius: 20px; padding: 3px 10px; font-size: 9.5px; font-weight: 900; color: #ffffff; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; box-shadow: 0 0 10px rgba(99, 102, 241, 0.4); margin-left: 6px; user-select: none; transition: all 0.2s ease;"><span id="notif_icon_{agent_key}">🔕</span><span id="notif_lbl_{agent_key}">ALERT OFF</span></span>'''
 
 
 def helper_get_color(num):
@@ -7191,7 +7197,7 @@ def render_titan_duo_brain_17_card(res_dict, engines_dict, df_history, cache_inf
         <span style="background: rgba(6, 182, 212, 0.2); border: 1.5px solid #06b6d4; color: #67e8f9; padding: 4px 10px; border-radius: 8px; font-size: 9.5px; font-weight: 900; text-transform: uppercase;">
             🎯 DUAL TARGET
         </span>
-        {render_notif_button("titan17", "TITAN DUO-BRAIN 17.0", target_issue, pred_col + " " + pred_size, pred_col, pred_size, round(float(conf * 100), 1))}
+        {render_notif_button("titan17", "TITAN DUO-BRAIN 17.0", target_issue, pred_col + " " + pred_size, pred_col, pred_size, round(float((conf_col + conf_size) / 2), 1))}
     </div>
 </div>
 
@@ -7932,7 +7938,7 @@ def render_nexus_omnisapient_card(res_dict, engines_dict, df_history, cache_info
         <span style="background: rgba(168, 85, 247, 0.25); border: 1.5px solid #06b6d4; color: #67e8f9; padding: 4px 10px; border-radius: 8px; font-size: 9.5px; font-weight: 900; text-transform: uppercase;">
             🎯 TARGET: COLOR & SIZE
         </span>
-        {render_notif_button("omnisapient18", "NEXUS OMNISAPIENT 15.0", target_issue, pred_col + " " + pred_size, pred_col, pred_size, round(float(conf * 100), 1))}
+        {render_notif_button("omnisapient18", "NEXUS OMNISAPIENT 15.0", target_issue, pred_col + " " + pred_size, pred_col, pred_size, round(float((conf_col + conf_size) / 2), 1))}
     </div>
 </div>
 
@@ -12567,40 +12573,44 @@ with st.expander("&#128202; ऐतिहासिक डेटा (अंति�
     st.caption(f"कुल राउंड: {len(display_df)}")
 
 # Client-side Live Notification & Mobile Sidebar JS Dispatcher
-curr_target_iss_str = str(target_issue)
 st.markdown(r'''
 <script>
 window.toggleAgentNotification = function(agentKey, agentName, issue, predVal, predCol, predSize, predConf) {
-    if (!("Notification" in window)) {
-        alert("Browser notification not supported.");
-        return;
+    var keyName = "damananti_notif_" + agentKey;
+    var current = localStorage.getItem(keyName) === "1";
+    var nextState = !current;
+    localStorage.setItem(keyName, nextState ? "1" : "0");
+    
+    updateNotifButtons();
+    
+    var alertTitle = nextState ? ("🔔 " + agentName + " Live Alert ON") : ("🔕 " + agentName + " Live Alert OFF");
+    var alertBody = "Target #" + issue + " ➔ NUM: " + predVal + " | COL: " + predCol + " | SIZE: " + predSize + " (" + predConf + "%)";
+    
+    if (window.FlutterNotificationBridge) {
+        window.FlutterNotificationBridge.postMessage(alertTitle + " ➔ " + alertBody);
     }
     
-    Notification.requestPermission().then(function(permission) {
-        if (permission === "granted") {
-            var current = localStorage.getItem("damananti_notif_" + agentKey) === "1";
-            var nextState = !current;
-            localStorage.setItem("damananti_notif_" + agentKey, nextState ? "1" : "0");
-            
-            updateNotifButtons();
-            
+    if ("Notification" in window) {
+        if (Notification.permission === "granted") {
             if (nextState) {
-                var title = "🔔 " + agentName + " Live Alert ON";
-                var body = "Target #" + issue + " ➔ NUM: " + predVal + " | COL: " + predCol + " | SIZE: " + predSize + " (" + predConf + "%)";
                 try {
-                    new Notification(title, { body: body });
+                    new Notification(alertTitle, { body: alertBody });
                 } catch(e){}
-                
-                if (window.FlutterNotificationBridge) {
-                    window.FlutterNotificationBridge.postMessage(title + " - " + body);
-                }
             }
+        } else if (Notification.permission !== "denied") {
+            Notification.requestPermission().then(function(perm) {
+                if (perm === "granted" && nextState) {
+                    try {
+                        new Notification(alertTitle, { body: alertBody });
+                    } catch(e){}
+                }
+            });
         }
-    });
+    }
 };
 
 function updateNotifButtons() {
-    var buttons = document.querySelectorAll("[id^='notif_toggle_']");
+    var buttons = document.querySelectorAll(".damananti-notif-toggle, [id^='notif_toggle_']");
     buttons.forEach(function(btn) {
         var key = btn.id.replace("notif_toggle_", "");
         var isEnabled = localStorage.getItem("damananti_notif_" + key) === "1";
@@ -12608,67 +12618,67 @@ function updateNotifButtons() {
         var icon = document.getElementById("notif_icon_" + key);
         if (isEnabled) {
             btn.style.borderColor = "#22c55e";
-            btn.style.background = "rgba(34, 197, 94, 0.25)";
-            btn.style.boxShadow = "0 0 8px rgba(34, 197, 94, 0.6)";
-            if (lbl) { lbl.innerText = "NOTIF: ON"; lbl.style.color = "#86efac"; }
+            btn.style.background = "linear-gradient(90deg, rgba(34, 197, 94, 0.35), rgba(16, 185, 129, 0.45))";
+            btn.style.boxShadow = "0 0 12px rgba(34, 197, 94, 0.8)";
+            if (lbl) { lbl.innerText = "ALERT ON"; lbl.style.color = "#86efac"; }
             if (icon) { icon.innerText = "🔔"; }
         } else {
-            btn.style.borderColor = "#6366f1";
-            btn.style.background = "rgba(15, 23, 42, 0.9)";
-            btn.style.boxShadow = "none";
-            if (lbl) { lbl.innerText = "NOTIF: OFF"; lbl.style.color = "#a5b4fc"; }
+            btn.style.borderColor = "#818cf8";
+            btn.style.background = "rgba(99, 102, 241, 0.25)";
+            btn.style.boxShadow = "0 0 8px rgba(99, 102, 241, 0.3)";
+            if (lbl) { lbl.innerText = "ALERT OFF"; lbl.style.color = "#ffffff"; }
             if (icon) { icon.innerText = "🔕"; }
         }
     });
 }
 
 function checkAndFireEnabledNotifications() {
-    var buttons = document.querySelectorAll("[id^='notif_toggle_']");
+    var buttons = document.querySelectorAll(".damananti-notif-toggle, [id^='notif_toggle_']");
     if (buttons.length === 0) return;
     
     var firstBtn = buttons[0];
-    var onclickStr = firstBtn.getAttribute("onclick") || "";
-    var match = onclickStr.match(/toggleAgentNotification\('([^']+)',\s*'([^']+)',\s*'([^']+)'/);
-    var currentIssue = match ? match[3] : "";
-    
+    var currentIssue = firstBtn.getAttribute("data-issue") || "";
+    if (!currentIssue) {
+        var onclickStr = firstBtn.getAttribute("onclick") || "";
+        var match = onclickStr.match(/toggleAgentNotification\('([^']+)',\s*'([^']+)',\s*'([^']+)'/);
+        currentIssue = match ? match[3] : "";
+    }
     if (!currentIssue) return;
     
     var lastFired = localStorage.getItem("damananti_last_fired_issue");
     if (lastFired !== currentIssue) {
         localStorage.setItem("damananti_last_fired_issue", currentIssue);
         buttons.forEach(function(btn) {
-            var key = btn.id.replace("notif_toggle_", "");
+            var key = btn.getAttribute("data-agent-key") || btn.id.replace("notif_toggle_", "");
             var isEnabled = localStorage.getItem("damananti_notif_" + key) === "1";
-            if (isEnabled && Notification.permission === "granted") {
-                var btnOnclick = btn.getAttribute("onclick") || "";
-                var bMatch = btnOnclick.match(/toggleAgentNotification\('([^']+)',\s*'([^']+)',\s*'([^']+)',\s*'([^']+)',\s*'([^']+)',\s*'([^']+)',\s*'([^']+)'\)/);
-                if (bMatch) {
-                    var aName = bMatch[2];
-                    var pVal = bMatch[4];
-                    var pCol = bMatch[5];
-                    var pSize = bMatch[6];
-                    var pConf = bMatch[7];
-                    var title = "🎯 " + aName + " (Issue #" + currentIssue + ")";
-                    var body = "NUM: " + pVal + " | COL: " + pCol + " | SIZE: " + pSize + " | CONF: " + pConf + "%";
+            if (isEnabled) {
+                var aName = btn.getAttribute("data-agent-name") || "AI Agent";
+                var pVal = btn.getAttribute("data-num") || "5";
+                var pCol = btn.getAttribute("data-col") || "Red";
+                var pSize = btn.getAttribute("data-size") || "Big";
+                var pConf = btn.getAttribute("data-conf") || "80.0";
+                
+                var title = "🎯 " + aName + " (Issue #" + currentIssue + ")";
+                var body = "NUM: " + pVal + " | COL: " + pCol + " | SIZE: " + pSize + " | CONF: " + pConf + "%";
+                
+                if (window.FlutterNotificationBridge) {
+                    window.FlutterNotificationBridge.postMessage(title + " ➔ " + body);
+                }
+                
+                if ("Notification" in window && Notification.permission === "granted") {
                     try {
                         new Notification(title, { body: body });
                     } catch(e){}
-                    if (window.FlutterNotificationBridge) {
-                        window.FlutterNotificationBridge.postMessage(title + " ➔ " + body);
-                    }
                 }
             }
         });
     }
 }
 
+setInterval(updateNotifButtons, 1000);
 setTimeout(function() {
     updateNotifButtons();
     checkAndFireEnabledNotifications();
-}, 400);
-setTimeout(function() {
-    updateNotifButtons();
-    checkAndFireEnabledNotifications();
-}, 1200);
+}, 500);
 </script>
 ''', unsafe_allow_html=True)

@@ -545,6 +545,8 @@ LIVE_API_ENDPOINTS = {
     "Win Go 5Min": "https://draw.ar-lottery01.com/WinGo/WinGo_5M/GetHistoryIssuePage.json",
 }
 
+MARTINGALE_LADDER = [5, 5, 11, 20, 30, 45, 70, 105, 155, 235]
+
 DAMAN_BET_URL = "https://api.ar-lottery01.com/api/Lottery/WinGoBet"
 DAMAN_LOGIN_URL = "https://api.ar-lottery01.com/api/Account/HeaderLogin"
 
@@ -565,13 +567,13 @@ def login_daman_account(mobile_number, password):
             res = r.json()
             token = res.get("data", {}).get("token") or res.get("data", {}).get("bearerToken")
             if token:
-                return True, token, "Login successful! Bearer token auto-refreshed."
-            return False, None, res.get("msg", "Login failed: No token returned.")
+                return True, token, "Login successful! Bearer Token refreshed."
+            return False, None, res.get("msg", "Login failed: Invalid credentials or token missing.")
         return False, None, f"Login HTTP Error: {r.status_code}"
     except Exception as e:
-        return False, None, f"Login exception: {str(e)}"
+        return False, None, f"Login Exception: {str(e)}"
 
-def execute_daman_autobet(bearer_token, game_code, issue_number, bet_content, amount=10, bet_multiple=1):
+def execute_daman_autobet(bearer_token, game_code, issue_number, bet_content, amount=5):
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
         "Origin": "https://damanworld.world",
@@ -584,7 +586,7 @@ def execute_daman_autobet(bearer_token, game_code, issue_number, bet_content, am
         "gameCode": str(game_code),
         "issueNumber": str(issue_number),
         "amount": int(amount),
-        "betMultiple": int(bet_multiple),
+        "betMultiple": 1,
         "betContent": str(bet_content),
         "language": "en",
         "random": random_str,
@@ -9033,48 +9035,30 @@ cache_info = st.session_state.get("cache_info")
 st.sidebar.markdown("### &#128736;️ CONFIGURATION & AGENT CONTROL")
 deep_analysis = st.sidebar.checkbox("Deep Analysis Mode (SHAP & Causality) &#128300;", value=False)
 
-# --- 🤖 AUTOBET AUTOMATION CONTROL PANEL ---
+# --- 🤖 SENTINEL PRIME OMEGA AUTOBET AUTOMATION CONTROL ---
 st.sidebar.markdown("---")
-st.sidebar.markdown("### ⚡ AUTOBET AUTOMATION ENGINE")
-autobet_enabled = st.sidebar.checkbox("Enable Real-Time AutoBetting 🚀", value=st.session_state.get("autobet_enabled", False))
+st.sidebar.markdown("### ⚡ SENTINEL OMEGA AUTOBET ENGINE")
+autobet_enabled = st.sidebar.checkbox("Enable Sentinel Omega AutoBet 🚀", value=st.session_state.get("autobet_enabled", False))
 st.session_state["autobet_enabled"] = autobet_enabled
 
-with st.sidebar.expander("🔑 Auth & AutoBet Settings", expanded=autobet_enabled):
-    autobet_agent = st.selectbox(
-        "🎯 AI Agent Strategy to Follow:",
-        [
-            "Hyperion Omni-AGI 12.0",
-            "Nexus Atlas 22.0",
-            "Sentinel Ultra Omega 21.0",
-            "Sentinel Phoenix 20.0",
-            "Nexus Omnisapient 18.0",
-            "Titan Duo-Brain 17.0",
-            "Chromatic God-Mode 16.0",
-            "Top 1 Best Engine",
-            "Top 2 Best Engine",
-            "Nexus Supreme Prime"
-        ],
-        index=0
-    )
-    st.session_state["autobet_agent"] = autobet_agent
+with st.sidebar.expander("🔑 Login & AutoBet Settings", expanded=autobet_enabled):
+    st.markdown("🎯 **Connected Model:** `SENTINEL PRIME OMEGA (12-Layer)`")
     
-    autobet_target_type = st.selectbox(
-        "📌 Bet Type Preference:",
-        ["Color Only (Red/Green)", "Size Only (Big/Small)", "Both (Color + Size Dual)"],
+    autobet_target_type = st.radio(
+        "📌 Choose Bet Mode (One at a time):",
+        ["Color (Red/Green)", "Size (Big/Small)"],
         index=0
     )
     st.session_state["autobet_target_type"] = autobet_target_type
     
-    col_am1, col_am2 = st.columns(2)
-    with col_am1:
-        autobet_amount = st.number_input("Base Amount (₹)", min_value=1, value=10, step=10)
-        st.session_state["autobet_amount"] = autobet_amount
-    with col_am2:
-        autobet_multiple = st.selectbox("Bet Multiple", [1, 2, 3, 5, 10], index=0)
-        st.session_state["autobet_multiple"] = autobet_multiple
-
+    st.markdown("""
+    📈 **10-Step Progressive Loss Recovery Ladder:**
+    `[₹5 ➔ ₹5 ➔ ₹11 ➔ ₹20 ➔ ₹30 ➔ ₹45 ➔ ₹70 ➔ ₹105 ➔ ₹155 ➔ ₹235]`
+    *(Jeetne par wapas ₹5 se start hoga, Haarne par next step)*
+    """)
+    
     autobet_game_code = st.selectbox(
-        "🎮 Target Game Code",
+        "🎮 Target Game Mode",
         ["WinGo_30S", "WinGo_1M", "WinGo_3M", "WinGo_5M"],
         index=0
     )
@@ -9084,7 +9068,7 @@ with st.sidebar.expander("🔑 Auth & AutoBet Settings", expanded=autobet_enable
         "🔑 Bearer JWT Token",
         value=st.session_state.get("daman_bearer_token", ""),
         type="password",
-        help="Paste valid Bearer JWT Token from network tab"
+        help="Paste valid Bearer Token or use Auto-Login below"
     )
     st.session_state["daman_bearer_token"] = bearer_token
     
@@ -9092,7 +9076,7 @@ with st.sidebar.expander("🔑 Auth & AutoBet Settings", expanded=autobet_enable
     st.markdown("📱 **Auto Token Refresher (Login):**")
     mob_num = st.text_input("Mobile Number", value=st.session_state.get("daman_mob", ""), key="daman_mob_in")
     mob_pass = st.text_input("Password", value="", type="password", key="daman_pass_in")
-    if st.button("🔑 Auto-Login & Refresh Token", width="stretch"):
+    if st.button("🔑 Auto-Login & Generate Token", width="stretch"):
         if mob_num and mob_pass:
             ok, tok, msg = login_daman_account(mob_num, mob_pass)
             if ok:
@@ -9103,6 +9087,7 @@ with st.sidebar.expander("🔑 Auth & AutoBet Settings", expanded=autobet_enable
                 st.sidebar.error(msg)
         else:
             st.sidebar.warning("Please enter Mobile Number and Password.")
+
 
 
 if st.sidebar.button("FORCE RETRAIN MODELS &#128260;", width="stretch"):

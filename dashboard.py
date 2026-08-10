@@ -578,12 +578,11 @@ def fetch_live_daman_game_data(game_mode="Win Go 30Sec"):
         pass
     return None
 
-def get_current_ist_issue_30s():
-    ist_now = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(hours=5, minutes=30)
-    seconds_in_day = ist_now.hour * 3600 + ist_now.minute * 60 + ist_now.second
-    period_30s_index = (seconds_in_day // 30) + 1
-    # Real 17-digit format matching Daman: YYYYMMDD10005XXXX
-    return int(ist_now.strftime("%Y%m%d")) * 1000000000 + 100050000 + period_30s_index
+def get_current_daman_calculated_issue_30s():
+    utc_now = datetime.datetime.now(datetime.timezone.utc)
+    utc_seconds = utc_now.hour * 3600 + utc_now.minute * 60 + utc_now.second
+    calculated_30s_index = (utc_seconds // 30)
+    return int(utc_now.strftime("%Y%m%d")) * 1000000000 + 100050000 + calculated_30s_index
 
 @st.cache_data(ttl=2)
 def sync_and_load_live_data():
@@ -613,7 +612,7 @@ def sync_and_load_live_data():
         else:
             df = df_live
     
-    current_time_issue = get_current_ist_issue_30s()
+    current_time_issue = get_current_daman_calculated_issue_30s()
 
     if df is None or df.empty or 'issue' not in df.columns or 'number' not in df.columns:
         n_rows = 1000
@@ -631,8 +630,8 @@ def sync_and_load_live_data():
         })
     else:
         last_issue = int(df['issue'].iloc[-1])
-        # If old format, convert to 17-digit format
-        if len(str(last_issue)) < 15:
+        # Realign if old format
+        if len(str(last_issue)) < 15 or abs(current_time_issue - last_issue) > 100:
             df['issue'] = [current_time_issue - len(df) + 1 + i for i in range(len(df))]
             last_issue = int(df['issue'].iloc[-1])
             

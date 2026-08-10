@@ -536,19 +536,66 @@ def get_file_hash(file_path=None):
     except Exception:
         return "error_hash"
 
-@st.cache_data(ttl=3)
+LIVE_API_ENDPOINTS = {
+    "Win Go 30Sec": "https://draw.ar-lottery01.com/WinGo/WinGo_30S/GetHistoryIssuePage.json",
+    "Win Go 1Min": "https://draw.ar-lottery01.com/WinGo/WinGo_1M/GetHistoryIssuePage.json",
+    "Win Go 3Min": "https://draw.ar-lottery01.com/WinGo/WinGo_3M/GetHistoryIssuePage.json",
+    "Win Go 5Min": "https://draw.ar-lottery01.com/WinGo/WinGo_5M/GetHistoryIssuePage.json",
+}
+
+def fetch_live_daman_game_data(game_mode="Win Go 30Sec"):
+    url = LIVE_API_ENDPOINTS.get(game_mode, LIVE_API_ENDPOINTS["Win Go 30Sec"])
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+        "Origin": "https://damanworld.world",
+        "Referer": "https://damanworld.world/",
+        "Accept": "application/json, text/plain, */*"
+    }
+    try:
+        r = requests.get(f"{url}?ts={int(time.time()*1000)}", headers=headers, timeout=3)
+        if r.status_code == 200:
+            data = r.json()
+            items = data.get("data", {}).get("list", [])
+            if items:
+                records = []
+                for it in items:
+                    raw_num = it.get("number")
+                    if raw_num is not None and str(raw_num).isdigit():
+                        n = int(raw_num)
+                        iss = int(it.get("issueNumber"))
+                        c = helper_get_color(n)
+                        s = helper_get_size(n)
+                        records.append({
+                            "issue": iss,
+                            "number": n,
+                            "color": c,
+                            "size": s
+                        })
+                if records:
+                    records.sort(key=lambda x: x["issue"])
+                    return pd.DataFrame(records)
+    except Exception:
+        pass
+    return None
+
+def get_current_ist_issue_30s():
+    ist_now = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(hours=5, minutes=30)
+    seconds_in_day = ist_now.hour * 3600 + ist_now.minute * 60 + ist_now.second
+    period_30s_index = (seconds_in_day // 30) + 1
+    # Real 17-digit format matching Daman: YYYYMMDD10005XXXX
+    return int(ist_now.strftime("%Y%m%d")) * 1000000000 + 100050000 + period_30s_index
+
+@st.cache_data(ttl=2)
 def sync_and_load_live_data():
     file_path = get_history_file_path()
     dir_name = os.path.dirname(file_path)
     if dir_name:
         os.makedirs(dir_name, exist_ok=True)
     
-    # Indian Standard Time (IST UTC+5:30)
-    ist_now = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(hours=5, minutes=30)
-    seconds_in_day = ist_now.hour * 3600 + ist_now.minute * 60 + ist_now.second
-    period_30s_index = (seconds_in_day // 30) + 1
-    current_issue = int(ist_now.strftime("%Y%m%d")) * 10000 + period_30s_index
+    # 1. First priority: Real-time Live Daman API
+    df_live = fetch_live_daman_game_data("Win Go 30Sec")
     
+    # 2. Local history file
     df = None
     if os.path.exists(file_path):
         try:
@@ -557,37 +604,40 @@ def sync_and_load_live_data():
             if 'issue' in temp_df.columns and 'number' in temp_df.columns and not temp_df.empty:
                 df = temp_df
         except Exception:
-            df = None
+            pass
+
+    if df_live is not None and not df_live.empty:
+        if df is not None and not df.empty and 'issue' in df.columns:
+            df = pd.concat([df, df_live], ignore_index=True)
+            df = df.drop_duplicates(subset=['issue'], keep='last').sort_values('issue').reset_index(drop=True)
+        else:
+            df = df_live
+    
+    current_time_issue = get_current_ist_issue_30s()
 
     if df is None or df.empty or 'issue' not in df.columns or 'number' not in df.columns:
         n_rows = 1000
-        start_issue = current_issue - n_rows + 1
-        issues = list(range(start_issue, current_issue + 1))
+        start_issue = current_time_issue - n_rows + 1
+        issues = list(range(start_issue, current_time_issue + 1))
         numbers = []
         for iss in issues:
             np.random.seed(iss % 100000)
             numbers.append(int(np.random.choice(range(10))))
-            
         df = pd.DataFrame({
             'issue': issues,
             'number': numbers,
             'color': [helper_get_color(n) for n in numbers],
             'size': [helper_get_size(n) for n in numbers]
         })
-        try:
-            df.to_csv(file_path, index=False)
-        except Exception:
-            pass
     else:
         last_issue = int(df['issue'].iloc[-1])
-        
-        # If the file history is from an old date or mismatched format, realign to current IST issue
-        if abs(current_issue - last_issue) > 3000:
-            df['issue'] = [current_issue - len(df) + 1 + i for i in range(len(df))]
+        # If old format, convert to 17-digit format
+        if len(str(last_issue)) < 15:
+            df['issue'] = [current_time_issue - len(df) + 1 + i for i in range(len(df))]
             last_issue = int(df['issue'].iloc[-1])
             
-        if current_issue > last_issue:
-            missing_count = min(current_issue - last_issue, 10)
+        if current_time_issue > last_issue:
+            missing_count = min(current_time_issue - last_issue, 10)
             missing_issues = list(range(last_issue + 1, last_issue + missing_count + 1))
             new_rows = []
             for miss_iss in missing_issues:
@@ -602,11 +652,6 @@ def sync_and_load_live_data():
                 })
             df_new = pd.DataFrame(new_rows)
             df = pd.concat([df, df_new], ignore_index=True)
-            df = df.tail(1000).reset_index(drop=True)
-            try:
-                df.to_csv(file_path, index=False)
-            except Exception:
-                pass
 
         if len(df) < 1000:
             first_issue = int(df['issue'].iloc[0])
@@ -623,13 +668,14 @@ def sync_and_load_live_data():
                 'size': [helper_get_size(n) for n in numbers]
             })
             df = pd.concat([df_prepended, df], ignore_index=True)
-            try:
-                df.to_csv(file_path, index=False)
-            except Exception:
-                pass
 
+    df = df.tail(1000).reset_index(drop=True)
     df['color'] = df['number'].apply(helper_get_color)
     df['size'] = df['number'].apply(helper_get_size)
+    try:
+        df.to_csv(file_path, index=False)
+    except Exception:
+        pass
     return df
 
 

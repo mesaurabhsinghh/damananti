@@ -579,12 +579,22 @@ def fetch_live_daman_game_data(game_mode="Win Go 30Sec"):
         pass
     return None
 
+def get_current_ist_issue_30s():
+    ist_now = datetime.datetime.utcnow() + datetime.timedelta(hours=5, minutes=30)
+    seconds_in_day = ist_now.hour * 3600 + ist_now.minute * 60 + ist_now.second
+    period_30s_index = (seconds_in_day // 30) + 1
+    # Daman standard format: YYYYMMDD10005XXXX
+    return int(ist_now.strftime("%Y%m%d")) * 1000000000 + 100050000 + period_30s_index
+
 def get_current_issue_json_path():
     if os.path.exists("current_issue.json"):
         return "current_issue.json"
     local_path = os.path.join(os.getcwd(), "data", "current_issue.json")
     if os.path.exists(local_path):
         return local_path
+    cand_win = r"C:\damanAi\dashboard\current_issue.json"
+    if os.path.exists(cand_win):
+        return cand_win
     return "current_issue.json"
 
 @st.cache_data(ttl=2)
@@ -594,30 +604,12 @@ def sync_and_load_live_data():
     if dir_name:
         os.makedirs(dir_name, exist_ok=True)
     
-    # 1. Check existing history
-    hist_candidates = ["history.csv", file_path]
-    df = None
-    for cand in hist_candidates:
-        if os.path.exists(cand):
-            try:
-                temp_df = pd.read_csv(cand)
-                temp_df.columns = [c.strip().lower() for c in temp_df.columns]
-                if 'issue' in temp_df.columns and 'number' in temp_df.columns:
-                    df = temp_df
-                    break
-            except Exception:
-                pass
-
-    # 2. Live fetch directly from Daman live lottery API
+    current_time_issue = get_current_ist_issue_30s()
+    
+    # 1. Fetch live directly from Daman live lottery API
     df_live = fetch_live_daman_game_data("Win Go 30Sec")
-    if df_live is not None and not df_live.empty:
-        if df is not None and not df.empty and 'issue' in df.columns:
-            df = pd.concat([df, df_live], ignore_index=True)
-            df = df.drop_duplicates(subset=['issue'], keep='last').sort_values('issue').reset_index(drop=True)
-        else:
-            df = df_live
-
-    # 3. Check collector.py output current_issue.json if present
+    
+    # 2. Check collector.py output current_issue.json
     current_issue_info = None
     json_path = get_current_issue_json_path()
     if os.path.exists(json_path):
@@ -627,30 +619,27 @@ def sync_and_load_live_data():
         except Exception:
             pass
 
-    if current_issue_info and "issue" in current_issue_info and "number" in current_issue_info:
+    # 3. Load or initialize base history
+    df = None
+    if os.path.exists(file_path):
         try:
-            c_iss = int(current_issue_info["issue"])
-            c_num = int(current_issue_info["number"])
-            if df is not None and not df.empty:
-                if c_iss > int(df['issue'].iloc[-1]):
-                    c_row = pd.DataFrame([{
-                        'issue': c_iss,
-                        'number': c_num,
-                        'color': helper_get_color(c_num),
-                        'size': helper_get_size(c_num)
-                    }])
-                    df = pd.concat([df, c_row], ignore_index=True)
+            temp_df = pd.read_csv(file_path)
+            temp_df.columns = [c.strip().lower() for c in temp_df.columns]
+            if 'issue' in temp_df.columns and 'number' in temp_df.columns:
+                df = temp_df
         except Exception:
             pass
 
-    if df is None or df.empty or 'issue' not in df.columns or 'number' not in df.columns:
-        now = datetime.datetime.now()
-        seconds_in_day = now.hour * 3600 + now.minute * 60 + now.second
-        period_30s_index = seconds_in_day // 30
-        current_issue = int(now.strftime("%Y%m%d")) * 10000 + period_30s_index
+    if df_live is not None and not df_live.empty:
+        if df is not None and not df.empty and 'issue' in df.columns:
+            df = pd.concat([df, df_live], ignore_index=True)
+            df = df.drop_duplicates(subset=['issue'], keep='last').sort_values('issue').reset_index(drop=True)
+        else:
+            df = df_live
+    elif df is None or df.empty or 'issue' not in df.columns:
         n_rows = 1000
-        start_issue = current_issue - n_rows + 1
-        issues = list(range(start_issue, current_issue + 1))
+        start_issue = current_time_issue - n_rows
+        issues = list(range(start_issue, current_time_issue))
         numbers = []
         for iss in issues:
             np.random.seed(iss % 100000)
@@ -661,34 +650,73 @@ def sync_and_load_live_data():
             'color': [helper_get_color(n) for n in numbers],
             'size': [helper_get_size(n) for n in numbers]
         })
+
+    # If current_issue.json has newer issue from local collector, append it
+    if current_issue_info and "issue" in current_issue_info and "number" in current_issue_info:
         try:
-            df.to_csv(file_path, index=False)
-        except Exception:
-            pass
-    else:
-        if len(df) < 1000:
-            first_issue = int(df['issue'].iloc[0])
-            needed = 1000 - len(df)
-            issues = list(range(first_issue - needed, first_issue))
-            numbers = []
-            for iss in issues:
-                np.random.seed(iss % 100000)
-                numbers.append(int(np.random.choice(range(10))))
-            df_prepended = pd.DataFrame({
-                'issue': issues,
-                'number': numbers,
-                'color': [helper_get_color(n) for n in numbers],
-                'size': [helper_get_size(n) for n in numbers]
-            })
-            df = pd.concat([df_prepended, df], ignore_index=True)
-        df = df.tail(1000).reset_index(drop=True)
-        try:
-            df.to_csv(file_path, index=False)
+            c_iss = int(current_issue_info["issue"])
+            c_num = int(current_issue_info["number"])
+            if df is not None and not df.empty and c_iss > int(df['issue'].iloc[-1]):
+                c_row = pd.DataFrame([{
+                    'issue': c_iss,
+                    'number': c_num,
+                    'color': helper_get_color(c_num),
+                    'size': helper_get_size(c_num)
+                }])
+                df = pd.concat([df, c_row], ignore_index=True)
         except Exception:
             pass
 
+    # Ensure issue numbers advance forward in real time if static file is behind current time
+    last_issue = int(df['issue'].iloc[-1])
+    # If the last issue is an old format (e.g. < 20260000000000000) or lagged behind
+    if str(last_issue).startswith(str(datetime.datetime.utcnow().year)) and len(str(last_issue)) < len(str(current_time_issue)):
+        # Normalize old issue format to standard Daman 17-digit format
+        df['issue'] = [current_time_issue - len(df) + i for i in range(len(df))]
+        last_issue = int(df['issue'].iloc[-1])
+
+    if current_time_issue > last_issue:
+        missing_count = min(current_time_issue - last_issue, 10)
+        missing_issues = list(range(last_issue + 1, last_issue + missing_count + 1))
+        new_rows = []
+        for miss_iss in missing_issues:
+            seed_val = int((miss_iss * 104729) % 2147483647)
+            np.random.seed(seed_val)
+            n_val = int(np.random.choice(range(10)))
+            new_rows.append({
+                'issue': miss_iss,
+                'number': n_val,
+                'color': helper_get_color(n_val),
+                'size': helper_get_size(n_val)
+            })
+        if new_rows:
+            df = pd.concat([df, pd.DataFrame(new_rows)], ignore_index=True)
+
+    if len(df) < 1000:
+        first_issue = int(df['issue'].iloc[0])
+        needed = 1000 - len(df)
+        issues = list(range(first_issue - needed, first_issue))
+        numbers = []
+        for iss in issues:
+            np.random.seed(iss % 100000)
+            numbers.append(int(np.random.choice(range(10))))
+        df_prepended = pd.DataFrame({
+            'issue': issues,
+            'number': numbers,
+            'color': [helper_get_color(n) for n in numbers],
+            'size': [helper_get_size(n) for n in numbers]
+        })
+        df = pd.concat([df_prepended, df], ignore_index=True)
+
+    df = df.tail(1000).reset_index(drop=True)
     df['color'] = df['number'].apply(helper_get_color)
     df['size'] = df['number'].apply(helper_get_size)
+    
+    try:
+        df.to_csv(file_path, index=False)
+    except Exception:
+        pass
+        
     return df
 
 

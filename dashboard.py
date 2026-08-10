@@ -518,7 +518,17 @@ def check_size_hit(pred_size, act_num, act_size):
             return True
     return p_s == a_s
 
-def get_file_hash(file_path):
+def get_history_file_path():
+    win_path = r"C:\damananti\history.csv"
+    if os.name == 'nt' and os.path.exists(r"C:\damananti"):
+        return win_path
+    local_dir = os.path.join(os.getcwd(), "data")
+    os.makedirs(local_dir, exist_ok=True)
+    return os.path.join(local_dir, "history.csv")
+
+def get_file_hash(file_path=None):
+    if file_path is None:
+        file_path = get_history_file_path()
     if not os.path.exists(file_path):
         return "not_exists"
     try:
@@ -526,71 +536,62 @@ def get_file_hash(file_path):
     except Exception:
         return "error_hash"
 
-@st.cache_data(ttl=5)
+@st.cache_data(ttl=3)
 def sync_and_load_live_data():
-    file_path = r"C:\damananti\history.csv"
-    os.makedirs(os.path.dirname(file_path), exist_ok=True)
+    file_path = get_history_file_path()
+    dir_name = os.path.dirname(file_path)
+    if dir_name:
+        os.makedirs(dir_name, exist_ok=True)
     
-    now = datetime.datetime.now()
-    seconds_in_day = now.hour * 3600 + now.minute * 60 + now.second
-    period_30s_index = seconds_in_day // 30
-    current_issue = int(now.strftime("%Y%m%d")) * 10000 + period_30s_index
+    # Indian Standard Time (IST UTC+5:30)
+    ist_now = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(hours=5, minutes=30)
+    seconds_in_day = ist_now.hour * 3600 + ist_now.minute * 60 + ist_now.second
+    period_30s_index = (seconds_in_day // 30) + 1
+    current_issue = int(ist_now.strftime("%Y%m%d")) * 10000 + period_30s_index
     
     df = None
     if os.path.exists(file_path):
         try:
-            df = pd.read_csv(file_path)
+            temp_df = pd.read_csv(file_path)
+            temp_df.columns = [c.strip().lower() for c in temp_df.columns]
+            if 'issue' in temp_df.columns and 'number' in temp_df.columns and not temp_df.empty:
+                df = temp_df
         except Exception:
             df = None
 
-    if df is None or df.empty or not all(col in df.columns for col in ['issue', 'number']):
+    if df is None or df.empty or 'issue' not in df.columns or 'number' not in df.columns:
         n_rows = 1000
         start_issue = current_issue - n_rows + 1
         issues = list(range(start_issue, current_issue + 1))
-        
         numbers = []
         for iss in issues:
             np.random.seed(iss % 100000)
             numbers.append(int(np.random.choice(range(10))))
             
-        colors = [helper_get_color(n) for n in numbers]
-        sizes = [helper_get_size(n) for n in numbers]
-        
         df = pd.DataFrame({
             'issue': issues,
             'number': numbers,
-            'color': colors,
-            'size': sizes
+            'color': [helper_get_color(n) for n in numbers],
+            'size': [helper_get_size(n) for n in numbers]
         })
-        df.to_csv(file_path, index=False)
-    else:
-        # Check if loaded dataframe has fewer than 1000 rows and retroactively prepend
-        if len(df) < 1000:
-            first_issue = int(df['issue'].iloc[0])
-            needed = 1000 - len(df)
-            issues = list(range(first_issue - needed, first_issue))
-            numbers = []
-            for iss in issues:
-                np.random.seed(iss % 100000)
-                numbers.append(int(np.random.choice(range(10))))
-            colors = [helper_get_color(n) for n in numbers]
-            sizes = [helper_get_size(n) for n in numbers]
-            df_prepended = pd.DataFrame({
-                'issue': issues,
-                'number': numbers,
-                'color': colors,
-                'size': sizes
-            })
-            df = pd.concat([df_prepended, df], ignore_index=True)
+        try:
             df.to_csv(file_path, index=False)
-
+        except Exception:
+            pass
+    else:
         last_issue = int(df['issue'].iloc[-1])
+        
+        # If the file history is from an old date or mismatched format, realign to current IST issue
+        if abs(current_issue - last_issue) > 3000:
+            df['issue'] = [current_issue - len(df) + 1 + i for i in range(len(df))]
+            last_issue = int(df['issue'].iloc[-1])
+            
         if current_issue > last_issue:
-            missing_issues = list(range(last_issue + 1, min(current_issue + 1, last_issue + 6)))
+            missing_count = min(current_issue - last_issue, 10)
+            missing_issues = list(range(last_issue + 1, last_issue + missing_count + 1))
             new_rows = []
             for miss_iss in missing_issues:
-                # Dynamic random seed tying issue number + precise microsecond timestamp
-                seed_val = int((miss_iss * 104729 + int(time.time() * 1000)) % 2147483647)
+                seed_val = int((miss_iss * 104729) % 2147483647)
                 np.random.seed(seed_val)
                 new_num = int(np.random.choice(range(10)))
                 new_rows.append({
@@ -602,8 +603,31 @@ def sync_and_load_live_data():
             df_new = pd.DataFrame(new_rows)
             df = pd.concat([df, df_new], ignore_index=True)
             df = df.tail(1000).reset_index(drop=True)
-            df.to_csv(file_path, index=False)
-            
+            try:
+                df.to_csv(file_path, index=False)
+            except Exception:
+                pass
+
+        if len(df) < 1000:
+            first_issue = int(df['issue'].iloc[0])
+            needed = 1000 - len(df)
+            issues = list(range(first_issue - needed, first_issue))
+            numbers = []
+            for iss in issues:
+                np.random.seed(iss % 100000)
+                numbers.append(int(np.random.choice(range(10))))
+            df_prepended = pd.DataFrame({
+                'issue': issues,
+                'number': numbers,
+                'color': [helper_get_color(n) for n in numbers],
+                'size': [helper_get_size(n) for n in numbers]
+            })
+            df = pd.concat([df_prepended, df], ignore_index=True)
+            try:
+                df.to_csv(file_path, index=False)
+            except Exception:
+                pass
+
     df['color'] = df['number'].apply(helper_get_color)
     df['size'] = df['number'].apply(helper_get_size)
     return df
@@ -8885,7 +8909,7 @@ run_model_training_page = render_advanced_model_training_page
 CACHE_FILE = "trained_models.pkl"
 
 df_history = sync_and_load_live_data()
-st.session_state["file_hash"] = get_file_hash(r"C:\damananti\history.csv")
+st.session_state["file_hash"] = get_file_hash(get_history_file_path())
 
 if "training_status" not in st.session_state or "cache_info" not in st.session_state:
     if os.path.exists(CACHE_FILE):

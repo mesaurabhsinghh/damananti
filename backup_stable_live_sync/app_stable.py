@@ -485,38 +485,39 @@ def helper_get_color(num):
 def helper_get_size(num):
     return "Big" if num >= 5 else "Small"
 
-def check_color_hit(pred_col, act_num, act_col):
+def check_color_hit(pred_col, act_num, act_col=None):
     if pred_col is None:
         return False
     p_c = str(pred_col).strip().lower()
-    a_c = str(act_col).strip().lower() if act_col is not None else ""
     act_n = int(act_num) if (act_num is not None and str(act_num).isdigit()) else None
-    
-    if "red" in p_c:
-        if (act_n is not None and act_n in [0, 2, 4, 6, 8]) or ("red" in a_c):
-            return True
-    if "green" in p_c:
-        if (act_n is not None and act_n in [1, 3, 5, 7, 9]) or ("green" in a_c):
-            return True
-    if "violet" in p_c:
-        if (act_n is not None and act_n in [0, 5]) or ("violet" in a_c):
-            return True
-    return p_c == a_c
+    if act_n is not None:
+        if act_n in [2, 4, 6, 8]:
+            return "red" in p_c
+        elif act_n in [1, 3, 7, 9]:
+            return "green" in p_c
+        elif act_n == 0:
+            return "red" in p_c or "violet" in p_c
+        elif act_n == 5:
+            return "green" in p_c or "violet" in p_c
+    if act_col is not None:
+        a_c = str(act_col).strip().lower()
+        return p_c in a_c or a_c in p_c
+    return False
 
-def check_size_hit(pred_size, act_num, act_size):
+def check_size_hit(pred_size, act_num, act_size=None):
     if pred_size is None:
         return False
     p_s = str(pred_size).strip().lower()
-    a_s = str(act_size).strip().lower() if act_size is not None else ""
     act_n = int(act_num) if (act_num is not None and str(act_num).isdigit()) else None
-    
-    if "big" in p_s:
-        if (act_n is not None and act_n >= 5) or ("big" in a_s):
-            return True
-    if "small" in p_s:
-        if (act_n is not None and act_n <= 4) or ("small" in a_s):
-            return True
-    return p_s == a_s
+    if act_n is not None:
+        if act_n >= 5:
+            return "big" in p_s
+        else:
+            return "small" in p_s
+    if act_size is not None:
+        a_s = str(act_size).strip().lower()
+        return p_s in a_s
+    return False
 
 def get_history_file_path():
     win_path = r"C:\damananti\history.csv"
@@ -9620,9 +9621,9 @@ def generate_last_8_boxes_html(agent_key, current_issue):
         issue_num = item.get("issue", current_issue - (n_entries - 1 - i))
         issue_str = f"#{str(issue_num)[-3:]}" if len(str(issue_num)) > 3 else f"#{issue_num}"
         
-        num_ok = item.get("num_hit", False)
-        col_ok = item.get("col_hit", False)
-        size_ok = item.get("size_hit", False)
+        num_ok = bool(item.get("num_hit", False))
+        col_ok = bool(item.get("col_hit", False))
+        size_ok = bool(item.get("size_hit", False))
         
         num_bg = "rgba(34, 197, 94, 0.25)" if num_ok else "rgba(239, 68, 68, 0.25)"
         num_border = "#22c55e" if num_ok else "#ef4444"
@@ -9648,9 +9649,9 @@ def generate_last_8_boxes_html(agent_key, current_issue):
     history_items_html = []
     for h_item in reversed(full_hist):
         h_iss = h_item.get("issue", "N/A")
-        h_num_ok = h_item.get("num_hit", False)
-        h_col_ok = h_item.get("col_hit", False)
-        h_sz_ok = h_item.get("size_hit", False)
+        h_num_ok = bool(h_item.get("num_hit", False))
+        h_col_ok = bool(h_item.get("col_hit", False))
+        h_sz_ok = bool(h_item.get("size_hit", False))
         h_p_num = h_item.get("pred_digit", "-")
         h_p_col = h_item.get("pred_col", "-")
         h_p_sz = h_item.get("pred_size", "-")
@@ -9666,7 +9667,7 @@ def generate_last_8_boxes_html(agent_key, current_issue):
         
     full_history_scrollable = "".join(history_items_html) if history_items_html else '<span style="color:#94a3b8; font-size:11px;">No History Stored</span>'
 
-    return f"""<div style="margin-top: 14px; background: rgba(15, 23, 42, 0.85); border: 1.5px solid rgba(245, 158, 11, 0.4); border-radius: 10px; padding: 12px; text-align: left;">
+    return f'''<div style="margin-top: 14px; background: rgba(15, 23, 42, 0.85); border: 1.5px solid rgba(245, 158, 11, 0.4); border-radius: 10px; padding: 12px; text-align: left;">
 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px;">
 <span style="font-size: 12px; font-weight: 800; color: #fbbf24;">📊 LAST 8 ISSUES PERFORMANCE TRACKER (pichle 8 issue ka record)</span>
 <details style="cursor: pointer;">
@@ -9696,7 +9697,8 @@ def generate_last_8_boxes_html(agent_key, current_issue):
 <div style="display: inline-flex; gap: 5px; flex-wrap: wrap; align-items: center;">{size_row}</div>
 </div>
 </div>
-</div>"""
+</div>'''
+
 
 agi2_num_sahi, agi2_num_galat, agi2_col_sahi, agi2_col_galat, agi2_size_sahi, agi2_size_galat = compute_agent_stats_tuple("agi2")
 asi3_num_sahi, asi3_num_galat, asi3_col_sahi, asi3_col_galat, asi3_size_sahi, asi3_size_galat = compute_agent_stats_tuple("asi3")

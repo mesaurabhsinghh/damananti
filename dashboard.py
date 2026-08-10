@@ -528,7 +528,7 @@ def get_file_hash(file_path):
 
 @st.cache_data(ttl=5)
 def sync_and_load_live_data():
-    file_path = r"C:\damanAi\dashboard\history.csv"
+    file_path = r"C:\damananti\history.csv"
     os.makedirs(os.path.dirname(file_path), exist_ok=True)
     
     now = datetime.datetime.now()
@@ -8885,7 +8885,7 @@ run_model_training_page = render_advanced_model_training_page
 CACHE_FILE = "trained_models.pkl"
 
 df_history = sync_and_load_live_data()
-st.session_state["file_hash"] = get_file_hash(r"C:\damanAi\dashboard\history.csv")
+st.session_state["file_hash"] = get_file_hash(r"C:\damananti\history.csv")
 
 if "training_status" not in st.session_state or "cache_info" not in st.session_state:
     if os.path.exists(CACHE_FILE):

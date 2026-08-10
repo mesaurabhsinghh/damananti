@@ -519,8 +519,8 @@ def check_size_hit(pred_size, act_num, act_size):
     return p_s == a_s
 
 def get_history_file_path():
-    win_path = r"C:\damanAi\dashboard\history.csv"
-    if os.name == 'nt' and os.path.exists(r"C:\damanAi\dashboard"):
+    win_path = r"C:\damananti\history.csv"
+    if os.name == 'nt' and os.path.exists(r"C:\damananti"):
         return win_path
     local_dir = os.path.join(os.getcwd(), "data")
     os.makedirs(local_dir, exist_ok=True)

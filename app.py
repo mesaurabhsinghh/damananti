@@ -9,6 +9,7 @@ import time
 import math
 import random
 import datetime
+import requests
 import numpy as np
 import pandas as pd
 import streamlit as st
@@ -536,47 +537,71 @@ def get_file_hash(file_path=None):
     except Exception:
         return "error_hash"
 
-@st.cache_data(ttl=5)
-def sync_and_load_live_data():
+LIVE_API_ENDPOINTS = {
+    "Win Go 30Sec": "https://draw.ar-lottery01.com/WinGo/WinGo_30S/GetHistoryIssuePage.json",
+    "Win Go 1Min": "https://draw.ar-lottery01.com/WinGo/WinGo_1M/GetHistoryIssuePage.json",
+    "Win Go 3Min": "https://draw.ar-lottery01.com/WinGo/WinGo_3M/GetHistoryIssuePage.json",
+    "Win Go 5Min": "https://draw.ar-lottery01.com/WinGo/WinGo_5M/GetHistoryIssuePage.json",
+}
+
+def fetch_live_daman_game_data(game_mode="Win Go 30Sec"):
+    url = LIVE_API_ENDPOINTS.get(game_mode, LIVE_API_ENDPOINTS["Win Go 30Sec"])
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        "Origin": "https://damanworld.org",
+        "Referer": "https://damanworld.org/"
+    }
+    try:
+        r = requests.get(f"{url}?ts={int(time.time()*1000)}", headers=headers, timeout=4)
+        if r.status_code == 200:
+            data = r.json()
+            items = data.get("data", {}).get("list", [])
+            if items:
+                records = []
+                for it in items:
+                    raw_num = it.get("number")
+                    if raw_num is not None and str(raw_num).isdigit():
+                        n = int(raw_num)
+                        iss = int(it.get("issueNumber"))
+                        c = helper_get_color(n)
+                        s = helper_get_size(n)
+                        records.append({
+                            "issue": iss,
+                            "number": n,
+                            "color": c,
+                            "size": s
+                        })
+                if records:
+                    records.sort(key=lambda x: x["issue"])
+                    return pd.DataFrame(records)
+    except Exception:
+        pass
+    return None
+
+@st.cache_data(ttl=2)
+def sync_and_load_live_data(game_mode="Win Go 30Sec"):
     file_path = get_history_file_path()
     dir_name = os.path.dirname(file_path)
     if dir_name:
         os.makedirs(dir_name, exist_ok=True)
     
-    now = datetime.datetime.now()
-    seconds_in_day = now.hour * 3600 + now.minute * 60 + now.second
-    period_30s_index = seconds_in_day // 30
-    current_issue = int(now.strftime("%Y%m%d")) * 10000 + period_30s_index
-    
-    df = None
+    df_existing = None
     if os.path.exists(file_path):
         try:
-            df = pd.read_csv(file_path)
+            df_existing = pd.read_csv(file_path)
         except Exception:
-            df = None
+            df_existing = None
 
-    if df is None or df.empty or not all(col in df.columns for col in ['issue', 'number']):
-        n_rows = 1000
-        start_issue = current_issue - n_rows + 1
-        issues = list(range(start_issue, current_issue + 1))
+    # Integrated collector live fetching directly from API
+    df_live = fetch_live_daman_game_data(game_mode)
+    
+    if df_live is not None and not df_live.empty:
+        if df_existing is not None and not df_existing.empty and 'issue' in df_existing.columns:
+            df = pd.concat([df_existing, df_live], ignore_index=True)
+            df = df.drop_duplicates(subset=['issue'], keep='last').sort_values('issue').reset_index(drop=True)
+        else:
+            df = df_live
         
-        numbers = []
-        for iss in issues:
-            np.random.seed(iss % 100000)
-            numbers.append(int(np.random.choice(range(10))))
-            
-        colors = [helper_get_color(n) for n in numbers]
-        sizes = [helper_get_size(n) for n in numbers]
-        
-        df = pd.DataFrame({
-            'issue': issues,
-            'number': numbers,
-            'color': colors,
-            'size': sizes
-        })
-        df.to_csv(file_path, index=False)
-    else:
-        # Check if loaded dataframe has fewer than 1000 rows and retroactively prepend
         if len(df) < 1000:
             first_issue = int(df['issue'].iloc[0])
             needed = 1000 - len(df)
@@ -585,37 +610,44 @@ def sync_and_load_live_data():
             for iss in issues:
                 np.random.seed(iss % 100000)
                 numbers.append(int(np.random.choice(range(10))))
-            colors = [helper_get_color(n) for n in numbers]
-            sizes = [helper_get_size(n) for n in numbers]
             df_prepended = pd.DataFrame({
                 'issue': issues,
                 'number': numbers,
-                'color': colors,
-                'size': sizes
+                'color': [helper_get_color(n) for n in numbers],
+                'size': [helper_get_size(n) for n in numbers]
             })
             df = pd.concat([df_prepended, df], ignore_index=True)
-            df.to_csv(file_path, index=False)
-
-        last_issue = int(df['issue'].iloc[-1])
-        if current_issue > last_issue:
-            missing_issues = list(range(last_issue + 1, min(current_issue + 1, last_issue + 6)))
-            new_rows = []
-            for miss_iss in missing_issues:
-                # Dynamic random seed tying issue number + precise microsecond timestamp
-                seed_val = int((miss_iss * 104729 + int(time.time() * 1000)) % 2147483647)
-                np.random.seed(seed_val)
-                new_num = int(np.random.choice(range(10)))
-                new_rows.append({
-                    'issue': miss_iss,
-                    'number': new_num,
-                    'color': helper_get_color(new_num),
-                    'size': helper_get_size(new_num)
-                })
-            df_new = pd.DataFrame(new_rows)
-            df = pd.concat([df, df_new], ignore_index=True)
-            df = df.tail(1000).reset_index(drop=True)
-            df.to_csv(file_path, index=False)
             
+        df = df.tail(1000).reset_index(drop=True)
+        try:
+            df.to_csv(file_path, index=False)
+        except Exception:
+            pass
+    elif df_existing is not None and not df_existing.empty and all(col in df_existing.columns for col in ['issue', 'number']):
+        df = df_existing
+    else:
+        now = datetime.datetime.utcnow() + datetime.timedelta(hours=5, minutes=30)
+        seconds_in_day = now.hour * 3600 + now.minute * 60 + now.second
+        period_30s_index = (seconds_in_day // 30) + 1
+        current_issue = int(now.strftime("%Y%m%d")) * 100000 + 10000 + period_30s_index
+        n_rows = 1000
+        start_issue = current_issue - n_rows + 1
+        issues = list(range(start_issue, current_issue + 1))
+        numbers = []
+        for iss in issues:
+            np.random.seed(iss % 100000)
+            numbers.append(int(np.random.choice(range(10))))
+        df = pd.DataFrame({
+            'issue': issues,
+            'number': numbers,
+            'color': [helper_get_color(n) for n in numbers],
+            'size': [helper_get_size(n) for n in numbers]
+        })
+        try:
+            df.to_csv(file_path, index=False)
+        except Exception:
+            pass
+
     df['color'] = df['number'].apply(helper_get_color)
     df['size'] = df['number'].apply(helper_get_size)
     return df
@@ -8896,7 +8928,13 @@ run_model_training_page = render_advanced_model_training_page
 # -------------------------------------------------------------
 CACHE_FILE = "trained_models.pkl"
 
-df_history = sync_and_load_live_data()
+st.sidebar.markdown("### 🎮 LIVE GAME API (collector.py Auto-Sync)")
+selected_game_mode = st.sidebar.selectbox(
+    "Select Win Go Game Mode",
+    ["Win Go 30Sec", "Win Go 1Min", "Win Go 3Min", "Win Go 5Min"],
+    index=0
+)
+df_history = sync_and_load_live_data(selected_game_mode)
 st.session_state["file_hash"] = get_file_hash(get_history_file_path())
 
 if "training_status" not in st.session_state or "cache_info" not in st.session_state:

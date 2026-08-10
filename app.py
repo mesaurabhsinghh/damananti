@@ -753,17 +753,28 @@ def get_file_hash(file_path=None):
     except Exception:
         return "error_hash"
 
-@st.cache_data(ttl=5)
-def sync_and_load_live_data():
+def get_current_ist_time():
+    # Indian Standard Time (UTC + 5 hours 30 mins)
+    return datetime.datetime.utcnow() + datetime.timedelta(hours=5, minutes=30)
+
+def get_current_game_issue(game_interval_seconds=30):
+    ist_now = get_current_ist_time()
+    seconds_in_day = ist_now.hour * 3600 + ist_now.minute * 60 + ist_now.second
+    period_index = (seconds_in_day // game_interval_seconds) + 1
+    current_issue = int(ist_now.strftime("%Y%m%d")) * 10000 + period_index
+    seconds_remaining = game_interval_seconds - (seconds_in_day % game_interval_seconds)
+    return current_issue, seconds_remaining, ist_now
+
+@st.cache_data(ttl=3)
+def sync_and_load_live_data(custom_issue_override=None):
     file_path = get_history_file_path()
     dir_name = os.path.dirname(file_path)
     if dir_name:
         os.makedirs(dir_name, exist_ok=True)
     
-    now = datetime.datetime.now()
-    seconds_in_day = now.hour * 3600 + now.minute * 60 + now.second
-    period_30s_index = seconds_in_day // 30
-    current_issue = int(now.strftime("%Y%m%d")) * 10000 + period_30s_index
+    current_issue, _, ist_now = get_current_game_issue(30)
+    if custom_issue_override is not None and str(custom_issue_override).isdigit() and int(custom_issue_override) > 100000:
+        current_issue = int(custom_issue_override)
     
     df = None
     if os.path.exists(file_path):
@@ -815,11 +826,11 @@ def sync_and_load_live_data():
 
         last_issue = int(df['issue'].iloc[-1])
         if current_issue > last_issue:
-            missing_issues = list(range(last_issue + 1, min(current_issue + 1, last_issue + 6)))
+            missing_issues = list(range(last_issue + 1, min(current_issue + 1, last_issue + 10)))
             new_rows = []
             for miss_iss in missing_issues:
-                # Dynamic random seed tying issue number + precise microsecond timestamp
-                seed_val = int((miss_iss * 104729 + int(time.time() * 1000)) % 2147483647)
+                # Stable deterministic seed tied ONLY to issue number (never changes per second)
+                seed_val = int((miss_iss * 104729) % 2147483647)
                 np.random.seed(seed_val)
                 new_num = int(np.random.choice(range(10)))
                 new_rows.append({
@@ -9063,7 +9074,8 @@ run_model_training_page = render_advanced_model_training_page
 # -------------------------------------------------------------
 CACHE_FILE = "trained_models.pkl"
 
-df_history = sync_and_load_live_data()
+calib_override = st.session_state.get("custom_calibrated_issue", None)
+df_history = sync_and_load_live_data(calib_override)
 st.session_state["file_hash"] = get_file_hash(get_history_file_path())
 
 if "training_status" not in st.session_state or "cache_info" not in st.session_state:
@@ -9080,6 +9092,32 @@ if st.session_state.get("training_status") == "training" or "cache_info" not in 
     run_model_training_page(df_history)
 
 cache_info = st.session_state.get("cache_info")
+
+
+# 🎯 LIVE GAME ISSUE SYNCHRONIZATION & CALIBRATION
+st.sidebar.markdown("### 🎯 LIVE GAME SYNC (IST UTC+5:30)")
+curr_iss_calc, secs_rem_calc, ist_time_now = get_current_game_issue(30)
+st.sidebar.markdown(f'''<div style="background: rgba(15, 23, 42, 0.9); border: 1.5px solid #10b981; border-radius: 8px; padding: 8px; margin-bottom: 8px; text-align: center;">
+<div style="font-size: 10px; color: #94a3b8; font-weight: 700;">⏰ IST TIME: <span style="color: #67e8f9; font-weight: 800;">{ist_time_now.strftime('%I:%M:%S %p')}</span></div>
+<div style="font-size: 13px; font-weight: 900; color: #facc15; margin: 2px 0;">🎯 ISSUE #{curr_iss_calc}</div>
+<div style="font-size: 11px; font-weight: 800; color: {'#ef4444' if secs_rem_calc <= 5 else '#34d399'};">⏳ ROUND CLOSES IN: {secs_rem_calc}s</div>
+</div>''', unsafe_allow_html=True)
+
+with st.sidebar.expander("⚡ Calibrate / Custom Issue Number", expanded=False):
+    st.markdown("<span style='font-size: 11px; color:#cbd5e1;'>Agar aapke game ka issue number alag hai, to yaha apna live issue number daal kar Sync karein:</span>", unsafe_allow_html=True)
+    custom_iss_input = st.text_input("Live Issue Number:", value="", placeholder=str(curr_iss_calc), key="user_calib_issue")
+    if st.button("⚡ SYNC TO GAME ISSUE", width="stretch"):
+        if custom_iss_input.strip().isdigit():
+            st.session_state["custom_calibrated_issue"] = int(custom_iss_input.strip())
+            st.cache_data.clear()
+            st.rerun()
+    if st.button("🔄 RESET TO AUTOMATIC IST SYNC", width="stretch"):
+        if "custom_calibrated_issue" in st.session_state:
+            del st.session_state["custom_calibrated_issue"]
+        st.cache_data.clear()
+        st.rerun()
+
+calib_override = st.session_state.get("custom_calibrated_issue", None)
 
 
 # Sidebar Controls & Configuration

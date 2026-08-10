@@ -573,7 +573,7 @@ def login_daman_account(mobile_number, password):
     except Exception as e:
         return False, None, f"Login Exception: {str(e)}"
 
-def execute_daman_autobet(bearer_token, game_code, issue_number, bet_content, amount=5):
+def execute_daman_autobet(bearer_token, game_code, issue_number, bet_content, amount=5, bet_multiple=1, **kwargs):
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
         "Origin": "https://damanworld.world",
@@ -10036,90 +10036,6 @@ st.session_state["last_pred_sentinel_ultra_21"] = {
 }
 
 
-# ============================================================
-#  ⚡ AUTOBET AUTOMATION EXECUTION ENGINE & LIVE MONITOR CARD
-# ============================================================
-autobet_logs = st.session_state.get("autobet_logs", [])
-
-if st.session_state.get("autobet_enabled", False):
-    token = st.session_state.get("daman_bearer_token", "").strip()
-    target_agent_sel = st.session_state.get("autobet_agent", "Hyperion Omni-AGI 12.0")
-    target_type_sel = st.session_state.get("autobet_target_type", "Color Only (Red/Green)")
-    base_amt = st.session_state.get("autobet_amount", 10)
-    bet_mult = st.session_state.get("autobet_multiple", 1)
-    game_code_sel = st.session_state.get("autobet_game_code", "WinGo_30S")
-    
-    # Map target agent selection to active prediction
-    selected_bet_content = None
-    if "Hyperion" in target_agent_sel:
-        selected_bet_content = hyp12_pred_col if "Color" in target_type_sel else hyp12_pred_size
-    elif "Atlas" in target_agent_sel:
-        selected_bet_content = atlas_pred_col if "Color" in target_type_sel else atlas_pred_sz
-    elif "Ultra" in target_agent_sel:
-        selected_bet_content = ultra_pred_col if "Color" in target_type_sel else ultra_pred_sz
-    elif "Phoenix" in target_agent_sel:
-        selected_bet_content = phoenix_pred_col if "Color" in target_type_sel else phoenix_pred_sz
-    elif "Omnisapient" in target_agent_sel:
-        selected_bet_content = omnisapient18_pred_col if "Color" in target_type_sel else omnisapient18_pred_sz
-    elif "Titan" in target_agent_sel:
-        selected_bet_content = titan17_pred_col if "Color" in target_type_sel else titan17_pred_sz
-    elif "Chromatic" in target_agent_sel:
-        selected_bet_content = chromatic16_pred_col
-    elif "Top 1" in target_agent_sel:
-        selected_bet_content = top_rank_1_col if "Color" in target_type_sel else top_rank_1_size
-    elif "Top 2" in target_agent_sel:
-        selected_bet_content = top_rank_2_col if "Color" in target_type_sel else top_rank_2_size
-    else:
-        selected_bet_content = supreme_prediction
-        
-    if token and selected_bet_content:
-        last_bet_issue = st.session_state.get("autobet_last_issue")
-        if last_bet_issue != target_issue:
-            success, status_code, res_data = execute_daman_autobet(
-                bearer_token=token,
-                game_code=game_code_sel,
-                issue_number=target_issue,
-                bet_content=selected_bet_content,
-                amount=base_amt,
-                bet_multiple=bet_mult
-            )
-            st.session_state["autobet_last_issue"] = target_issue
-            log_entry = {
-                "timestamp": datetime.datetime.now().strftime("%H:%M:%S"),
-                "issue": target_issue,
-                "agent": target_agent_sel,
-                "bet_content": selected_bet_content,
-                "amount": base_amt * bet_mult,
-                "status_code": status_code,
-                "success": success,
-                "msg": res_data.get("msg", "Bet Placed") if isinstance(res_data, dict) else str(res_data)
-            }
-            autobet_logs.append(log_entry)
-            st.session_state["autobet_logs"] = autobet_logs[-50:]
-
-autobet_is_on = st.session_state.get("autobet_enabled", False)
-autobet_token_present = bool(st.session_state.get("daman_bearer_token", "").strip())
-
-status_badge = '<span style="color:#22c55e; background:rgba(34,197,94,0.2); border:1px solid #22c55e; padding:4px 10px; border-radius:12px; font-weight:800;">ACTIVE ONLINE 🟢</span>' if (autobet_is_on and autobet_token_present) else ('<span style="color:#f59e0b; background:rgba(245,158,11,0.2); border:1px solid #f59e0b; padding:4px 10px; border-radius:12px; font-weight:800;">WAITING FOR TOKEN 🔑</span>' if autobet_is_on else '<span style="color:#94a3b8; background:rgba(148,163,184,0.2); border:1px solid #94a3b8; padding:4px 10px; border-radius:12px; font-weight:800;">PAUSED / OFF ⏸️</span>')
-
-last_log = st.session_state.get("autobet_logs", [])[-1] if st.session_state.get("autobet_logs") else None
-last_bet_html = f"Target Issue: <b>#{last_log['issue']}</b> | Bet: <b>{last_log['bet_content']}</b> | Amount: <b>₹{last_log['amount']}</b> | Status: <b>{last_log['status_code']}</b> ({last_log['msg']})" if last_log else "No bets executed in current session yet."
-
-st.markdown(f"""
-<div style="background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #020617 100%); border: 2.5px solid #6366f1; border-radius: 16px; padding: 18px; margin-bottom: 20px; box-shadow: 0 0 25px rgba(99, 102, 241, 0.4);">
-    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;">
-        <span style="font-size: 18px; font-weight: 900; color: #a5b4fc;">⚡ AUTOBET AUTOMATION MONITOR ENGINE</span>
-        {status_badge}
-    </div>
-    <div style="font-size: 12px; color: #c7d2fe; margin-bottom: 10px;">
-        Follow Strategy: <b>{st.session_state.get('autobet_agent', 'Hyperion Omni-AGI 12.0')}</b> | Bet Mode: <b>{st.session_state.get('autobet_target_type', 'Color Only')}</b> | Base Amount: <b>₹{st.session_state.get('autobet_amount', 10)}</b>
-    </div>
-    <div style="background: rgba(2, 6, 23, 0.7); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 10px; font-size: 11px; color: #e2e8f0;">
-        📌 <b>Last Execution:</b> {last_bet_html}
-    </div>
-</div>
-""", unsafe_allow_html=True)
-
 # --- 🌌 NEXUS A\.T\.L\.A\.S\. \(Agentic Transcendent Logic And Synthesis\) ULTIMATE SUPREME META-ORCHESTRATOR CARD RENDER ---
 all_agent_preds_map = {
     "Nexus Omnisapient 18.0": {
@@ -10863,6 +10779,101 @@ HMM &#8226; NEAT NeuroEvolution &#8226; MCTS Strategic Planner &#8226; Bayesian 
 {generate_last_8_boxes_html('sentinel_omega', latest_issue)}
 </div>"""
 st.markdown(sentinel_card_html, unsafe_allow_html=True)
+
+# ============================================================
+#  ⚡ SENTINEL PRIME OMEGA AUTOBET EXECUTION & PROGRESSIVE LADDER
+# ============================================================
+if "autobet_step_index" not in st.session_state:
+    st.session_state["autobet_step_index"] = 0
+if "autobet_logs" not in st.session_state:
+    st.session_state["autobet_logs"] = []
+
+# Evaluate previous round's autobet result if available
+last_placed = st.session_state.get("autobet_last_placed")
+if last_placed and last_placed.get("issue") == latest_issue:
+    bet_type = last_placed.get("bet_type", "Color")
+    placed_content = last_placed.get("bet_content")
+    
+    if "Color" in bet_type:
+        won = check_color_hit(placed_content, actual_num, actual_col)
+    else:
+        won = check_size_hit(placed_content, actual_num, actual_size)
+        
+    if won:
+        st.session_state["autobet_step_index"] = 0
+        last_placed["result"] = "WON 🟢 (Reset to ₹5)"
+    else:
+        st.session_state["autobet_step_index"] = min(st.session_state["autobet_step_index"] + 1, len(MARTINGALE_LADDER) - 1)
+        next_amt = MARTINGALE_LADDER[st.session_state["autobet_step_index"]]
+        last_placed["result"] = f"LOST 🔴 (Next Step: ₹{next_amt})"
+
+# Execute AutoBet for upcoming target_issue using Sentinel Prime Omega predictions
+if st.session_state.get("autobet_enabled", False):
+    token = st.session_state.get("daman_bearer_token", "").strip()
+    target_type_sel = st.session_state.get("autobet_target_type", "Color (Red/Green)")
+    game_code_sel = st.session_state.get("autobet_game_code", "WinGo_30S")
+    
+    # Sentinel Prime Omega prediction (Color or Size)
+    selected_bet_content = sentinel_col if "Color" in target_type_sel else sentinel_size
+    current_step_idx = st.session_state.get("autobet_step_index", 0)
+    current_bet_amount = MARTINGALE_LADDER[current_step_idx]
+    
+    if token and selected_bet_content:
+        last_bet_issue = st.session_state.get("autobet_last_issue")
+        if last_bet_issue != target_issue:
+            success, status_code, res_data = execute_daman_autobet(
+                bearer_token=token,
+                game_code=game_code_sel,
+                issue_number=target_issue,
+                bet_content=selected_bet_content,
+                amount=current_bet_amount,
+                bet_multiple=1
+            )
+            st.session_state["autobet_last_issue"] = target_issue
+            
+            placed_info = {
+                "issue": target_issue,
+                "bet_type": target_type_sel,
+                "bet_content": selected_bet_content,
+                "amount": current_bet_amount,
+                "step_index": current_step_idx,
+                "status_code": status_code,
+                "success": success,
+                "msg": res_data.get("msg", "Bet Placed") if isinstance(res_data, dict) else str(res_data),
+                "timestamp": datetime.datetime.now().strftime("%H:%M:%S")
+            }
+            st.session_state["autobet_last_placed"] = placed_info
+            st.session_state["autobet_logs"].append(placed_info)
+            st.session_state["autobet_logs"] = st.session_state["autobet_logs"][-50:]
+
+autobet_is_on = st.session_state.get("autobet_enabled", False)
+autobet_token_present = bool(st.session_state.get("daman_bearer_token", "").strip())
+curr_ladder_idx = st.session_state.get("autobet_step_index", 0)
+curr_ladder_amt = MARTINGALE_LADDER[curr_ladder_idx]
+
+status_badge = '<span style="color:#22c55e; background:rgba(34,197,94,0.2); border:1px solid #22c55e; padding:4px 10px; border-radius:12px; font-weight:800;">ACTIVE ONLINE 🟢</span>' if (autobet_is_on and autobet_token_present) else ('<span style="color:#f59e0b; background:rgba(245,158,11,0.2); border:1px solid #f59e0b; padding:4px 10px; border-radius:12px; font-weight:800;">WAITING FOR TOKEN 🔑</span>' if autobet_is_on else '<span style="color:#94a3b8; background:rgba(148,163,184,0.2); border:1px solid #94a3b8; padding:4px 10px; border-radius:12px; font-weight:800;">PAUSED / OFF ⏸️</span>')
+
+last_log = st.session_state.get("autobet_logs", [])[-1] if st.session_state.get("autobet_logs") else None
+last_bet_html = f"Target Issue: <b>#{last_log['issue']}</b> | Bet: <b>{last_log['bet_content']}</b> | Bet Amount: <b style='color:#f59e0b;'>₹{last_log['amount']}</b> (Step {last_log['step_index']+1}/10) | Status: <b>{last_log['status_code']}</b> ({last_log['msg']})" if last_log else "No bets executed in current session yet."
+
+st.markdown(f"""
+<div style="background: linear-gradient(135deg, #020617 0%, #0f172a 50%, #1e1b4b 100%); border: 3px solid #f59e0b; border-radius: 16px; padding: 18px; margin-bottom: 20px; box-shadow: 0 0 30px rgba(245, 158, 11, 0.5);">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;">
+        <span style="font-size: 18px; font-weight: 900; color: #facc15;">⚡ SENTINEL PRIME OMEGA AUTOBET MONITOR</span>
+        {status_badge}
+    </div>
+    <div style="font-size: 12px; color: #cbd5e1; margin-bottom: 10px;">
+        Model Connected: <b>SENTINEL PRIME OMEGA (12-Layer)</b> | Active Bet Choice: <b>{st.session_state.get('autobet_target_type', 'Color')}</b> | Next Bet Amount: <b style="color:#fbbf24; font-size:14px;">₹{curr_ladder_amt}</b> (Step {curr_ladder_idx+1}/10)
+    </div>
+    <div style="font-size: 11px; color: #94a3b8; margin-bottom: 10px; background: rgba(2, 6, 23, 0.6); padding: 6px 10px; border-radius: 6px;">
+        📊 <b>Recovery Ladder:</b> [₹5 ➔ ₹5 ➔ ₹11 ➔ ₹20 ➔ ₹30 ➔ ₹45 ➔ ₹70 ➔ ₹105 ➔ ₹155 ➔ ₹235]
+    </div>
+    <div style="background: rgba(2, 6, 23, 0.85); border: 1px solid #f59e0b; border-radius: 8px; padding: 10px; font-size: 11px; color: #e2e8f0;">
+        📌 <b>Last Execution Log:</b> {last_bet_html}
+    </div>
+</div>
+""", unsafe_allow_html=True)
+
 
 with st.expander("&#128752;️ Mission Control Mini-Dashboard (SENTINEL PRIME OMEGA NASA Analytics)"):
     sent_mission_html = f"""<div style="background: #090d16; padding: 15px; border-radius: 10px; border: 1px solid #06b6d4; font-family: monospace;">

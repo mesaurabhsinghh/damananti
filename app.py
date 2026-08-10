@@ -537,71 +537,73 @@ def get_file_hash(file_path=None):
     except Exception:
         return "error_hash"
 
-LIVE_API_ENDPOINTS = {
-    "Win Go 30Sec": "https://draw.ar-lottery01.com/WinGo/WinGo_30S/GetHistoryIssuePage.json",
-    "Win Go 1Min": "https://draw.ar-lottery01.com/WinGo/WinGo_1M/GetHistoryIssuePage.json",
-    "Win Go 3Min": "https://draw.ar-lottery01.com/WinGo/WinGo_3M/GetHistoryIssuePage.json",
-    "Win Go 5Min": "https://draw.ar-lottery01.com/WinGo/WinGo_5M/GetHistoryIssuePage.json",
-}
-
-def fetch_live_daman_game_data(game_mode="Win Go 30Sec"):
-    url = LIVE_API_ENDPOINTS.get(game_mode, LIVE_API_ENDPOINTS["Win Go 30Sec"])
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-        "Origin": "https://damanworld.org",
-        "Referer": "https://damanworld.org/"
-    }
-    try:
-        r = requests.get(f"{url}?ts={int(time.time()*1000)}", headers=headers, timeout=4)
-        if r.status_code == 200:
-            data = r.json()
-            items = data.get("data", {}).get("list", [])
-            if items:
-                records = []
-                for it in items:
-                    raw_num = it.get("number")
-                    if raw_num is not None and str(raw_num).isdigit():
-                        n = int(raw_num)
-                        iss = int(it.get("issueNumber"))
-                        c = helper_get_color(n)
-                        s = helper_get_size(n)
-                        records.append({
-                            "issue": iss,
-                            "number": n,
-                            "color": c,
-                            "size": s
-                        })
-                if records:
-                    records.sort(key=lambda x: x["issue"])
-                    return pd.DataFrame(records)
-    except Exception:
-        pass
-    return None
+def get_current_issue_json_path():
+    if os.path.exists("current_issue.json"):
+        return "current_issue.json"
+    local_path = os.path.join(os.getcwd(), "data", "current_issue.json")
+    if os.path.exists(local_path):
+        return local_path
+    return "current_issue.json"
 
 @st.cache_data(ttl=2)
-def sync_and_load_live_data(game_mode="Win Go 30Sec"):
+def sync_and_load_live_data():
     file_path = get_history_file_path()
     dir_name = os.path.dirname(file_path)
     if dir_name:
         os.makedirs(dir_name, exist_ok=True)
     
-    df_existing = None
-    if os.path.exists(file_path):
-        try:
-            df_existing = pd.read_csv(file_path)
-        except Exception:
-            df_existing = None
+    # 1. Check if history.csv from collector.py exists in root or data folder
+    hist_candidates = ["history.csv", file_path]
+    df = None
+    for cand in hist_candidates:
+        if os.path.exists(cand):
+            try:
+                temp_df = pd.read_csv(cand)
+                temp_df.columns = [c.strip().lower() for c in temp_df.columns]
+                if 'issue' in temp_df.columns and 'number' in temp_df.columns:
+                    df = temp_df
+                    break
+            except Exception:
+                pass
 
-    # Integrated collector live fetching directly from API
-    df_live = fetch_live_daman_game_data(game_mode)
-    
-    if df_live is not None and not df_live.empty:
-        if df_existing is not None and not df_existing.empty and 'issue' in df_existing.columns:
-            df = pd.concat([df_existing, df_live], ignore_index=True)
-            df = df.drop_duplicates(subset=['issue'], keep='last').sort_values('issue').reset_index(drop=True)
-        else:
-            df = df_live
+    # 2. Check current_issue.json from collector.py
+    current_issue_info = None
+    json_path = get_current_issue_json_path()
+    if os.path.exists(json_path):
+        try:
+            with open(json_path, "r", encoding="utf-8") as jf:
+                current_issue_info = json.load(jf)
+        except Exception:
+            pass
+
+    if df is None or df.empty or 'issue' not in df.columns or 'number' not in df.columns:
+        now = datetime.datetime.now()
+        seconds_in_day = now.hour * 3600 + now.minute * 60 + now.second
+        period_30s_index = seconds_in_day // 30
+        current_issue = int(now.strftime("%Y%m%d")) * 10000 + period_30s_index
+        if current_issue_info and "issue" in current_issue_info and str(current_issue_info["issue"]).isdigit():
+            current_issue = int(current_issue_info["issue"])
+
+        n_rows = 1000
+        start_issue = current_issue - n_rows + 1
+        issues = list(range(start_issue, current_issue + 1))
         
+        numbers = []
+        for iss in issues:
+            np.random.seed(iss % 100000)
+            numbers.append(int(np.random.choice(range(10))))
+            
+        df = pd.DataFrame({
+            'issue': issues,
+            'number': numbers,
+            'color': [helper_get_color(n) for n in numbers],
+            'size': [helper_get_size(n) for n in numbers]
+        })
+        try:
+            df.to_csv(file_path, index=False)
+        except Exception:
+            pass
+    else:
         if len(df) < 1000:
             first_issue = int(df['issue'].iloc[0])
             needed = 1000 - len(df)
@@ -617,36 +619,23 @@ def sync_and_load_live_data(game_mode="Win Go 30Sec"):
                 'size': [helper_get_size(n) for n in numbers]
             })
             df = pd.concat([df_prepended, df], ignore_index=True)
-            
+
+        if current_issue_info and "issue" in current_issue_info and "number" in current_issue_info:
+            try:
+                c_iss = int(current_issue_info["issue"])
+                c_num = int(current_issue_info["number"])
+                if c_iss > int(df['issue'].iloc[-1]):
+                    c_row = pd.DataFrame([{
+                        'issue': c_iss,
+                        'number': c_num,
+                        'color': helper_get_color(c_num),
+                        'size': helper_get_size(c_num)
+                    }])
+                    df = pd.concat([df, c_row], ignore_index=True)
+            except Exception:
+                pass
+
         df = df.tail(1000).reset_index(drop=True)
-        try:
-            df.to_csv(file_path, index=False)
-        except Exception:
-            pass
-    elif df_existing is not None and not df_existing.empty and all(col in df_existing.columns for col in ['issue', 'number']):
-        df = df_existing
-    else:
-        now = datetime.datetime.utcnow() + datetime.timedelta(hours=5, minutes=30)
-        seconds_in_day = now.hour * 3600 + now.minute * 60 + now.second
-        period_30s_index = (seconds_in_day // 30) + 1
-        current_issue = int(now.strftime("%Y%m%d")) * 100000 + 10000 + period_30s_index
-        n_rows = 1000
-        start_issue = current_issue - n_rows + 1
-        issues = list(range(start_issue, current_issue + 1))
-        numbers = []
-        for iss in issues:
-            np.random.seed(iss % 100000)
-            numbers.append(int(np.random.choice(range(10))))
-        df = pd.DataFrame({
-            'issue': issues,
-            'number': numbers,
-            'color': [helper_get_color(n) for n in numbers],
-            'size': [helper_get_size(n) for n in numbers]
-        })
-        try:
-            df.to_csv(file_path, index=False)
-        except Exception:
-            pass
 
     df['color'] = df['number'].apply(helper_get_color)
     df['size'] = df['number'].apply(helper_get_size)
@@ -8928,13 +8917,7 @@ run_model_training_page = render_advanced_model_training_page
 # -------------------------------------------------------------
 CACHE_FILE = "trained_models.pkl"
 
-st.sidebar.markdown("### 🎮 LIVE GAME API (collector.py Auto-Sync)")
-selected_game_mode = st.sidebar.selectbox(
-    "Select Win Go Game Mode",
-    ["Win Go 30Sec", "Win Go 1Min", "Win Go 3Min", "Win Go 5Min"],
-    index=0
-)
-df_history = sync_and_load_live_data(selected_game_mode)
+df_history = sync_and_load_live_data()
 st.session_state["file_hash"] = get_file_hash(get_history_file_path())
 
 if "training_status" not in st.session_state or "cache_info" not in st.session_state:

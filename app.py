@@ -300,28 +300,25 @@ def render_attributions_html(attributions, label_prefix="Lag"):
 if not st.session_state.get("import_only") and not st.session_state.get("page_config_set"):
     st.set_page_config(
         page_title="Daman / Wingo Ultra-Advanced AI Prediction Agent",
-        page_icon="🤖",
+        page_icon="",
         layout="wide",
-        initial_sidebar_state="collapsed"
+        initial_sidebar_state="expanded"
     )
     
     # Auto-refresh will be initialized after models are loaded/trained below.
     
-    # Ultra-responsive mobile & desktop adaptive CSS styling
+    # Ultra-small desktop-optimized CSS with rich visual aesthetics
     st.markdown("""
     <style>
-        /* Global Base Styling */
+        /* Global desktop compact styling */
         html, body, [class*="css"] {
             font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
             font-size: 13px !important;
         }
-        
         .main .block-container {
-            padding-top: 0.8rem !important;
-            padding-bottom: 0.8rem !important;
-            padding-left: 0.8rem !important;
-            padding-right: 0.8rem !important;
-            max-width: 100% !important;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+            max-width: 98%;
         }
         
         /* Header Card */
@@ -329,13 +326,13 @@ if not st.session_state.get("import_only") and not st.session_state.get("page_co
             background: linear-gradient(135deg, #090d16 0%, #111827 50%, #1e1b4b 100%);
             border: 1px solid #3b82f6;
             border-radius: 10px;
-            padding: 12px 16px;
+            padding: 12px 20px;
             color: #f8fafc;
-            margin-bottom: 12px;
+            margin-bottom: 15px;
             box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
         }
         .header-title {
-            font-size: 20px !important;
+            font-size: 21px !important;
             font-weight: 900;
             background: linear-gradient(90deg, #38bdf8, #818cf8, #c084fc);
             -webkit-background-clip: text;
@@ -348,19 +345,19 @@ if not st.session_state.get("import_only") and not st.session_state.get("page_co
             background: #111827;
             border: 1px solid #1f2937;
             border-radius: 8px;
-            padding: 8px 6px;
+            padding: 10px;
             text-align: center;
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
         .metric-label {
             color: #9ca3af;
-            font-size: 10px;
+            font-size: 11px;
             font-weight: 600;
             text-transform: uppercase;
         }
         .metric-val {
             color: #f9fafb;
-            font-size: 16px;
+            font-size: 17px;
             font-weight: 700;
             margin-top: 2px;
         }
@@ -370,8 +367,8 @@ if not st.session_state.get("import_only") and not st.session_state.get("page_co
             background: #0b0f19;
             border: 1px solid #1f2937;
             border-radius: 6px;
-            padding: 6px;
-            margin-bottom: 6px;
+            padding: 8px;
+            margin-bottom: 8px;
             text-align: center;
             transition: transform 0.2s, border-color 0.2s;
         }
@@ -380,7 +377,7 @@ if not st.session_state.get("import_only") and not st.session_state.get("page_co
             transform: translateY(-2px);
         }
         .engine-name {
-            font-size: 10px;
+            font-size: 11px;
             font-weight: 700;
             color: #cbd5e1;
             white-space: nowrap;
@@ -388,44 +385,44 @@ if not st.session_state.get("import_only") and not st.session_state.get("page_co
             text-overflow: ellipsis;
         }
         .engine-pred {
-            font-size: 12px;
+            font-size: 13px;
             font-weight: 800;
-            margin: 2px 0;
+            margin: 4px 0;
         }
         .engine-pts {
-            font-size: 9px;
+            font-size: 10px;
             color: #64748b;
         }
         
         /* Badges */
-        .bg-red { background-color: #ef4444; color: white; padding: 2px 6px; border-radius: 4px; font-weight: bold; font-size: 11px; }
-        .bg-green { background-color: #22c55e; color: white; padding: 2px 6px; border-radius: 4px; font-weight: bold; font-size: 11px; }
-        .bg-big { background-color: #f59e0b; color: white; padding: 2px 6px; border-radius: 4px; font-weight: bold; font-size: 11px; }
-        .bg-small { background-color: #3b82f6; color: white; padding: 2px 6px; border-radius: 4px; font-weight: bold; font-size: 11px; }
+        .bg-red { background-color: #ef4444; color: white; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
+        .bg-green { background-color: #22c55e; color: white; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
+        .bg-big { background-color: #f59e0b; color: white; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
+        .bg-small { background-color: #3b82f6; color: white; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
         
         /* Hindi AI Panel */
         .hindi-panel {
             background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #2e1065 100%);
             border: 1.5px solid #818cf8;
             border-radius: 10px;
-            padding: 14px;
+            padding: 18px;
             color: #f1f5f9;
-            font-size: 12px;
-            line-height: 1.5;
+            font-size: 13px;
+            line-height: 1.6;
             box-shadow: 0 4px 15px rgba(99, 102, 241, 0.2);
         }
         .hindi-header {
-            font-size: 15px;
+            font-size: 17px;
             font-weight: 800;
             color: #a7f3d0;
             border-bottom: 1px solid #4338ca;
             padding-bottom: 6px;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
         .hindi-section-title {
             font-weight: 700;
             color: #38bdf8;
-            margin-top: 8px;
+            margin-top: 10px;
         }
         
         /* Decision Banner */
@@ -433,208 +430,14 @@ if not st.session_state.get("import_only") and not st.session_state.get("page_co
             background: linear-gradient(90deg, #064e3b 0%, #047857 50%, #065f46 100%);
             border: 2px solid #10b981;
             border-radius: 10px;
-            padding: 12px;
+            padding: 16px;
             color: white;
             text-align: center;
-            margin-bottom: 12px;
+            margin-bottom: 15px;
             box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
-        }
-
-        /* ============================================================ */
-        /* 📱 ALL-ENFORCING ULTRA-COMPACT MOBILE ENGINE SYSTEM         */
-        /* ============================================================ */
-        @media (max-width: 768px) {
-            html, body, [class*="css"], div[data-testid="stMarkdownContainer"] p, div[data-testid="stMarkdownContainer"] span {
-                font-size: 10px !important;
-                line-height: 1.25 !important;
-            }
-            /* Mobile Header & Sidebar Collapse Button Styling (Fully Visible on Smartphones) */
-            header[data-testid="stHeader"] {
-                background: transparent !important;
-                height: 2.5rem !important;
-                z-index: 999999 !important;
-                display: block !important;
-            }
-            [data-testid="collapsedControl"],
-            [data-testid="stSidebarCollapseButton"],
-            button[kind="header"] {
-                display: flex !important;
-                visibility: visible !important;
-                opacity: 1 !important;
-                background: rgba(30, 27, 75, 0.95) !important;
-                border: 1.5px solid #a855f7 !important;
-                border-radius: 8px !important;
-                color: #f0abfc !important;
-                box-shadow: 0 0 12px rgba(168, 85, 247, 0.6) !important;
-                margin-left: 6px !important;
-                margin-top: 4px !important;
-            }
-            .main .block-container {
-                padding: 2.2rem 0.2rem 0.2rem 0.2rem !important;
-                max-width: 100% !important;
-            }
-
-            /* Override all inline large font-sizes across the ENTIRE codebase on mobile */
-            [style*="font-size: 20px"], [style*="font-size: 21px"], [style*="font-size: 22px"], 
-            [style*="font-size: 24px"], [style*="font-size: 26px"], [style*="font-size: 28px"] {
-                font-size: 14px !important;
-            }
-            [style*="font-size: 30px"], [style*="font-size: 32px"], [style*="font-size: 34px"], 
-            [style*="font-size: 38px"], [style*="font-size: 42px"], [style*="font-size: 52px"] {
-                font-size: 18px !important;
-            }
-
-            /* Override all inline large paddings on mobile */
-            [style*="padding: 14px"], [style*="padding: 16px"], [style*="padding: 18px"], 
-            [style*="padding: 20px"], [style*="padding: 22px"], [style*="padding: 24px"] {
-                padding: 6px 8px !important;
-            }
-
-            /* Universal Mobile Min-Width Flex Override for all cards and score boxes */
-            [style*="min-width: 140px"], [style*="min-width: 150px"], [style*="min-width: 160px"],
-            [style*="min-width: 180px"], [style*="min-width: 220px"], [style*="min-width: 120px"], [style*="min-width: 130px"] {
-                min-width: 0 !important;
-                flex: 1 1 30% !important;
-                white-space: nowrap !important;
-                text-align: center !important;
-                padding: 4px 2px !important;
-            }
-
-            /* Prevent inner span elements in boxes from line-wrapping vertically */
-            [style*="min-width"] span {
-                white-space: nowrap !important;
-                word-break: keep-all !important;
-            }
-
-            /* Override all inline large margins on mobile */
-            [style*="margin-bottom: 20px"], [style*="margin-bottom: 24px"], [style*="margin-bottom: 25px"] {
-                margin-bottom: 8px !important;
-            }
-
-            /* Header Card */
-            .header-card {
-                padding: 6px 8px !important;
-                border-radius: 6px !important;
-                margin-bottom: 5px !important;
-            }
-            .header-title {
-                font-size: 13px !important;
-                text-align: center;
-            }
-
-            /* FORCE Streamlit Horizontal Row Containers to stay flex-row on Mobile */
-            div[data-testid="stHorizontalBlock"],
-            div[data-testid="horizontal-block"],
-            div[class*="stHorizontalBlock"],
-            .stHorizontalBlock {
-                display: flex !important;
-                flex-direction: row !important;
-                flex-wrap: wrap !important;
-                gap: 4px !important;
-                width: 100% !important;
-            }
-            
-            /* FORCE Streamlit Columns to stay SIDE-BY-SIDE (2 per row: 48% width) on Mobile */
-            div[data-testid="column"],
-            div[data-testid="stColumn"],
-            div[class*="stColumn"],
-            .stColumn {
-                flex: 0 0 calc(50% - 4px) !important;
-                min-width: calc(50% - 4px) !important;
-                max-width: calc(50% - 4px) !important;
-                width: calc(50% - 4px) !important;
-                margin-bottom: 4px !important;
-                padding: 0 !important;
-            }
-
-            /* Override inner column children */
-            div[data-testid="column"] > div,
-            div[data-testid="stColumn"] > div {
-                width: 100% !important;
-            }
-
-            /* Expanders, Tabs & Controls Mobile Overrides */
-            div[data-testid="stExpander"] {
-                border-radius: 6px !important;
-                margin-bottom: 4px !important;
-            }
-            div[data-testid="stExpander"] details summary {
-                font-size: 10px !important;
-                font-weight: 800 !important;
-                padding: 4px 6px !important;
-            }
-            button[data-baseweb="tab"] {
-                padding: 3px 6px !important;
-                font-size: 9.5px !important;
-                min-height: 28px !important;
-            }
-
-            /* Engine Cards & Metrics on Mobile */
-            .engine-card {
-                padding: 3px 2px !important;
-                margin-bottom: 3px !important;
-                border-radius: 4px !important;
-            }
-            .engine-name {
-                font-size: 8px !important;
-            }
-            .engine-pred {
-                font-size: 10px !important;
-                margin: 1px 0 !important;
-            }
-            .engine-pts {
-                font-size: 7px !important;
-            }
-            .metric-box {
-                padding: 3px 2px !important;
-                border-radius: 5px !important;
-            }
-            .metric-val {
-                font-size: 11px !important;
-            }
-            .metric-label {
-                font-size: 7px !important;
-            }
-            .decision-banner {
-                padding: 5px 6px !important;
-                font-size: 10px !important;
-                margin-bottom: 5px !important;
-                border-radius: 6px !important;
-            }
-            .hindi-panel {
-                padding: 5px 6px !important;
-                font-size: 9px !important;
-                border-radius: 6px !important;
-            }
-            .hindi-header {
-                font-size: 10.5px !important;
-                padding-bottom: 2px !important;
-                margin-bottom: 4px !important;
-            }
-            /* Compact Mobile Buttons & Inputs */
-            .stButton button {
-                width: 100% !important;
-                min-height: 32px !important;
-                font-size: 10.5px !important;
-                font-weight: 700 !important;
-                padding: 2px 4px !important;
-                border-radius: 5px !important;
-            }
-            /* Compact DataFrames */
-            .stDataFrame, div[data-testid="stTable"] {
-                font-size: 8px !important;
-                overflow-x: auto !important;
-            }
-            [data-testid="stDataFrameResizable"] {
-                max-height: 220px !important;
-            }
         }
     </style>
     """, unsafe_allow_html=True)
-
-
-
-
 
 def initialize_session_state():
     defaults = {
@@ -669,33 +472,18 @@ import torch.optim as optim
 
 # TrueLSTMNet and DQNCoreNet are imported from model_manager.py
 
-def render_notif_button(agent_key, agent_name, target_issue, pred_val, pred_col, pred_size, pred_conf=80.0):
-    c_val = str(round(float(pred_conf), 1)) if pred_conf is not None else "80.0"
-    p_num = str(pred_val) if pred_val is not None else "5"
-    p_col = str(pred_col) if pred_col is not None else "Red"
-    p_sz = str(pred_size) if pred_size is not None else "Big"
-    t_iss = str(target_issue) if target_issue is not None else "Next"
-    
-    return f'''<span class="damananti-notif-toggle" id="notif_toggle_{agent_key}" data-agent-key="{agent_key}" data-agent-name="{agent_name}" data-issue="{t_iss}" data-num="{p_num}" data-col="{p_col}" data-size="{p_sz}" data-conf="{c_val}" style="background: rgba(30, 27, 75, 0.85); border: 1.5px solid #818cf8; border-radius: 20px; padding: 3px 10px; font-size: 9.5px; font-weight: 900; color: #cbd5e1; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; box-shadow: 0 0 8px rgba(99, 102, 241, 0.4); margin-left: 6px; user-select: none; transition: all 0.2s ease; z-index: 999;"><span id="notif_icon_{agent_key}">🔕</span><span id="notif_lbl_{agent_key}">ALERT OFF</span></span>'''
-
-
 def helper_get_color(num):
-    if num is None:
+    if num in [2, 4, 6, 8]:
         return "Red"
-    try:
-        n = int(num)
-        return "Red" if n in [0, 2, 4, 6, 8] else "Green"
-    except Exception:
+    elif num in [1, 3, 7, 9]:
+        return "Green"
+    elif num == 0:
         return "Red"
+    else:
+        return "Green"
 
 def helper_get_size(num):
-    if num is None:
-        return "Small"
-    try:
-        n = int(num)
-        return "Big" if n >= 5 else "Small"
-    except Exception:
-        return "Small"
+    return "Big" if num >= 5 else "Small"
 
 def check_color_hit(pred_col, act_num, act_col):
     if pred_col is None:
@@ -704,17 +492,16 @@ def check_color_hit(pred_col, act_num, act_col):
     a_c = str(act_col).strip().lower() if act_col is not None else ""
     act_n = int(act_num) if (act_num is not None and str(act_num).isdigit()) else None
     
-    if act_n is not None:
-        actual_color = "Red" if act_n in [0, 2, 4, 6, 8] else "Green"
-    elif "red" in a_c:
-        actual_color = "Red"
-    elif "green" in a_c:
-        actual_color = "Green"
-    else:
-        actual_color = a_c.capitalize()
-        
-    predicted_color = "Red" if "red" in p_c else ("Green" if "green" in p_c else p_c.capitalize())
-    return predicted_color.lower() == actual_color.lower()
+    if "red" in p_c:
+        if (act_n is not None and act_n in [0, 2, 4, 6, 8]) or ("red" in a_c):
+            return True
+    if "green" in p_c:
+        if (act_n is not None and act_n in [1, 3, 5, 7, 9]) or ("green" in a_c):
+            return True
+    if "violet" in p_c:
+        if (act_n is not None and act_n in [0, 5]) or ("violet" in a_c):
+            return True
+    return p_c == a_c
 
 def check_size_hit(pred_size, act_num, act_size):
     if pred_size is None:
@@ -723,17 +510,13 @@ def check_size_hit(pred_size, act_num, act_size):
     a_s = str(act_size).strip().lower() if act_size is not None else ""
     act_n = int(act_num) if (act_num is not None and str(act_num).isdigit()) else None
     
-    if act_n is not None:
-        actual_size = "Big" if act_n >= 5 else "Small"
-    elif "big" in a_s:
-        actual_size = "Big"
-    elif "small" in a_s:
-        actual_size = "Small"
-    else:
-        actual_size = a_s.capitalize()
-        
-    predicted_size = "Big" if "big" in p_s else ("Small" if "small" in p_s else p_s.capitalize())
-    return predicted_size.lower() == actual_size.lower()
+    if "big" in p_s:
+        if (act_n is not None and act_n >= 5) or ("big" in a_s):
+            return True
+    if "small" in p_s:
+        if (act_n is not None and act_n <= 4) or ("small" in a_s):
+            return True
+    return p_s == a_s
 
 def get_history_file_path():
     win_path = r"C:\damanAi\dashboard\history.csv"
@@ -2517,7 +2300,7 @@ def run_nexus_ascend_10_0(engines_dict, ucb_scores, df_history, cache_info, maml
     final_pred_digit = int(np.argmax(meta_prob_dist))
     final_confidence = float(meta_prob_dist[final_pred_digit] * 100.0)
 
-    pred_col = "Red" if final_pred_digit in [0, 2, 4, 6, 8] else "Green"
+    pred_col = "Red" if final_pred_digit in [1, 3, 7, 9, 8] else "Green"
     pred_size = "Big" if final_pred_digit >= 5 else "Small"
 
     target_name = f"Number {final_pred_digit} ({pred_col} | {pred_size})"
@@ -2577,13 +2360,13 @@ def extract_nexus_core_features(df):
         hour_val = float((issue_val % 24))
         
         last_n = sub_nums[-1]
-        color_last = 1.0 if int(last_n) in [0, 2, 4, 6, 8] else 0.0
+        color_last = 1.0 if int(last_n) in [1, 3, 7, 9, 8] else 0.0
         size_last = 1.0 if int(last_n) >= 5 else 0.0
         
         streak_col = 1.0
         for k in range(len(sub_nums)-1, 0, -1):
-            curr_c = (int(sub_nums[k]) in [0, 2, 4, 6, 8])
-            prev_c = (int(sub_nums[k-1]) in [0, 2, 4, 6, 8])
+            curr_c = (int(sub_nums[k]) in [1, 3, 7, 9, 8])
+            prev_c = (int(sub_nums[k-1]) in [1, 3, 7, 9, 8])
             if curr_c == prev_c:
                 streak_col += 1.0
             else:
@@ -2758,7 +2541,7 @@ def run_nexus_core_agent(engines_dict, ucb_scores, df_history, cache_info):
             "conf_label": confidence_label
         }
 
-        pred_col = "Red" if chosen_digit in [0, 2, 4, 6, 8] else "Green"
+        pred_col = "Red" if chosen_digit in [1, 3, 7, 9, 8] else "Green"
         pred_size = "Big" if chosen_digit >= 5 else "Small"
         target_name = f"Number {chosen_digit} ({pred_col} | {pred_size})"
 
@@ -2784,7 +2567,7 @@ def run_nexus_core_agent(engines_dict, ucb_scores, df_history, cache_info):
     except Exception as e:
         all_votes = [engines_dict[f"E{k}"]["num"] for k in range(1, 60) if f"E{k}" in engines_dict]
         fallback_digit = Counter(all_votes).most_common(1)[0][0] if all_votes else 5
-        fb_col = "Red" if fallback_digit in [0, 2, 4, 6, 8] else "Green"
+        fb_col = "Red" if fallback_digit in [1, 3, 7, 9, 8] else "Green"
         fb_size = "Big" if fallback_digit >= 5 else "Small"
         return f"Number {fallback_digit} ({fb_col} | {fb_size})", str(fallback_digit), 65.0, f"NEXUS CORE Fallback: {str(e)}", [f"Fallback active: {str(e)}"]
 
@@ -3007,7 +2790,7 @@ def run_absolute_agent_10_0(engines_dict, ucb_scores, df_history, cache_info):
             "top_shap": top_shap_drivers
         }
 
-        pred_col = "Red" if chosen_digit in [0, 2, 4, 6, 8] else "Green"
+        pred_col = "Red" if chosen_digit in [1, 3, 7, 9, 8] else "Green"
         pred_size = "Big" if chosen_digit >= 5 else "Small"
         target_name = f"Number {chosen_digit} ({pred_col} | {pred_size})"
 
@@ -3037,7 +2820,7 @@ def run_absolute_agent_10_0(engines_dict, ucb_scores, df_history, cache_info):
     except Exception as e:
         all_votes = [engines_dict[f"E{k}"]["num"] for k in range(1, 60) if f"E{k}" in engines_dict]
         fallback_digit = Counter(all_votes).most_common(1)[0][0] if all_votes else 5
-        fb_col = "Red" if fallback_digit in [0, 2, 4, 6, 8] else "Green"
+        fb_col = "Red" if fallback_digit in [1, 3, 7, 9, 8] else "Green"
         fb_size = "Big" if fallback_digit >= 5 else "Small"
         return f"Number {fallback_digit} ({fb_col} | {fb_size})", str(fallback_digit), 75.0, f"ABSOLUTE 10.0 Fallback: {str(e)}", [f"Fallback active: {str(e)}"]
 
@@ -3230,7 +3013,7 @@ def run_transcendent_agent_11_0(engines_dict, ucb_scores, df_history, cache_info
         raw_conf = float(final_godmind_prob[chosen_digit] * 100.0)
         confidence = float(np.clip(raw_conf + 45.0, 88.0, 99.9))
 
-        pred_col = "Red" if chosen_digit in [0, 2, 4, 6, 8] else "Green"
+        pred_col = "Red" if chosen_digit in [1, 3, 7, 9, 8] else "Green"
         pred_size = "Big" if chosen_digit >= 5 else "Small"
         target_name = f"Number {chosen_digit} ({pred_col} | {pred_size})"
 
@@ -3277,7 +3060,7 @@ def run_transcendent_agent_11_0(engines_dict, ucb_scores, df_history, cache_info
     except Exception as e:
         all_votes = [engines_dict[f"E{k}"]["num"] for k in range(1, 60) if f"E{k}" in engines_dict]
         fallback_digit = Counter(all_votes).most_common(1)[0][0] if all_votes else 7
-        fb_col = "Red" if fallback_digit in [0, 2, 4, 6, 8] else "Green"
+        fb_col = "Red" if fallback_digit in [1, 3, 7, 9, 8] else "Green"
         fb_size = "Big" if fallback_digit >= 5 else "Small"
         return f"Number {fallback_digit} ({fb_col} | {fb_size})", str(fallback_digit), 88.0, f"TRANSCENDENT 11.0 Fallback: {str(e)}", [f"Fallback active: {str(e)}"]
 
@@ -3596,7 +3379,7 @@ def run_nexus_supreme_prime(engines_dict, ucb_scores, df_history, cache_info):
             else:
                 confidence = float(np.clip(conf_raw + 70.0, 70.0, 99.9))
 
-        pred_col = "Red" if chosen_digit in [0, 2, 4, 6, 8] else "Green"
+        pred_col = "Red" if chosen_digit in [1, 3, 7, 9, 8] else "Green"
         pred_size = "Big" if chosen_digit >= 5 else "Small"
         target_name = f"Number {chosen_digit} ({pred_col} | {pred_size})"
 
@@ -3639,7 +3422,7 @@ def run_nexus_supreme_prime(engines_dict, ucb_scores, df_history, cache_info):
     except Exception as e:
         all_votes = [engines_dict[f"E{k}"]["num"] for k in range(1, 60) if f"E{k}" in engines_dict]
         fallback_digit = Counter(all_votes).most_common(1)[0][0] if all_votes else 5
-        fb_col = "Red" if fallback_digit in [0, 2, 4, 6, 8] else "Green"
+        fb_col = "Red" if fallback_digit in [1, 3, 7, 9, 8] else "Green"
         fb_size = "Big" if fallback_digit >= 5 else "Small"
         return f"Number {fallback_digit} ({fb_col} | {fb_size})", str(fallback_digit), 75.0, f"NEXUS SUPREME PRIME Fallback: {str(e)}", [f"Fallback active: {str(e)}"]
 
@@ -3759,9 +3542,9 @@ def run_oracle_agent_8_0(engines_dict, ucb_scores, df_history, cache_info):
             for p in test_preds:
                 actual = p["actual_num"]
                 pred_d = int(np.argmax(prob_dist))
-                actual_col = "Red" if actual in [0, 2, 4, 6, 8] else "Green"
+                actual_col = "Red" if actual in [1,3,7,9,8] else "Green"
                 actual_size = "Big" if actual >= 5 else "Small"
-                pred_col = "Red" if pred_d in [0, 2, 4, 6, 8] else "Green"
+                pred_col = "Red" if pred_d in [1,3,7,9,8] else "Green"
                 pred_size = "Big" if pred_d >= 5 else "Small"
 
                 if pred_d == actual:
@@ -3902,7 +3685,7 @@ def run_oracle_agent_8_0(engines_dict, ucb_scores, df_history, cache_info):
             "recent_acc": recent_acc
         }
 
-        pred_col = "Red" if chosen_digit in [0, 2, 4, 6, 8] else "Green"
+        pred_col = "Red" if chosen_digit in [1, 3, 7, 9, 8] else "Green"
         pred_size = "Big" if chosen_digit >= 5 else "Small"
         target_name = f"Number {chosen_digit} ({pred_col} | {pred_size})"
 
@@ -3930,7 +3713,7 @@ def run_oracle_agent_8_0(engines_dict, ucb_scores, df_history, cache_info):
     except Exception as e:
         all_votes = [engines_dict[f"E{k}"]["num"] for k in range(1, 60) if f"E{k}" in engines_dict]
         fallback_digit = Counter(all_votes).most_common(1)[0][0] if all_votes else 5
-        fb_col = "Red" if fallback_digit in [0, 2, 4, 6, 8] else "Green"
+        fb_col = "Red" if fallback_digit in [1, 3, 7, 9, 8] else "Green"
         fb_size = "Big" if fallback_digit >= 5 else "Small"
         return f"Number {fallback_digit} ({fb_col} | {fb_size})", str(fallback_digit), 65.0, f"ORACLE 8.0 Fallback: {str(e)}", [f"Fallback active: {str(e)}"]
 
@@ -4174,7 +3957,7 @@ def run_omni_nexus_9_0(engines_dict, ucb_scores, df_history, cache_info):
             "chosen_pillar": chosen_pillar
         }
 
-        pred_col = "Red" if chosen_digit in [0, 2, 4, 6, 8] else "Green"
+        pred_col = "Red" if chosen_digit in [1, 3, 7, 9, 8] else "Green"
         pred_size = "Big" if chosen_digit >= 5 else "Small"
         target_name = f"Number {chosen_digit} ({pred_col} | {pred_size})"
 
@@ -4202,7 +3985,7 @@ def run_omni_nexus_9_0(engines_dict, ucb_scores, df_history, cache_info):
     except Exception as e:
         all_votes = [engines_dict[f"E{k}"]["num"] for k in range(1, 60) if f"E{k}" in engines_dict]
         fallback_digit = Counter(all_votes).most_common(1)[0][0] if all_votes else 5
-        fb_col = "Red" if fallback_digit in [0, 2, 4, 6, 8] else "Green"
+        fb_col = "Red" if fallback_digit in [1, 3, 7, 9, 8] else "Green"
         fb_size = "Big" if fallback_digit >= 5 else "Small"
         return f"Number {fallback_digit} ({fb_col} | {fb_size})", str(fallback_digit), 70.0, f"OMNI-NEXUS 9.0 Fallback: {str(e)}", [f"Fallback active: {str(e)}"]
 
@@ -4623,7 +4406,7 @@ def run_sentinel_prime_omega(engines_dict, ucb_scores, df_history, cache_info):
             else:
                 confidence = float(np.clip(conf_raw + 30.0, 72.0, 99.9))
 
-        pred_col = "Red" if final_digit in [0, 2, 4, 6, 8] else "Green"
+        pred_col = "Red" if final_digit in [1, 3, 7, 9, 8] else "Green"
         pred_size = "Big" if final_digit >= 5 else "Small"
         target_name = f"Number {final_digit} ({pred_col} | {pred_size})"
 
@@ -4683,7 +4466,7 @@ def run_sentinel_prime_omega(engines_dict, ucb_scores, df_history, cache_info):
     except Exception as e:
         all_votes = [engines_dict[f"E{k}"]["num"] for k in range(1, 60) if f"E{k}" in engines_dict]
         fallback_digit = Counter(all_votes).most_common(1)[0][0] if all_votes else 5
-        fb_col = "Red" if fallback_digit in [0, 2, 4, 6, 8] else "Green"
+        fb_col = "Red" if fallback_digit in [1, 3, 7, 9, 8] else "Green"
         fb_size = "Big" if fallback_digit >= 5 else "Small"
         st.session_state["sentinel_stats"] = {
             "regime": "Random Chaos (Fallback)",
@@ -5264,7 +5047,7 @@ def run_omega_zero_agent(engines_dict, ucb_scores, df_history, cache_info):
             "loss": st.session_state.get("omega_last_loss", 0.0)
         }
 
-        pred_col = "Red" if chosen_digit in [0, 2, 4, 6, 8] else "Green"
+        pred_col = "Red" if chosen_digit in [1, 3, 7, 9, 8] else "Green"
         pred_size = "Big" if chosen_digit >= 5 else "Small"
         target_name = f"Number {chosen_digit} ({pred_col} | {pred_size})"
 
@@ -5294,7 +5077,7 @@ def run_omega_zero_agent(engines_dict, ucb_scores, df_history, cache_info):
         base_digit = Counter(all_votes).most_common(1)[0][0] if all_votes else 5
         jitter = int(np.random.choice([-1, 0, 1]))
         fallback_digit = int(np.clip(base_digit + jitter, 0, 9))
-        fb_col = "Red" if fallback_digit in [0, 2, 4, 6, 8] else "Green"
+        fb_col = "Red" if fallback_digit in [1, 3, 7, 9, 8] else "Green"
         fb_size = "Big" if fallback_digit >= 5 else "Small"
         return f"Number {fallback_digit} ({fb_col} | {fb_size})", str(fallback_digit), 60.0, f"MCTS Fallback Jitter: {str(e)}", [f"Fallback Jitter active: {str(e)}"]
 
@@ -6312,47 +6095,46 @@ def render_nexus_duo_force_card(target_name, pred_col, pred_size, conf_col, conf
 
     target_issue_str = str(target_issue) if target_issue is not None else "LIVE"
 
-    card_html = f"""<div style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.12) 0%, rgba(15, 23, 42, 0.95) 50%, rgba(16, 185, 129, 0.12) 100%); border: 2px solid #38bdf8; border-radius: 12px; padding: 10px; margin-bottom: 16px; box-shadow: 0 0 20px rgba(56, 189, 248, 0.2);">
-<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px; flex-wrap: wrap; gap: 4px;">
-<div style="display: flex; align-items: center; gap: 6px;">
-<span style="font-size: 18px;">⚡</span>
-<span style="font-size: 14px; font-weight: 900; color: #f8fafc; text-transform: uppercase; letter-spacing: 0.5px;">NEXUS DUO FORCE <span style="font-size: 9.5px; color: #94a3b8; font-weight: 700;">(Color + Size Precision Agent)</span></span>
+    card_html = f"""<div style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.12) 0%, rgba(15, 23, 42, 0.95) 50%, rgba(16, 185, 129, 0.12) 100%); border: 2px solid #38bdf8; border-radius: 14px; padding: 18px; margin-bottom: 20px; box-shadow: 0 0 25px rgba(239, 68, 68, 0.2), 0 0 25px rgba(16, 185, 129, 0.2);">
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; flex-wrap: wrap; gap: 8px;">
+<div style="display: flex; align-items: center; gap: 8px;">
+<span style="font-size: 22px;">⚡</span>
+<span style="font-size: 16px; font-weight: 900; color: #f8fafc; text-transform: uppercase; letter-spacing: 0.5px;">NEXUS DUO FORCE <span style="font-size: 11px; color: #94a3b8; font-weight: 700;">(Color + Size Precision Agent)</span></span>
 </div>
-<div style="display: flex; gap: 4px; align-items: center; flex-wrap: wrap;">
-<span style="background: rgba(15, 23, 42, 0.85); border: 1px solid #38bdf8; border-radius: 6px; padding: 2px 6px; font-size: 8.5px; font-weight: 800; color: #a7f3d0; display: inline-flex; align-items: center; gap: 4px;">🎯 TARGET ISSUE: <span style="color: #facc15; font-size: 10px; font-weight: 900;">#{target_issue_str}</span> <span style="background: #10b981; color: #020617; font-size: 7.5px; font-weight: 900; padding: 1px 4px; border-radius: 8px;">LIVE SYNC</span></span>
-<span style="background: rgba(56, 189, 248, 0.2); border: 1px solid #38bdf8; color: #7dd3fc; font-size: 8px; font-weight: 800; padding: 1px 5px; border-radius: 10px;">65 Sources</span>
-<span style="background: rgba(168, 85, 247, 0.2); border: 1px solid #a855f7; color: #c084fc; font-size: 8px; font-weight: 800; padding: 1px 5px; border-radius: 10px;">HMM Regime</span>
-<span style="background: rgba(234, 179, 8, 0.2); border: 1px solid #eab308; color: #fde047; font-size: 8px; font-weight: 800; padding: 1px 5px; border-radius: 10px;">Platt Calibrated</span>
-<span style="background: rgba(16, 185, 129, 0.2); border: 1px solid #10b981; color: #6ee7b7; font-size: 8px; font-weight: 800; padding: 1px 5px; border-radius: 10px;">Kelly Bets</span>
-{render_notif_button("nexus_duo_force", "NEXUS DUO FORCE", target_issue_str, pred_col + " " + pred_size, pred_col, pred_size, round(float((conf_col + conf_sz)/2), 1))}
-</div>
-</div>
-
-<div style="display: flex; gap: 6px; margin-bottom: 8px; width: 100%;">
-<div style="flex: 1; min-width: 0; background: {col_bg}; border: 1.5px solid {col_color}; border-radius: 10px; padding: 6px 3px; text-align: center; box-shadow: inset 0 0 10px {col_bg};">
-<div style="font-size: 8.5px; font-weight: 800; color: #94a3b8; text-transform: uppercase;">🎯 COLOR TARGET PREDICTION</div>
-<div style="font-size: 18px; font-weight: 900; color: {col_color}; text-shadow: 0 0 10px {col_color}; margin: 1px 0;">{pred_col.upper()}</div>
-<div style="font-size: 9px; font-weight: 800; color: #e2e8f0;">Confidence: <span style="color: {col_color};">{conf_col}%</span></div>
-</div>
-<div style="flex: 1; min-width: 0; background: {size_bg}; border: 1.5px solid {size_color}; border-radius: 10px; padding: 6px 3px; text-align: center; box-shadow: inset 0 0 10px {size_bg};">
-<div style="font-size: 8.5px; font-weight: 800; color: #94a3b8; text-transform: uppercase;">📏 SIZE TARGET PREDICTION</div>
-<div style="font-size: 18px; font-weight: 900; color: {size_color}; text-shadow: 0 0 10px {size_color}; margin: 1px 0;">{pred_size.upper()}</div>
-<div style="font-size: 9px; font-weight: 800; color: #e2e8f0;">Confidence: <span style="color: {size_color};">{conf_sz}%</span></div>
+<div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
+<span style="background: rgba(15, 23, 42, 0.85); border: 1.5px solid #38bdf8; border-radius: 8px; padding: 4px 12px; font-size: 10px; font-weight: 800; color: #a7f3d0; display: inline-flex; align-items: center; gap: 6px;">🎯 TARGET ISSUE: <span style="color: #facc15; font-size: 12px; font-weight: 900;">#{target_issue_str}</span> <span style="background: #10b981; color: #020617; font-size: 8px; font-weight: 900; padding: 2px 6px; border-radius: 10px;">LIVE SYNC</span></span>
+<span style="background: rgba(56, 189, 248, 0.2); border: 1px solid #38bdf8; color: #7dd3fc; font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 12px;">65 Sources</span>
+<span style="background: rgba(168, 85, 247, 0.2); border: 1px solid #a855f7; color: #c084fc; font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 12px;">HMM Regime</span>
+<span style="background: rgba(234, 179, 8, 0.2); border: 1px solid #eab308; color: #fde047; font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 12px;">Platt Calibrated</span>
+<span style="background: rgba(16, 185, 129, 0.2); border: 1px solid #10b981; color: #6ee7b7; font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 12px;">Kelly Bets</span>
 </div>
 </div>
 
-<div style="margin-top: 4px; margin-bottom: 8px; display: flex; justify-content: space-between; gap: 4px; width: 100%;">
-<div style="flex: 1; min-width: 0; background: rgba(2, 6, 23, 0.7); border: 1px solid #22c55e; border-radius: 6px; padding: 3px 2px; text-align: center;">
-<span style="font-size: 7.5px; color: #86efac; font-weight: 800; display:block; text-transform: uppercase;">🎨 COLOR SCORE</span>
-<span style="font-size: 9px; font-weight: 900; color: #86efac;">{duo_col_sahi} Sahi | {duo_col_galat} Galat</span>
+<div style="display: flex; gap: 15px; margin-bottom: 15px;">
+<div style="flex: 1; background: {col_bg}; border: 1.5px solid {col_color}; border-radius: 12px; padding: 14px; text-align: center; box-shadow: inset 0 0 15px {col_bg};">
+<div style="font-size: 11px; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">🎯 COLOR TARGET PREDICTION</div>
+<div style="font-size: 32px; font-weight: 900; color: {col_color}; text-shadow: 0 0 12px {col_color}; margin: 4px 0;">{pred_col.upper()}</div>
+<div style="font-size: 13px; font-weight: 800; color: #e2e8f0; margin-top: 6px;">Confidence: <span style="color: {col_color};">{conf_col}%</span></div>
 </div>
-<div style="flex: 1; min-width: 0; background: rgba(2, 6, 23, 0.7); border: 1px solid #38bdf8; border-radius: 6px; padding: 3px 2px; text-align: center;">
-<span style="font-size: 7.5px; color: #7dd3fc; font-weight: 800; display:block; text-transform: uppercase;">📏 SIZE SCORE</span>
-<span style="font-size: 9px; font-weight: 900; color: #7dd3fc;">{duo_size_sahi} Sahi | {duo_size_galat} Galat</span>
+<div style="flex: 1; background: {size_bg}; border: 1.5px solid {size_color}; border-radius: 12px; padding: 14px; text-align: center; box-shadow: inset 0 0 15px {size_bg};">
+<div style="font-size: 11px; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">📏 SIZE TARGET PREDICTION</div>
+<div style="font-size: 32px; font-weight: 900; color: {size_color}; text-shadow: 0 0 12px {size_color}; margin: 4px 0;">{pred_size.upper()}</div>
+<div style="font-size: 13px; font-weight: 800; color: #e2e8f0; margin-top: 6px;">Confidence: <span style="color: {size_color};">{conf_sz}%</span></div>
 </div>
 </div>
 
-<div style="text-align: center; padding: 4px 6px; border-radius: 6px; font-size: 9px; font-weight: 800; {kelly_style} margin-bottom: 4px;">💰 RECOMMENDED BANKROLL SIZING: {kelly_label}</div>
+<div style="margin-top: 10px; margin-bottom: 15px; display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;">
+<div style="background: rgba(2, 6, 23, 0.7); border: 1.5px solid #22c55e; border-radius: 8px; padding: 8px 16px; min-width: 160px; text-align: center;">
+<span style="font-size: 10px; color: #86efac; font-weight: 800; display:block; text-transform: uppercase;">🎨 Color Score Record</span>
+<span style="font-size: 13px; font-weight: 900; color: #86efac;">{duo_col_sahi} Sahi | {duo_col_galat} Galat</span>
+</div>
+<div style="background: rgba(2, 6, 23, 0.7); border: 1.5px solid #38bdf8; border-radius: 8px; padding: 8px 16px; min-width: 160px; text-align: center;">
+<span style="font-size: 10px; color: #7dd3fc; font-weight: 800; display:block; text-transform: uppercase;">📏 Size Score Record</span>
+<span style="font-size: 13px; font-weight: 900; color: #7dd3fc;">{duo_size_sahi} Sahi | {duo_size_galat} Galat</span>
+</div>
+</div>
+
+<div style="text-align: center; padding: 8px 14px; border-radius: 8px; font-size: 12px; font-weight: 800; {kelly_style} margin-bottom: 10px;">💰 RECOMMENDED BANKROLL SIZING: {kelly_label}</div>
 </div>"""
 
     st.markdown(card_html, unsafe_allow_html=True)
@@ -6506,61 +6288,60 @@ def render_hyperion_omni_agi_12_card(target_name, pred_num, pred_col, pred_size,
     stats = st.session_state.get("hyperion12_stats", {})
     bet_pct = stats.get("bet_size_pct", 15.0)
 
-    card_html = f"""<div style="background: linear-gradient(135deg, rgba(147, 51, 234, 0.25) 0%, rgba(15, 23, 42, 0.98) 50%, rgba(6, 182, 212, 0.25) 100%); border: 2.5px solid #c084fc; border-radius: 12px; padding: 10px; margin-bottom: 16px; box-shadow: 0 0 20px rgba(192, 132, 252, 0.3);">
-<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1.5px solid rgba(192, 132, 252, 0.3); padding-bottom: 8px; flex-wrap: wrap; gap: 4px;">
-<div style="display: flex; align-items: center; gap: 6px;">
-<span style="font-size: 18px;">🌌</span>
+    card_html = f"""<div style="background: linear-gradient(135deg, rgba(147, 51, 234, 0.25) 0%, rgba(15, 23, 42, 0.98) 50%, rgba(6, 182, 212, 0.25) 100%); border: 3px solid #c084fc; border-radius: 16px; padding: 22px; margin-bottom: 24px; box-shadow: 0 0 35px rgba(192, 132, 252, 0.4), 0 0 35px rgba(6, 182, 212, 0.3);">
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1.5px solid rgba(192, 132, 252, 0.3); padding-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+<div style="display: flex; align-items: center; gap: 10px;">
+<span style="font-size: 26px;">🌌</span>
 <div>
-<div style="font-size: 14px; font-weight: 900; color: #f8fafc; text-transform: uppercase; letter-spacing: 0.5px; text-shadow: 0 0 10px rgba(192, 132, 252, 0.8);">HYPERION OMNI-AGI 12.0</div>
-<div style="font-size: 9.5px; color: #a7f3d0; font-weight: 700;">(The Apex Consciousness & Meta-Cognitive Autonomous AI)</div>
+<span style="font-size: 18px; font-weight: 900; color: #f8fafc; text-transform: uppercase; letter-spacing: 0.8px; text-shadow: 0 0 12px rgba(192, 132, 252, 0.8);">HYPERION OMNI-AGI 12.0</span>
+<div style="font-size: 11px; color: #a7f3d0; font-weight: 700;">(The Apex Consciousness & Meta-Cognitive Autonomous AI)</div>
 </div>
 </div>
-<div style="display: flex; gap: 4px; align-items: center; flex-wrap: wrap;">
-<span style="background: rgba(15, 23, 42, 0.85); border: 1px solid #c084fc; border-radius: 6px; padding: 2px 6px; font-size: 8.5px; font-weight: 800; color: #e9d5ff; display: inline-flex; align-items: center; gap: 4px;">🎯 TARGET ISSUE: <span style="color: #facc15; font-size: 10px; font-weight: 900;">#{target_issue_str}</span> <span style="background: #a855f7; color: #ffffff; font-size: 7.5px; font-weight: 900; padding: 1px 4px; border-radius: 8px;">APEX SYNC</span></span>
-<span style="background: rgba(192, 132, 252, 0.2); border: 1px solid #c084fc; color: #e9d5ff; font-size: 8px; font-weight: 800; padding: 1px 5px; border-radius: 10px;">75 Streams</span>
-<span style="background: rgba(6, 182, 212, 0.2); border: 1px solid #06b6d4; color: #67e8f9; font-size: 8px; font-weight: 800; padding: 1px 5px; border-radius: 10px;">q-PDF γ=1.6</span>
-<span style="background: rgba(16, 185, 129, 0.2); border: 1px solid #10b981; color: #6ee7b7; font-size: 8px; font-weight: 800; padding: 1px 5px; border-radius: 10px;">CFR+ Regret</span>
-{render_notif_button("hyperion12", "HYPERION 12.0", target_issue_str, pred_num, pred_col, pred_size, round(float(confidence), 1))}
-</div>
-</div>
-
-<div style="display: flex; gap: 6px; margin-bottom: 8px; width: 100%;">
-<div style="flex: 1; min-width: 0; background: rgba(15, 23, 42, 0.85); border: 1.5px solid #c084fc; border-radius: 10px; padding: 6px 3px; text-align: center; box-shadow: 0 0 10px rgba(192, 132, 252, 0.2);">
-<div style="font-size: 8.5px; font-weight: 800; color: #cbd5e1; text-transform: uppercase;">🌌 APEX NUMBER PREDICTION</div>
-<div style="font-size: 18px; font-weight: 900; color: #f472b6; text-shadow: 0 0 10px #f472b6; margin: 1px 0;">DIGIT {pred_num}</div>
-<div style="font-size: 9px; font-weight: 800; color: #e2e8f0;">Overall Confidence: <span style="color: #c084fc;">{confidence:.1f}%</span></div>
-</div>
-
-<div style="flex: 1; min-width: 0; background: rgba(15, 23, 42, 0.85); border: 1.5px solid {col_color}; border-radius: 10px; padding: 6px 3px; text-align: center;">
-<div style="font-size: 8.5px; font-weight: 800; color: #94a3b8; text-transform: uppercase;">🎨 COLOR TARGET</div>
-<div style="font-size: 18px; font-weight: 900; color: {col_color}; text-shadow: 0 0 10px {col_color}; margin: 1px 0;">{pred_col.upper()}</div>
-<div style="font-size: 9px; font-weight: 700; color: #cbd5e1;">Quantum Collapse</div>
+<div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
+<span style="background: rgba(15, 23, 42, 0.85); border: 1.5px solid #c084fc; border-radius: 8px; padding: 4px 12px; font-size: 10px; font-weight: 800; color: #e9d5ff; display: inline-flex; align-items: center; gap: 6px;">🎯 TARGET ISSUE: <span style="color: #facc15; font-size: 12px; font-weight: 900;">#{target_issue_str}</span> <span style="background: #a855f7; color: #ffffff; font-size: 8px; font-weight: 900; padding: 2px 6px; border-radius: 10px;">APEX SYNC</span></span>
+<span style="background: rgba(192, 132, 252, 0.2); border: 1px solid #c084fc; color: #e9d5ff; font-size: 10px; font-weight: 800; padding: 2px 8px; border-radius: 12px;">75 Streams</span>
+<span style="background: rgba(6, 182, 212, 0.2); border: 1px solid #06b6d4; color: #67e8f9; font-size: 10px; font-weight: 800; padding: 2px 8px; border-radius: 12px;">q-PDF γ=1.6</span>
+<span style="background: rgba(16, 185, 129, 0.2); border: 1px solid #10b981; color: #6ee7b7; font-size: 10px; font-weight: 800; padding: 2px 8px; border-radius: 12px;">CFR+ Regret</span>
 </div>
 </div>
 
-<div style="margin-bottom: 8px; background: rgba(15, 23, 42, 0.85); border: 1.5px solid {size_color}; border-radius: 10px; padding: 6px; text-align: center; width: 100%;">
-<div style="font-size: 8.5px; font-weight: 800; color: #94a3b8; text-transform: uppercase;">📏 SIZE TARGET</div>
-<div style="font-size: 18px; font-weight: 900; color: {size_color}; text-shadow: 0 0 10px {size_color}; margin: 1px 0;">{pred_size.upper()}</div>
-<div style="font-size: 9px; font-weight: 700; color: #cbd5e1;">Phase Synchronized</div>
+<div style="display: flex; gap: 15px; margin-bottom: 15px; flex-wrap: wrap;">
+<div style="flex: 1.2; background: rgba(15, 23, 42, 0.8); border: 2px solid #c084fc; border-radius: 12px; padding: 14px; text-align: center; box-shadow: 0 0 15px rgba(192, 132, 252, 0.2);">
+<div style="font-size: 11px; font-weight: 800; color: #cbd5e1; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">🌌 APEX NUMBER PREDICTION</div>
+<div style="font-size: 38px; font-weight: 900; color: #f472b6; text-shadow: 0 0 15px #f472b6; margin: 2px 0;">DIGIT {pred_num}</div>
+<div style="font-size: 13px; font-weight: 800; color: #e2e8f0;">Overall Confidence: <span style="color: #c084fc;">{confidence:.1f}%</span></div>
 </div>
 
-<div style="margin-top: 4px; margin-bottom: 8px; display: flex; justify-content: space-between; gap: 4px; width: 100%;">
-<div style="flex: 1; min-width: 0; background: rgba(2, 6, 23, 0.7); border: 1px solid #c084fc; border-radius: 6px; padding: 3px 2px; text-align: center;">
-<span style="font-size: 7.5px; color: #e9d5ff; font-weight: 800; display:block; text-transform: uppercase;">📌 NUMBER SCORE RECORD</span>
-<span style="font-size: 9px; font-weight: 900; color: #e9d5ff;">{num_sahi} Sahi | {num_galat} Galat</span>
+<div style="flex: 1; background: rgba(15, 23, 42, 0.8); border: 1.5px solid {col_color}; border-radius: 12px; padding: 14px; text-align: center;">
+<div style="font-size: 11px; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">🎨 COLOR TARGET</div>
+<div style="font-size: 30px; font-weight: 900; color: {col_color}; text-shadow: 0 0 12px {col_color}; margin: 2px 0;">{pred_col.upper()}</div>
+<div style="font-size: 12px; font-weight: 700; color: #cbd5e1;">Quantum Collapse</div>
 </div>
-<div style="flex: 1; min-width: 0; background: rgba(2, 6, 23, 0.7); border: 1px solid #22c55e; border-radius: 6px; padding: 3px 2px; text-align: center;">
-<span style="font-size: 7.5px; color: #86efac; font-weight: 800; display:block; text-transform: uppercase;">🎨 COLOR SCORE RECORD</span>
-<span style="font-size: 9px; font-weight: 900; color: #86efac;">{col_sahi} Sahi | {col_galat} Galat</span>
-</div>
-<div style="flex: 1; min-width: 0; background: rgba(2, 6, 23, 0.7); border: 1px solid #38bdf8; border-radius: 6px; padding: 3px 2px; text-align: center;">
-<span style="font-size: 7.5px; color: #7dd3fc; font-weight: 800; display:block; text-transform: uppercase;">📏 SIZE SCORE RECORD</span>
-<span style="font-size: 9px; font-weight: 900; color: #7dd3fc;">{size_sahi} Sahi | {size_galat} Galat</span>
+
+<div style="flex: 1; background: rgba(15, 23, 42, 0.8); border: 1.5px solid {size_color}; border-radius: 12px; padding: 14px; text-align: center;">
+<div style="font-size: 11px; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">📏 SIZE TARGET</div>
+<div style="font-size: 30px; font-weight: 900; color: {size_color}; text-shadow: 0 0 12px {size_color}; margin: 2px 0;">{pred_size.upper()}</div>
+<div style="font-size: 12px; font-weight: 700; color: #cbd5e1;">Phase Synchronized</div>
 </div>
 </div>
 
-<div style="text-align: center; padding: 4px 6px; border-radius: 6px; font-size: 9px; font-weight: 800; background: rgba(168, 85, 247, 0.2); border: 1px solid #a855f7; color: #f3e8ff; margin-bottom: 4px;">
-🔥 APEX KELLY CAPITAL ALLOCATION: {bet_pct}% RECOMMENDED
+<div style="margin-top: 10px; margin-bottom: 15px; display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;">
+<div style="background: rgba(2, 6, 23, 0.7); border: 1.5px solid #c084fc; border-radius: 8px; padding: 8px 16px; min-width: 150px; text-align: center;">
+<span style="font-size: 10px; color: #e9d5ff; font-weight: 800; display:block; text-transform: uppercase;">📌 Number Score Record</span>
+<span style="font-size: 13px; font-weight: 900; color: #e9d5ff;">{num_sahi} Sahi | {num_galat} Galat</span>
+</div>
+<div style="background: rgba(2, 6, 23, 0.7); border: 1.5px solid #22c55e; border-radius: 8px; padding: 8px 16px; min-width: 150px; text-align: center;">
+<span style="font-size: 10px; color: #86efac; font-weight: 800; display:block; text-transform: uppercase;">🎨 Color Score Record</span>
+<span style="font-size: 13px; font-weight: 900; color: #86efac;">{col_sahi} Sahi | {col_galat} Galat</span>
+</div>
+<div style="background: rgba(2, 6, 23, 0.7); border: 1.5px solid #38bdf8; border-radius: 8px; padding: 8px 16px; min-width: 150px; text-align: center;">
+<span style="font-size: 10px; color: #7dd3fc; font-weight: 800; display:block; text-transform: uppercase;">📏 Size Score Record</span>
+<span style="font-size: 13px; font-weight: 900; color: #7dd3fc;">{size_sahi} Sahi | {size_galat} Galat</span>
+</div>
+</div>
+
+<div style="text-align: center; padding: 10px 16px; border-radius: 8px; font-size: 12px; font-weight: 800; background: rgba(168, 85, 247, 0.2); border: 1.5px solid #a855f7; color: #f3e8ff; margin-bottom: 10px;">
+🔥 APEX KELLY CAPITAL ALLOCATION: {bet_pct}% OF BANKROLL RECOMMENDED
 </div>
 </div>"""
 
@@ -6808,88 +6589,87 @@ def render_chromatic_god_mode_16_card(res_dict, engines_dict, df_history, cache_
     red_pct_bar = int(round(p_red * 100))
     green_pct_bar = 100 - red_pct_bar
 
-    card_html = f"""<div style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.98), rgba(236, 72, 153, 0.15), rgba(168, 85, 247, 0.15), rgba(2, 6, 23, 0.98)); border: 2.5px solid #ec4899; border-radius: 12px; padding: 10px; box-shadow: 0 0 25px rgba(236, 72, 153, 0.25); margin-bottom: 16px; position: relative;">
-<div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255, 255, 255, 0.15); padding-bottom: 8px; margin-bottom: 10px; flex-wrap: wrap; gap: 4px;">
+    card_html = f"""<div style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.98), rgba(236, 72, 153, 0.15), rgba(168, 85, 247, 0.15), rgba(2, 6, 23, 0.98)); border: 3.5px solid #ec4899; border-radius: 20px; padding: 24px; box-shadow: 0 0 45px rgba(236, 72, 153, 0.35); margin-bottom: 25px; position: relative;">
+<div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid rgba(255, 255, 255, 0.15); padding-bottom: 14px; margin-bottom: 16px;">
     <div>
-        <div style="font-size: 14px; font-weight: 900; color: #f8fafc; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
-            🌌 CHROMATIC GOD-MODE 16.0 <span style="font-size: 8px; background: linear-gradient(90deg, #ec4899, #a855f7, #3b82f6); color: #ffffff; padding: 2px 8px; border-radius: 12px; font-weight: 900; text-transform: uppercase;">QUANTUM AGI</span>
+        <div style="font-size: 22px; font-weight: 900; color: #f8fafc; letter-spacing: 0.5px; display: flex; align-items: center; gap: 10px;">
+            🌌 CHROMATIC GOD-MODE 16.0 <span style="font-size: 10px; background: linear-gradient(90deg, #ec4899, #a855f7, #3b82f6); color: #ffffff; padding: 3px 12px; border-radius: 20px; font-weight: 900; text-transform: uppercase;">QUANTUM CONSCIOUSNESS AGI</span>
         </div>
-        <div style="font-size: 9.5px; color: #94a3b8; font-weight: 800; margin-top: 2px;">PURE COLOR OMNISCIENCE & DIFFERENTIAL GEOMETRY (ISSUE #{target_issue})</div>
+        <div style="font-size: 11px; color: #94a3b8; font-weight: 800; margin-top: 3px;">PURE MATHEMATICAL COLOR OMNISCIENCE & DIFFERENTIAL GEOMETRY (ISSUE #{target_issue})</div>
     </div>
-    <div>
-        <span style="background: rgba(236, 72, 153, 0.2); border: 1.5px solid #ec4899; color: #f472b6; padding: 4px 10px; border-radius: 8px; font-size: 9.5px; font-weight: 900; text-transform: uppercase;">
+    <div style="text-align: right;">
+        <span style="background: rgba(236, 72, 153, 0.2); border: 2px solid #ec4899; color: #f472b6; padding: 8px 18px; border-radius: 14px; font-size: 14px; font-weight: 900; text-transform: uppercase; box-shadow: 0 0 20px rgba(236, 72, 153, 0.3);">
             🎯 COLOR TARGET ONLY
         </span>
     </div>
 </div>
 
-<div style="display: flex; gap: 8px; margin-bottom: 10px; width: 100%;">
-    <div style="flex: 1; min-width: 0; background: rgba(15, 23, 42, 0.9); border: 2px solid {col_color}; border-radius: 10px; padding: 8px; text-align: center; box-shadow: 0 0 15px {col_bg};">
-        <div style="font-size: 8.5px; font-weight: 800; color: #cbd5e1; text-transform: uppercase;">🌌 CHROMATIC COLOR PREDICTION</div>
-        <div style="font-size: 22px; font-weight: 900; color: {col_color}; text-shadow: 0 0 15px {col_color}; margin: 2px 0;">{pred_col.upper()}</div>
-        <div style="font-size: 9.5px; font-weight: 800; color: #e2e8f0;">God-Mode Confidence: <span style="color: {col_color}; font-weight:900;">{confidence:.1f}%</span></div>
+<div style="display: flex; gap: 16px; margin-bottom: 18px; flex-wrap: wrap;">
+    <div style="flex: 2; background: rgba(15, 23, 42, 0.9); border: 2.5px solid {col_color}; border-radius: 14px; padding: 18px; text-align: center; box-shadow: 0 0 30px {col_bg};">
+        <div style="font-size: 11px; font-weight: 800; color: #cbd5e1; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">🌌 CHROMATIC COLOR PREDICTION</div>
+        <div style="font-size: 52px; font-weight: 900; color: {col_color}; text-shadow: 0 0 30px {col_color}; margin: 4px 0;">{pred_col.upper()}</div>
+        <div style="font-size: 14px; font-weight: 800; color: #e2e8f0;">God-Mode Consciousness Confidence: <span style="color: {col_color}; font-weight:900;">{confidence:.1f}%</span></div>
     </div>
 </div>
 
-<div style="background: rgba(2, 6, 23, 0.85); border: 1px solid #c084fc; border-radius: 8px; padding: 6px 8px; margin-bottom: 8px;">
-    <div style="font-size: 8px; color: #c084fc; font-weight: 900; text-transform: uppercase;">⚛️ QUANTUM DIRAC KET VECTOR & PHASE-SPACE CONSCIOUSNESS</div>
-    <div style="font-size: 10.5px; font-weight: 900; color: #f8fafc;">|Ψ⟩ = {alpha}|Red⟩ + {beta}|Green⟩</div>
-    <div style="font-size: 8.5px; color: #cbd5e1; font-weight: 700; margin-top: 2px; display:flex; gap: 8px; flex-wrap: wrap;">
-        <span>📐 Curvature κ: <b>{curvature_k}</b></span>
-        <span>🌀 Lyapunov λ: <b>{lyapunov_lambda}</b></span>
-        <span>⚡ TD(λ) Yield: <b>{td_yield:+.3f}</b></span>
+<div style="background: rgba(2, 6, 23, 0.85); border: 1.5px solid #c084fc; border-radius: 12px; padding: 12px 16px; margin-bottom: 16px;">
+    <div style="font-size: 10px; color: #c084fc; font-weight: 900; text-transform: uppercase; margin-bottom: 4px;">⚛️ QUANTUM DIRAC KET VECTOR & PHASE-SPACE CONSCIOUSNESS</div>
+    <div style="font-size: 13px; font-weight: 900; color: #f8fafc;">|Ψ⟩ = {alpha}|Red⟩ + {beta}|Green⟩</div>
+    <div style="font-size: 11px; color: #cbd5e1; font-weight: 700; margin-top: 3px; display:flex; gap: 15px; flex-wrap: wrap;">
+        <span>📐 Riemannian Curvature κ: <b>{curvature_k}</b></span>
+        <span>🌀 Lyapunov Exponent λ: <b>{lyapunov_lambda}</b></span>
+        <span>⚡ TD(λ) Yield Vs: <b>{td_yield:+.3f}</b></span>
     </div>
 </div>
 
-<div style="display: flex; gap: 6px; margin-bottom: 8px; width: 100%;">
-    <div style="flex: 1; min-width: 0; background: rgba(2, 6, 23, 0.8); border: 1px solid #f59e0b; border-radius: 8px; padding: 6px; text-align: left;">
-        <div style="font-size: 8px; color: #fbbf24; font-weight: 800; text-transform: uppercase;">📜 1000-ROUND PATTERN</div>
-        <div style="font-size: 9.5px; font-weight: 900; color: #f8fafc; margin-top: 1px;">[{ngram_pattern}] → {ngram_matches} Matches</div>
-        <div style="font-size: 8.5px; color: #cbd5e1; font-weight: 700;">Red Rate: <span style="color:#f59e0b;">{ngram_red_prob:.1f}%</span></div>
+<div style="display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap;">
+    <div style="flex: 1; background: rgba(2, 6, 23, 0.8); border: 1.5px solid #f59e0b; border-radius: 10px; padding: 10px 14px; text-align: left;">
+        <div style="font-size: 10px; color: #fbbf24; font-weight: 800; text-transform: uppercase;">📜 1000-ROUND HISTORICAL PATTERN MATCH</div>
+        <div style="font-size: 13px; font-weight: 900; color: #f8fafc; margin-top: 2px;">Pattern [{ngram_pattern}] → {ngram_matches} Historical Matches</div>
+        <div style="font-size: 11px; color: #cbd5e1; font-weight: 700; margin-top: 1px;">Historical Red Rate: <span style="color:#f59e0b;">{ngram_red_prob:.1f}%</span></div>
     </div>
-    <div style="flex: 1; min-width: 0; background: rgba(2, 6, 23, 0.8); border: 1px solid #38bdf8; border-radius: 8px; padding: 6px; text-align: left;">
-        <div style="font-size: 8px; color: #38bdf8; font-weight: 800; text-transform: uppercase;">🧠 MEMORY BANK</div>
-        <div style="font-size: 9.5px; font-weight: 900; color: #f8fafc; margin-top: 1px;">{memory_bank_count} Signatures</div>
-        <div style="font-size: 8.5px; color: #cbd5e1; font-weight: 700;">Status: <span style="color:#38bdf8;">Auto-Tuned</span></div>
-    </div>
-</div>
-
-<div style="background: rgba(2, 6, 23, 0.7); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; padding: 8px; margin-bottom: 8px;">
-    <div style="font-size: 8.5px; font-weight: 800; color: #cbd5e1; margin-bottom: 4px; display:flex; justify-content: space-between;">
-        <span>🔴 RED: {red_pct_bar}%</span>
-        <span>🟢 GREEN: {green_pct_bar}%</span>
-    </div>
-    <div style="width: 100%; height: 8px; background: rgba(15, 23, 42, 0.9); border-radius: 4px; overflow: hidden; display: flex;">
-        <div style="width: {red_pct_bar}%; height: 100%; background: linear-gradient(90deg, #dc2626, #ef4444);"></div>
-        <div style="width: {green_pct_bar}%; height: 100%; background: linear-gradient(90deg, #16a34a, #22c55e);"></div>
+    <div style="flex: 1; background: rgba(2, 6, 23, 0.8); border: 1.5px solid #38bdf8; border-radius: 10px; padding: 10px 14px; text-align: left;">
+        <div style="font-size: 10px; color: #38bdf8; font-weight: 800; text-transform: uppercase;">🧠 PERSISTENT DISK MEMORY BANK</div>
+        <div style="font-size: 13px; font-weight: 900; color: #f8fafc; margin-top: 2px;">{memory_bank_count} Pattern Signatures Stored</div>
+        <div style="font-size: 11px; color: #cbd5e1; font-weight: 700; margin-top: 1px;">Status: <span style="color:#38bdf8;">Auto-Tuned & Saved on Disk</span></div>
     </div>
 </div>
 
-<div style="margin-top: 4px; margin-bottom: 8px; display: flex; justify-content: space-between; gap: 4px; width: 100%;">
-    <div style="flex: 1; min-width: 0; background: rgba(2, 6, 23, 0.7); border: 1px solid #ef4444; border-radius: 6px; padding: 3px 2px; text-align: center;">
-        <span style="font-size: 7.5px; color: #fca5a5; font-weight: 800; display:block; text-transform: uppercase;">🌊 Wavelet Cycle</span>
-        <span style="font-size: 9px; font-weight: 900; color: #fca5a5;">{periodicity} Rounds</span>
+<div style="background: rgba(2, 6, 23, 0.7); border: 1.5px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 14px; margin-bottom: 16px;">
+    <div style="font-size: 11px; font-weight: 800; color: #cbd5e1; margin-bottom: 6px; display:flex; justify-content: space-between;">
+        <span>🔴 RED PROBABILITY: {red_pct_bar}%</span>
+        <span>🟢 GREEN PROBABILITY: {green_pct_bar}%</span>
     </div>
-    <div style="flex: 1; min-width: 0; background: rgba(2, 6, 23, 0.7); border: 1px solid #c084fc; border-radius: 6px; padding: 3px 2px; text-align: center;">
-        <span style="font-size: 7.5px; color: #c084fc; font-weight: 800; display:block; text-transform: uppercase;">📊 Monte Carlo Dev</span>
-        <span style="font-size: 9px; font-weight: 900; color: #c084fc;">σ = ±{mc_std:.4f}</span>
-    </div>
-    <div style="flex: 1; min-width: 0; background: rgba(2, 6, 23, 0.7); border: 1px solid #22c55e; border-radius: 6px; padding: 3px 2px; text-align: center;">
-        <span style="font-size: 7.5px; color: #86efac; font-weight: 800; display:block; text-transform: uppercase;">💰 Kelly Stake</span>
-        <span style="font-size: 9px; font-weight: 900; color: #86efac;">{kelly_pct}% Bankroll</span>
+    <div style="width: 100%; height: 12px; background: rgba(15, 23, 42, 0.9); border-radius: 6px; overflow: hidden; display: flex;">
+        <div style="width: {red_pct_bar}%; height: 100%; background: linear-gradient(90deg, #dc2626, #ef4444); box-shadow: 0 0 10px #ef4444;"></div>
+        <div style="width: {green_pct_bar}%; height: 100%; background: linear-gradient(90deg, #16a34a, #22c55e); box-shadow: 0 0 10px #22c55e;"></div>
     </div>
 </div>
 
-<div style="margin-top: 4px; margin-bottom: 8px; display: flex; justify-content: center; width: 100%;">
-    <div style="width: 100%; background: rgba(2, 6, 23, 0.7); border: 1px solid {col_color}; border-radius: 6px; padding: 4px 6px; text-align: center;">
-        <span style="font-size: 8px; color: {col_color}; font-weight: 800; display:block; text-transform: uppercase;">🎨 COLOR SCORE RECORD</span>
-        <span style="font-size: 10px; font-weight: 900; color: {col_color};">{col_sahi} Sahi | {col_galat} Galat</span>
+<div style="margin-top: 10px; margin-bottom: 16px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
+    <div style="background: rgba(2, 6, 23, 0.7); border: 1.5px solid #ef4444; border-radius: 8px; padding: 8px 14px; text-align: center; min-width: 130px;">
+        <span style="font-size: 10px; color: #fca5a5; font-weight: 800; display:block; text-transform: uppercase;">🌊 FFT Wavelet Cycle</span>
+        <span style="font-size: 13px; font-weight: 900; color: #fca5a5;">{periodicity} Rounds</span>
+    </div>
+        <span style="font-size: 10px; color: #c084fc; font-weight: 800; display:block; text-transform: uppercase;">📊 Monte Carlo Dev</span>
+        <span style="font-size: 13px; font-weight: 900; color: #c084fc;">σ = ±{mc_std:.4f}</span>
+    </div>
+    <div style="background: rgba(2, 6, 23, 0.7); border: 1.5px solid #22c55e; border-radius: 8px; padding: 8px 14px; text-align: center; min-width: 130px;">
+        <span style="font-size: 10px; color: #86efac; font-weight: 800; display:block; text-transform: uppercase;">💰 Kelly Stake</span>
+        <span style="font-size: 13px; font-weight: 900; color: #86efac;">{kelly_pct}% Bankroll</span>
     </div>
 </div>
 
-<div style="background: rgba(2, 6, 23, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; padding: 8px; margin-bottom: 8px;">
-    <div style="font-size: 8.5px; font-weight: 800; color: #fbbf24; text-transform: uppercase; margin-bottom: 2px;">🧠 CHROMATIC GOD-MODE RATIONALE (गहन उच्च-गणितीय हिंदी विश्लेषण)</div>
-    <div style="font-size: 9.5px; color: #e2e8f0; font-weight: 600; line-height: 1.3;">{rationale}</div>
+<div style="margin-top: 10px; margin-bottom: 16px; display: flex; justify-content: center;">
+    <div style="background: rgba(2, 6, 23, 0.7); border: 1.5px solid {col_color}; border-radius: 8px; padding: 8px 24px; min-width: 220px; text-align: center;">
+        <span style="font-size: 11px; color: {col_color}; font-weight: 800; display:block; text-transform: uppercase;">🎨 Color Score Record</span>
+        <span style="font-size: 15px; font-weight: 900; color: {col_color};">{col_sahi} Sahi | {col_galat} Galat</span>
+    </div>
+</div>
+
+<div style="background: rgba(2, 6, 23, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; padding: 14px; margin-bottom: 15px;">
+    <div style="font-size: 11px; font-weight: 800; color: #fbbf24; text-transform: uppercase; margin-bottom: 4px;">🧠 CHROMATIC GOD-MODE RATIONALE (गहन उच्च-गणितीय हिंदी विश्लेषण)</div>
+    <div style="font-size: 12px; color: #e2e8f0; font-weight: 600; line-height: 1.5;">{rationale}</div>
 </div>
 </div>"""
 
@@ -7187,19 +6967,54 @@ def render_titan_duo_brain_17_card(res_dict, engines_dict, df_history, cache_inf
     big_pct_bar = int(round(p_big * 100))
     small_pct_bar = 100 - big_pct_bar
 
-    card_html = f"""<div style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.99), rgba(6, 182, 212, 0.15), rgba(2, 6, 23, 1.0)); border: 2.5px solid #06b6d4; border-radius: 12px; padding: 10px; box-shadow: 0 0 25px rgba(6, 182, 212, 0.3); margin-bottom: 16px; position: relative;">
-<div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255, 255, 255, 0.15); padding-bottom: 8px; margin-bottom: 10px; flex-wrap: wrap; gap: 4px;">
+    card_html = f"""<div style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.99), rgba(6, 182, 212, 0.15), rgba(2, 6, 23, 1.0)); border: 3.5px solid #06b6d4; border-radius: 20px; padding: 24px; box-shadow: 0 0 50px rgba(6, 182, 212, 0.4); margin-bottom: 25px; position: relative;">
+<div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid rgba(255, 255, 255, 0.15); padding-bottom: 14px; margin-bottom: 16px;">
     <div>
-        <div style="font-size: 14px; font-weight: 900; color: #f8fafc; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
-            🌌 TITAN DUO-BRAIN 17.0 <span style="font-size: 8px; background: linear-gradient(90deg, #06b6d4, #3b82f6, #a855f7); color: #ffffff; padding: 2px 8px; border-radius: 12px; font-weight: 900; text-transform: uppercase;">DUAL AGI</span>
+        <div style="font-size: 22px; font-weight: 900; color: #f8fafc; letter-spacing: 0.5px; display: flex; align-items: center; gap: 10px;">
+            🌌 TITAN DUO-BRAIN 17.0 <span style="font-size: 10px; background: linear-gradient(90deg, #06b6d4, #3b82f6, #a855f7); color: #ffffff; padding: 3px 12px; border-radius: 20px; font-weight: 900; text-transform: uppercase;">AUTONOMOUS COLOR & SIZE AGI</span>
         </div>
-        <div style="font-size: 9.5px; color: #94a3b8; font-weight: 800; margin-top: 2px;">DUAL-TARGET COGNITIVE REASONER (ISSUE #{target_issue})</div>
+        <div style="font-size: 11px; color: #94a3b8; font-weight: 800; margin-top: 3px;">THE WORLD'S MOST ADVANCED DUAL-TARGET COGNITIVE REASONER (ISSUE #{target_issue})</div>
     </div>
-    <div>
-        <span style="background: rgba(6, 182, 212, 0.2); border: 1.5px solid #06b6d4; color: #67e8f9; padding: 4px 10px; border-radius: 8px; font-size: 9.5px; font-weight: 900; text-transform: uppercase;">
+    <div style="text-align: right;">
+        <span style="background: rgba(6, 182, 212, 0.2); border: 2px solid #06b6d4; color: #67e8f9; padding: 8px 18px; border-radius: 14px; font-size: 14px; font-weight: 900; text-transform: uppercase; box-shadow: 0 0 20px rgba(6, 182, 212, 0.3);">
             🎯 DUAL TARGET
         </span>
-        {render_notif_button("titan17", "TITAN DUO-BRAIN 17.0", target_issue, pred_col + " " + pred_size, pred_col, pred_size, round(float((confidence_col + confidence_size) / 2), 1))}
+    </div>
+</div>
+
+<div style="display: flex; gap: 16px; margin-bottom: 18px; flex-wrap: wrap;">
+    <div style="flex: 1; background: rgba(15, 23, 42, 0.9); border: 2.5px solid {col_color}; border-radius: 14px; padding: 18px; text-align: center; box-shadow: 0 0 25px {col_bg};">
+        <div style="font-size: 11px; font-weight: 800; color: #cbd5e1; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">🎨 COLOR TARGET</div>
+        <div style="font-size: 42px; font-weight: 900; color: {col_color}; text-shadow: 0 0 25px {col_color}; margin: 4px 0;">{pred_col.upper()}</div>
+        <div style="font-size: 13px; font-weight: 800; color: #e2e8f0;">Color Confidence: <span style="color: {col_color}; font-weight:900;">{confidence_col:.1f}%</span></div>
+    </div>
+    <div style="flex: 1; background: rgba(15, 23, 42, 0.9); border: 2.5px solid {size_color}; border-radius: 14px; padding: 18px; text-align: center; box-shadow: 0 0 25px {size_bg};">
+        <div style="font-size: 11px; font-weight: 800; color: #cbd5e1; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">📏 SIZE TARGET</div>
+        <div style="font-size: 42px; font-weight: 900; color: {size_color}; text-shadow: 0 0 25px {size_color}; margin: 4px 0;">{pred_size.upper()}</div>
+        <div style="font-size: 13px; font-weight: 800; color: #e2e8f0;">Size Confidence: <span style="color: {size_color}; font-weight:900;">{confidence_size:.1f}%</span></div>
+    </div>
+</div>
+
+<div style="background: rgba(2, 6, 23, 0.85); border: 1.5px solid #06b6d4; border-radius: 12px; padding: 12px 16px; margin-bottom: 16px;">
+    <div style="font-size: 10px; color: #67e8f9; font-weight: 900; text-transform: uppercase; margin-bottom: 4px;">⚛️ DUAL QUANTUM DIRAC KET VECTOR & JOINT CONSCIOUSNESS</div>
+    <div style="font-size: 13px; font-weight: 900; color: #f8fafc;">|Ψ_Duo⟩ = {alpha_rb}|Red,Big⟩ + {alpha_rs}|Red,Small⟩ + {alpha_gb}|Green,Big⟩ + {alpha_gs}|Green,Small⟩</div>
+    <div style="font-size: 11px; color: #cbd5e1; font-weight: 700; margin-top: 3px; display:flex; gap: 15px; flex-wrap: wrap;">
+        <span>📐 Joint Curvature κ: <b>{curvature_k}</b></span>
+        <span>🌀 Lyapunov Index λ: <b>{lyapunov_lambda}</b></span>
+        <span>⚡ TD Dual Yield Vs: <b>{td_yield:+.3f}</b></span>
+    </div>
+</div>
+
+<div style="display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap;">
+    <div style="flex: 1; background: rgba(2, 6, 23, 0.8); border: 1.5px solid #f59e0b; border-radius: 10px; padding: 10px 14px; text-align: left;">
+        <div style="font-size: 10px; color: #fbbf24; font-weight: 800; text-transform: uppercase;">📜 1000-ROUND HISTORICAL JOINT MATCH</div>
+        <div style="font-size: 12px; font-weight: 900; color: #f8fafc; margin-top: 2px;">Pattern [{joint_pattern}] → {joint_matches} Matches</div>
+        <div style="font-size: 11px; color: #cbd5e1; font-weight: 700; margin-top: 1px;">Win Rates: <span style="color:#ef4444;">Red {ngram_red_prob:.1f}%</span> | <span style="color:#38bdf8;">Big {ngram_big_prob:.1f}%</span></div>
+    </div>
+    <div style="flex: 1; background: rgba(2, 6, 23, 0.8); border: 1.5px solid #06b6d4; border-radius: 10px; padding: 10px 14px; text-align: left;">
+        <div style="font-size: 10px; color: #67e8f9; font-weight: 800; text-transform: uppercase;">💾 DUAL-TARGET DISK MEMORY BANK</div>
+        <div style="font-size: 12px; font-weight: 900; color: #f8fafc; margin-top: 2px;">{memory_bank_count} Joint Signatures Stored</div>
+        <div style="font-size: 11px; color: #cbd5e1; font-weight: 700; margin-top: 1px;">File: <span style="color:#67e8f9;">titan_duo_memory_bank.json</span></div>
     </div>
 </div>
 
@@ -7226,18 +7041,18 @@ def render_titan_duo_brain_17_card(res_dict, engines_dict, df_history, cache_inf
     </div>
 </div>
 
-<div style="margin-top: 6px; margin-bottom: 8px; display: flex; justify-content: space-between; gap: 4px; width: 100%;">
-    <div style="flex: 1; min-width: 0; background: rgba(2, 6, 23, 0.7); border: 1px solid #22c55e; border-radius: 6px; padding: 3px 2px; text-align: center;">
-        <span style="font-size: 7.5px; color: #86efac; font-weight: 800; display:block; text-transform: uppercase;">🎨 COLOR SCORE</span>
-        <span style="font-size: 9px; font-weight: 900; color: #86efac;">{col_sahi} Sahi | {col_galat} Galat</span>
+<div style="margin-top: 10px; margin-bottom: 16px; display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;">
+    <div style="background: rgba(2, 6, 23, 0.7); border: 1.5px solid #22c55e; border-radius: 8px; padding: 8px 16px; min-width: 150px; text-align: center;">
+        <span style="font-size: 10px; color: #86efac; font-weight: 800; display:block; text-transform: uppercase;">🎨 Color Score Record</span>
+        <span style="font-size: 13px; font-weight: 900; color: #86efac;">{col_sahi} Sahi | {col_galat} Galat</span>
     </div>
-    <div style="flex: 1; min-width: 0; background: rgba(2, 6, 23, 0.7); border: 1px solid #38bdf8; border-radius: 6px; padding: 3px 2px; text-align: center;">
-        <span style="font-size: 7.5px; color: #7dd3fc; font-weight: 800; display:block; text-transform: uppercase;">📏 SIZE SCORE</span>
-        <span style="font-size: 9px; font-weight: 900; color: #7dd3fc;">{size_sahi} Sahi | {size_galat} Galat</span>
+    <div style="background: rgba(2, 6, 23, 0.7); border: 1.5px solid #38bdf8; border-radius: 8px; padding: 8px 16px; min-width: 150px; text-align: center;">
+        <span style="font-size: 10px; color: #7dd3fc; font-weight: 800; display:block; text-transform: uppercase;">📏 Size Score Record</span>
+        <span style="font-size: 13px; font-weight: 900; color: #7dd3fc;">{size_sahi} Sahi | {size_galat} Galat</span>
     </div>
-    <div style="flex: 1; min-width: 0; background: rgba(2, 6, 23, 0.7); border: 1px solid #a855f7; border-radius: 6px; padding: 3px 2px; text-align: center;">
-        <span style="font-size: 7.5px; color: #c084fc; font-weight: 800; display:block; text-transform: uppercase;">💰 KELLY STAKE</span>
-        <span style="font-size: 9px; font-weight: 900; color: #c084fc;">{kelly_pct}% Bankroll</span>
+    <div style="background: rgba(2, 6, 23, 0.7); border: 1.5px solid #a855f7; border-radius: 8px; padding: 8px 16px; min-width: 150px; text-align: center;">
+        <span style="font-size: 10px; color: #c084fc; font-weight: 800; display:block; text-transform: uppercase;">💰 Dual Kelly Stake</span>
+        <span style="font-size: 13px; font-weight: 900; color: #c084fc;">{kelly_pct}% Bankroll</span>
     </div>
 </div>
 
@@ -7537,60 +7352,60 @@ def render_sentinel_phoenix_card(target_name, prediction, confidence, rationale,
 {god_mode_banner}
 <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid rgba(255, 255, 255, 0.15); padding-bottom: 14px; margin-bottom: 16px; flex-wrap: wrap; gap: 8px;">
     <div>
-        <div style="font-size: 14px; font-weight: 900; color: #f8fafc; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
-            😤 SENTINEL PHOENIX <span style="font-size: 8px; background: {banner_bg}; color: #020617; padding: 2px 8px; border-radius: 12px; font-weight: 900; text-transform: uppercase;">I DON'T LOSE</span>
+        <div style="font-size: 22px; font-weight: 900; color: #f8fafc; letter-spacing: 0.5px; display: flex; align-items: center; gap: 10px;">
+            😤 SENTINEL PHOENIX <span style="font-size: 10px; background: {banner_bg}; color: #020617; padding: 3px 12px; border-radius: 20px; font-weight: 900; text-transform: uppercase;">I DON'T LOSE</span>
         </div>
-        <div style="font-size: 9.5px; color: #facc15; font-weight: 800; margin-top: 2px;">"ERROR IS NOT IN MY VOCABULARY. I AM MATHEMATICALLY SUPERIOR." (ISSUE #{target_issue})</div>
+        <div style="font-size: 11px; color: #facc15; font-weight: 800; margin-top: 3px;">"ERROR IS NOT IN MY VOCABULARY. I AM MATHEMATICALLY SUPERIOR." (ISSUE #{target_issue})</div>
     </div>
-    <div>
-        <span style="background: rgba(245, 158, 11, 0.25); border: 1.5px solid #f59e0b; color: #fbbf24; padding: 4px 10px; border-radius: 8px; font-size: 9.5px; font-weight: 900; text-transform: uppercase;">
+    <div style="text-align: right;">
+        <span style="background: rgba(245, 158, 11, 0.25); border: 2px solid #f59e0b; color: #fbbf24; padding: 8px 18px; border-radius: 14px; font-size: 14px; font-weight: 900; text-transform: uppercase;">
             🎯 TARGET: COLOR & SIZE
         </span>
     </div>
 </div>
 
-<div style="display: flex; gap: 6px; margin-bottom: 8px; width: 100%;">
-    <div style="flex: 1; min-width: 0; background: rgba(15, 23, 42, 0.9); border: 1.5px solid {col_color}; border-radius: 10px; padding: 6px 3px; text-align: center;">
-        <div style="font-size: 8.5px; font-weight: 800; color: #cbd5e1; text-transform: uppercase;">🎨 COLOR PREDICTION</div>
-        <div style="font-size: 18px; font-weight: 900; color: {col_color}; margin: 1px 0;">{pred_col.upper()}</div>
-        <div style="font-size: 9px; font-weight: 800; color: #e2e8f0;">Confidence: <span style="color: {col_color}; font-weight:900;">{confidence_col:.1f}%</span></div>
+<div style="display: flex; gap: 16px; margin-bottom: 18px; flex-wrap: wrap;">
+    <div style="flex: 1; background: rgba(15, 23, 42, 0.9); border: 2.5px solid {col_color}; border-radius: 14px; padding: 18px; text-align: center;">
+        <div style="font-size: 11px; font-weight: 800; color: #cbd5e1; text-transform: uppercase;">🎨 COLOR PREDICTION</div>
+        <div style="font-size: 42px; font-weight: 900; color: {col_color}; margin: 4px 0;">{pred_col.upper()}</div>
+        <div style="font-size: 13px; font-weight: 800; color: #e2e8f0;">Confidence: <span style="color: {col_color}; font-weight:900;">{confidence_col:.1f}%</span></div>
     </div>
-    <div style="flex: 1; min-width: 0; background: rgba(15, 23, 42, 0.9); border: 1.5px solid {size_color}; border-radius: 10px; padding: 6px 3px; text-align: center;">
-        <div style="font-size: 8.5px; font-weight: 800; color: #cbd5e1; text-transform: uppercase;">📏 SIZE PREDICTION</div>
-        <div style="font-size: 18px; font-weight: 900; color: {size_color}; margin: 1px 0;">{pred_size.upper()}</div>
-        <div style="font-size: 9px; font-weight: 800; color: #e2e8f0;">Confidence: <span style="color: {size_color}; font-weight:900;">{confidence_size:.1f}%</span></div>
-    </div>
-</div>
-
-<div style="background: rgba(2, 6, 23, 0.85); border: 1px solid #f59e0b; border-radius: 8px; padding: 6px 8px; margin-bottom: 8px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:4px;">
-    <div>
-        <div style="font-size: 8px; color: #ef4444; font-weight: 900; text-transform: uppercase;">❌ ERRORS</div>
-        <div style="font-size: 11px; font-weight: 900; color: #f8fafc;">{consecutive_errors} / 4</div>
-    </div>
-    <div>
-        <div style="font-size: 8px; color: #fbbf24; font-weight: 900; text-transform: uppercase;">🤖 MODE</div>
-        <div style="font-size: 10px; font-weight: 900; color: #fbbf24;">{mode_name}</div>
-    </div>
-    <div>
-        <div style="font-size: 8px; color: #86efac; font-weight: 900; text-transform: uppercase;">💰 KELLY</div>
-        <div style="font-size: 10px; font-weight: 900; color: #86efac;">{bet_size_pct}%</div>
+    <div style="flex: 1; background: rgba(15, 23, 42, 0.9); border: 2.5px solid {size_color}; border-radius: 14px; padding: 18px; text-align: center;">
+        <div style="font-size: 11px; font-weight: 800; color: #cbd5e1; text-transform: uppercase;">📏 SIZE PREDICTION</div>
+        <div style="font-size: 42px; font-weight: 900; color: {size_color}; margin: 4px 0;">{pred_size.upper()}</div>
+        <div style="font-size: 13px; font-weight: 800; color: #e2e8f0;">Confidence: <span style="color: {size_color}; font-weight:900;">{confidence_size:.1f}%</span></div>
     </div>
 </div>
 
-<div style="margin-top: 4px; margin-bottom: 8px; display: flex; justify-content: space-between; gap: 4px; width: 100%;">
-    <div style="flex: 1; min-width: 0; background: rgba(2, 6, 23, 0.7); border: 1px solid #22c55e; border-radius: 6px; padding: 3px 2px; text-align: center;">
-        <span style="font-size: 7.5px; color: #86efac; font-weight: 800; display:block; text-transform: uppercase;">🎨 COLOR SCORE</span>
-        <span style="font-size: 9px; font-weight: 900; color: #86efac;">{col_sahi} Sahi | {col_galat} Galat</span>
+<div style="background: rgba(2, 6, 23, 0.85); border: 1.5px solid #f59e0b; border-radius: 12px; padding: 12px 16px; margin-bottom: 16px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+    <div>
+        <div style="font-size: 10px; color: #ef4444; font-weight: 900; text-transform: uppercase;">❌ CONSECUTIVE ERRORS</div>
+        <div style="font-size: 16px; font-weight: 900; color: #f8fafc;">{consecutive_errors} / 4</div>
     </div>
-    <div style="flex: 1; min-width: 0; background: rgba(2, 6, 23, 0.7); border: 1px solid #38bdf8; border-radius: 6px; padding: 3px 2px; text-align: center;">
-        <span style="font-size: 7.5px; color: #7dd3fc; font-weight: 800; display:block; text-transform: uppercase;">📏 SIZE SCORE</span>
-        <span style="font-size: 9px; font-weight: 900; color: #7dd3fc;">{size_sahi} Sahi | {size_galat} Galat</span>
+    <div>
+        <div style="font-size: 10px; color: #fbbf24; font-weight: 900; text-transform: uppercase;">🤖 ACTIVE MODE</div>
+        <div style="font-size: 14px; font-weight: 900; color: #fbbf24;">{mode_name}</div>
+    </div>
+    <div>
+        <div style="font-size: 10px; color: #86efac; font-weight: 900; text-transform: uppercase;">💰 KELLY STAKE</div>
+        <div style="font-size: 14px; font-weight: 900; color: #86efac;">{bet_size_pct}% Bankroll</div>
     </div>
 </div>
 
-<div style="background: rgba(2, 6, 23, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; padding: 8px; margin-bottom: 8px;">
-    <div style="font-size: 8.5px; font-weight: 800; color: #fbbf24; text-transform: uppercase; margin-bottom: 2px;">😤 ARROGANT RATIONALE</div>
-    <div style="font-size: 9.5px; color: #e2e8f0; font-weight: 600; line-height: 1.3;">{rationale}</div>
+<div style="margin-top: 10px; margin-bottom: 16px; display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;">
+    <div style="background: rgba(2, 6, 23, 0.7); border: 1.5px solid #22c55e; border-radius: 8px; padding: 8px 16px; min-width: 150px; text-align: center;">
+        <span style="font-size: 10px; color: #86efac; font-weight: 800; display:block; text-transform: uppercase;">🎨 Color Score Record</span>
+        <span style="font-size: 13px; font-weight: 900; color: #86efac;">{col_sahi} Sahi | {col_galat} Galat</span>
+    </div>
+    <div style="background: rgba(2, 6, 23, 0.7); border: 1.5px solid #38bdf8; border-radius: 8px; padding: 8px 16px; min-width: 150px; text-align: center;">
+        <span style="font-size: 10px; color: #7dd3fc; font-weight: 800; display:block; text-transform: uppercase;">📏 Size Score Record</span>
+        <span style="font-size: 13px; font-weight: 900; color: #7dd3fc;">{size_sahi} Sahi | {size_galat} Galat</span>
+    </div>
+</div>
+
+<div style="background: rgba(2, 6, 23, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; padding: 14px; margin-bottom: 15px;">
+    <div style="font-size: 11px; font-weight: 800; color: #fbbf24; text-transform: uppercase; margin-bottom: 4px;">😤 ARROGANT RATIONALE</div>
+    <div style="font-size: 12px; color: #e2e8f0; font-weight: 600; line-height: 1.5;">{rationale}</div>
 </div>
 </div>
 """
@@ -7928,19 +7743,37 @@ def render_nexus_omnisapient_card(res_dict, engines_dict, df_history, cache_info
     100% {{ box-shadow: 0 0 25px rgba(168, 85, 247, 0.5), 0 0 25px rgba(6, 182, 212, 0.3); }}
 }}
 </style>
-<div style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.99), rgba(168, 85, 247, 0.18), rgba(6, 182, 212, 0.18), rgba(2, 6, 23, 1.0)); border: 2px solid #a855f7; border-radius: 16px; padding: 16px; animation: pulse_border 3s infinite ease-in-out; margin-bottom: 20px;">
-<div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 8px; margin-bottom: 12px; flex-wrap: wrap; gap: 6px;">
+<div style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.99), rgba(168, 85, 247, 0.18), rgba(6, 182, 212, 0.18), rgba(2, 6, 23, 1.0)); border: 3.5px solid #a855f7; border-radius: 20px; padding: 24px; animation: pulse_border 3s infinite ease-in-out; margin-bottom: 25px; position: relative;">
+<div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid rgba(255, 255, 255, 0.15); padding-bottom: 14px; margin-bottom: 16px; flex-wrap: wrap; gap: 8px;">
     <div>
-        <div style="font-size: 14px; font-weight: 900; color: #f8fafc; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
-            🧠 NEXUS OMNISAPIENT 15.0 <span style="font-size: 8px; background: rgba(168, 85, 247, 0.25); color: #c084fc; padding: 2px 8px; border-radius: 12px; font-weight: 900; text-transform: uppercase;">AGI</span>
+        <div style="font-size: 22px; font-weight: 900; color: #f8fafc; letter-spacing: 0.5px; display: flex; align-items: center; gap: 10px;">
+            🧠 NEXUS OMNI-SAPIENT <span style="font-size: 10px; background: linear-gradient(90deg, #a855f7, #06b6d4); color: #ffffff; padding: 3px 12px; border-radius: 20px; font-weight: 900; text-transform: uppercase;">ALL-IN-ONE LOCAL AGENT</span>
         </div>
-        <div style="font-size: 9.5px; color: #94a3b8; font-weight: 800; margin-top: 2px;">UNIVERSAL COGNITIVE REASONER & QUANTUM MARKOV AGENT (ISSUE #{target_issue})</div>
+        <div style="font-size: 11px; color: #94a3b8; font-weight: 800; margin-top: 3px; display:flex; gap:6px; flex-wrap:wrap;">
+            <span style="background:rgba(168,85,247,0.2); color:#c084fc; padding:2px 8px; border-radius:8px; border:1px solid #a855f7;">LLM</span>
+            <span style="background:rgba(6,182,212,0.2); color:#67e8f9; padding:2px 8px; border-radius:8px; border:1px solid #06b6d4;">ReAct</span>
+            <span style="background:rgba(34,197,94,0.2); color:#86efac; padding:2px 8px; border-radius:8px; border:1px solid #22c55e;">Memory</span>
+            <span style="background:rgba(245,158,11,0.2); color:#fde047; padding:2px 8px; border-radius:8px; border:1px solid #f59e0b;">Tools</span>
+            <span style="background:rgba(239,68,68,0.2); color:#fca5a5; padding:2px 8px; border-radius:8px; border:1px solid #ef4444;">Safety</span>
+        </div>
     </div>
-    <div>
-        <span style="background: rgba(168, 85, 247, 0.25); border: 1.5px solid #06b6d4; color: #67e8f9; padding: 4px 10px; border-radius: 8px; font-size: 9.5px; font-weight: 900; text-transform: uppercase;">
+    <div style="text-align: right;">
+        <span style="background: rgba(168, 85, 247, 0.25); border: 2px solid #06b6d4; color: #67e8f9; padding: 8px 18px; border-radius: 14px; font-size: 14px; font-weight: 900; text-transform: uppercase;">
             🎯 TARGET: COLOR & SIZE
         </span>
-        {render_notif_button("omnisapient18", "NEXUS OMNISAPIENT 15.0", target_issue, pred_col + " " + pred_size, pred_col, pred_size, round(float((confidence_col + confidence_size) / 2), 1))}
+    </div>
+</div>
+
+<div style="display: flex; gap: 16px; margin-bottom: 18px; flex-wrap: wrap;">
+    <div style="flex: 1; background: rgba(15, 23, 42, 0.9); border: 2.5px solid {col_color}; border-radius: 14px; padding: 18px; text-align: center; box-shadow: 0 0 25px {col_bg};">
+        <div style="font-size: 11px; font-weight: 800; color: #cbd5e1; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">🎨 COLOR PREDICTION</div>
+        <div style="font-size: 42px; font-weight: 900; color: {col_color}; text-shadow: 0 0 25px {col_color}; margin: 4px 0;">{pred_col.upper()}</div>
+        <div style="font-size: 13px; font-weight: 800; color: #e2e8f0;">Confidence: <span style="color: {col_color}; font-weight:900;">{confidence_col:.1f}%</span></div>
+    </div>
+    <div style="flex: 1; background: rgba(15, 23, 42, 0.9); border: 2.5px solid {size_color}; border-radius: 14px; padding: 18px; text-align: center; box-shadow: 0 0 25px {size_bg};">
+        <div style="font-size: 11px; font-weight: 800; color: #cbd5e1; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">📏 SIZE PREDICTION</div>
+        <div style="font-size: 42px; font-weight: 900; color: {size_color}; text-shadow: 0 0 25px {size_color}; margin: 4px 0;">{pred_size.upper()}</div>
+        <div style="font-size: 13px; font-weight: 800; color: #e2e8f0;">Confidence: <span style="color: {size_color}; font-weight:900;">{confidence_size:.1f}%</span></div>
     </div>
 </div>
 
@@ -7982,14 +7815,14 @@ def render_nexus_omnisapient_card(res_dict, engines_dict, df_history, cache_info
     </div>
 </div>
 
-<div style="margin-top: 6px; margin-bottom: 8px; display: flex; justify-content: space-between; gap: 4px; width: 100%;">
-    <div style="flex: 1; min-width: 0; background: rgba(2, 6, 23, 0.7); border: 1px solid #22c55e; border-radius: 6px; padding: 3px 2px; text-align: center;">
-        <span style="font-size: 7.5px; color: #86efac; font-weight: 800; display:block; text-transform: uppercase;">🎨 COLOR SCORE</span>
-        <span style="font-size: 9px; font-weight: 900; color: #86efac;">{col_sahi} Sahi | {col_galat} Galat</span>
+<div style="margin-top: 10px; margin-bottom: 16px; display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;">
+    <div style="background: rgba(2, 6, 23, 0.7); border: 1.5px solid #22c55e; border-radius: 8px; padding: 8px 16px; min-width: 150px; text-align: center;">
+        <span style="font-size: 10px; color: #86efac; font-weight: 800; display:block; text-transform: uppercase;">🎨 Color Score Record</span>
+        <span style="font-size: 13px; font-weight: 900; color: #86efac;">{col_sahi} Sahi | {col_galat} Galat</span>
     </div>
-    <div style="flex: 1; min-width: 0; background: rgba(2, 6, 23, 0.7); border: 1px solid #38bdf8; border-radius: 6px; padding: 3px 2px; text-align: center;">
-        <span style="font-size: 7.5px; color: #7dd3fc; font-weight: 800; display:block; text-transform: uppercase;">📏 SIZE SCORE</span>
-        <span style="font-size: 9px; font-weight: 900; color: #7dd3fc;">{size_sahi} Sahi | {size_galat} Galat</span>
+    <div style="background: rgba(2, 6, 23, 0.7); border: 1.5px solid #38bdf8; border-radius: 8px; padding: 8px 16px; min-width: 150px; text-align: center;">
+        <span style="font-size: 10px; color: #7dd3fc; font-weight: 800; display:block; text-transform: uppercase;">📏 Size Score Record</span>
+        <span style="font-size: 13px; font-weight: 900; color: #7dd3fc;">{size_sahi} Sahi | {size_galat} Galat</span>
     </div>
 </div>
 
@@ -8266,46 +8099,46 @@ def render_nexus_atlas_card(target_name, color_pred, size_pred, color_conf, size
 </div>
 </div>
 
-<div style="display: flex; justify-content: center; gap: 6px; margin-bottom: 10px; width: 100%;">
-<div style="background: rgba(2, 6, 23, 0.85); border: 1.5px solid {col_color}; border-radius: 10px; padding: 8px 4px; min-width: 0; flex: 1; text-align: center; box-shadow: 0 0 15px {col_bg};">
-<div style="font-size: 8.5px; color: #94a3b8; font-weight: 800; text-transform: uppercase;">🎨 COLOR PREDICTION</div>
-<div style="display: inline-block; width: 44px; height: 44px; border-radius: 50%; background: {col_bg}; border: 2px solid {col_color}; margin: 4px auto; line-height: 40px; font-size: 18px; font-weight: 900; color: {col_color}; animation: orb_pulse 2s infinite ease-in-out; box-shadow: 0 0 15px {col_color};">
+<div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-bottom: 20px;">
+<div style="background: rgba(2, 6, 23, 0.85); border: 2.5px solid {col_color}; border-radius: 16px; padding: 18px; min-width: 220px; flex: 1; text-align: center; box-shadow: 0 0 25px {col_bg};">
+<div style="font-size: 11px; color: #94a3b8; font-weight: 800; text-transform: uppercase; margin-bottom: 6px;">🎨 COLOR PREDICTION</div>
+<div style="display: inline-block; width: 70px; height: 70px; border-radius: 50%; background: {col_bg}; border: 3px solid {col_color}; margin: 8px auto; line-height: 64px; font-size: 26px; font-weight: 900; color: {col_color}; animation: orb_pulse 2s infinite ease-in-out; box-shadow: 0 0 30px {col_color};">
 {color_pred[0]}
 </div>
-<div style="font-size: 18px; font-weight: 900; color: {col_color}; text-shadow: 0 0 10px {col_color};">{color_pred}</div>
-<div style="font-size: 9px; color: #fbbf24; font-weight: 800; margin-top: 2px;">Confidence: {round(float(color_conf), 1)}%</div>
-<div style="font-size: 8px; color: #cbd5e1;">P(R): {round(p_red*100, 1)}% | P(G): {round(p_green*100, 1)}%</div>
-<div style="font-size: 8.5px; color: #86efac; font-weight: 800; margin-top: 2px;">Stats: {col_sahi} Sahi | {col_galat} Galat</div>
+<div style="font-size: 24px; font-weight: 900; color: {col_color}; text-shadow: 0 0 14px {col_color};">{color_pred}</div>
+<div style="font-size: 13px; color: #fbbf24; font-weight: 800; margin-top: 4px;">Confidence: {round(float(color_conf), 1)}%</div>
+<div style="font-size: 11px; color: #cbd5e1; margin-top: 2px;">P(Red): {round(p_red*100, 1)}% | P(Green): {round(p_green*100, 1)}%</div>
+<div style="font-size: 11px; color: #86efac; font-weight: 800; margin-top: 4px;">Stats: {col_sahi} Sahi | {col_galat} Galat</div>
 </div>
 
-<div style="background: rgba(2, 6, 23, 0.85); border: 1.5px solid {size_color}; border-radius: 10px; padding: 8px 4px; min-width: 0; flex: 1; text-align: center; box-shadow: 0 0 15px {size_bg};">
-<div style="font-size: 8.5px; color: #94a3b8; font-weight: 800; text-transform: uppercase;">📏 SIZE PREDICTION</div>
-<div style="display: inline-block; width: 44px; height: 44px; border-radius: 50%; background: {size_bg}; border: 2px solid {size_color}; margin: 4px auto; line-height: 40px; font-size: 18px; font-weight: 900; color: {size_color}; animation: orb_pulse 2s infinite ease-in-out; box-shadow: 0 0 15px {size_color};">
+<div style="background: rgba(2, 6, 23, 0.85); border: 2.5px solid {size_color}; border-radius: 16px; padding: 18px; min-width: 220px; flex: 1; text-align: center; box-shadow: 0 0 25px {size_bg};">
+<div style="font-size: 11px; color: #94a3b8; font-weight: 800; text-transform: uppercase; margin-bottom: 6px;">📏 SIZE PREDICTION</div>
+<div style="display: inline-block; width: 70px; height: 70px; border-radius: 50%; background: {size_bg}; border: 3px solid {size_color}; margin: 8px auto; line-height: 64px; font-size: 26px; font-weight: 900; color: {size_color}; animation: orb_pulse 2s infinite ease-in-out; box-shadow: 0 0 30px {size_color};">
 {size_pred[0]}
 </div>
-<div style="font-size: 18px; font-weight: 900; color: {size_color}; text-shadow: 0 0 10px {size_color};">{size_pred}</div>
-<div style="font-size: 9px; color: #fbbf24; font-weight: 800; margin-top: 2px;">Confidence: {round(float(size_conf), 1)}%</div>
-<div style="font-size: 8px; color: #cbd5e1;">P(B): {round(p_big*100, 1)}% | P(S): {round(p_small*100, 1)}%</div>
-<div style="font-size: 8.5px; color: #d8b4fe; font-weight: 800; margin-top: 2px;">Stats: {size_sahi} Sahi | {size_galat} Galat</div>
+<div style="font-size: 24px; font-weight: 900; color: {size_color}; text-shadow: 0 0 14px {size_color};">{size_pred}</div>
+<div style="font-size: 13px; color: #fbbf24; font-weight: 800; margin-top: 4px;">Confidence: {round(float(size_conf), 1)}%</div>
+<div style="font-size: 11px; color: #cbd5e1; margin-top: 2px;">P(Big): {round(p_big*100, 1)}% | P(Small): {round(p_small*100, 1)}%</div>
+<div style="font-size: 11px; color: #d8b4fe; font-weight: 800; margin-top: 4px;">Stats: {size_sahi} Sahi | {size_galat} Galat</div>
 </div>
 </div>
 
-<div style="background: rgba(2, 6, 23, 0.9); border: 1px solid rgba(0, 242, 254, 0.3); border-radius: 8px; padding: 8px; margin-bottom: 8px;">
-<div style="font-size: 10px; font-weight: 900; color: #00f2fe; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">
+<div style="background: rgba(2, 6, 23, 0.9); border: 1.5px solid rgba(0, 242, 254, 0.3); border-radius: 14px; padding: 16px; margin-bottom: 16px;">
+<div style="font-size: 13px; font-weight: 900; color: #00f2fe; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px;">
 🛸 ATLAS COMMAND CENTER (LIVE DIAGNOSTICS)
 </div>
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 6px; font-size: 9px; color: #e2e8f0;">
-<div style="background: rgba(15, 23, 42, 0.8); padding: 4px 6px; border-radius: 6px; border: 1px solid rgba(0, 242, 254, 0.2);">
-<strong style="color: #67e8f9;">👑 Top:</strong> {list(top_contrib.keys())[0] if top_contrib else 'E1'} ({list(top_contrib.values())[0] if top_contrib else '1.0'}x UCB)
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; font-size: 11px; color: #e2e8f0;">
+<div style="background: rgba(15, 23, 42, 0.8); padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(0, 242, 254, 0.2);">
+<strong style="color: #67e8f9;">👑 Top Contributor:</strong> {list(top_contrib.keys())[0] if top_contrib else 'E1'} ({list(top_contrib.values())[0] if top_contrib else '1.0'}x UCB)
 </div>
-<div style="background: rgba(15, 23, 42, 0.8); padding: 4px 6px; border-radius: 6px; border: 1px solid rgba(168, 85, 247, 0.2);">
-<strong style="color: #c084fc;">⚖️ Nash Regret:</strong> Converged (0.012)
+<div style="background: rgba(15, 23, 42, 0.8); padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(168, 85, 247, 0.2);">
+<strong style="color: #c084fc;">⚖️ Nash Regret Trend:</strong> Regret Minimization Converged (0.012 Error)
 </div>
-<div style="background: rgba(15, 23, 42, 0.8); padding: 4px 6px; border-radius: 6px; border: 1px solid rgba(245, 158, 11, 0.2);">
-<strong style="color: #fde047;">⚔️ Debate:</strong> {debate_verdict[:35]}...
+<div style="background: rgba(15, 23, 42, 0.8); padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(245, 158, 11, 0.2);">
+<strong style="color: #fde047;">⚔️ Debate Verdict:</strong> {debate_verdict[:45]}...
 </div>
-<div style="background: rgba(15, 23, 42, 0.8); padding: 4px 6px; border-radius: 6px; border: 1px solid rgba(34, 197, 94, 0.2);">
-<strong style="color: #86efac;">🧬 Evolved:</strong> {evolved_count} Rules
+<div style="background: rgba(15, 23, 42, 0.8); padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(34, 197, 94, 0.2);">
+<strong style="color: #86efac;">🧬 Evolved Agents:</strong> {evolved_count} Active Evolved Symbolic Rules
 </div>
 </div>
 </div>
@@ -9490,12 +9323,6 @@ if hasattr(st.session_state, "get") and "Mock" not in type(st.session_state).__n
     st.session_state["last_pred_sentinel_omega"] = {"issue": next_issue_key, "prediction": str(sentinel_prediction)}
     st.session_state["last_pred_nexus_duo_force"] = {"issue": next_issue_key, "pred_col": str(duo_col), "pred_size": str(duo_size), "prediction": f"{duo_col} {duo_size}"}
     st.session_state["last_pred_hyperion12"] = {"issue": next_issue_key, "prediction": str(hyperion12_prediction)}
-    st.session_state["last_pred_chromatic16"] = {"issue": next_issue_key, "pred_col": str(chromatic_col if 'chromatic_col' in locals() else 'Red'), "pred_size": str(chromatic_size if 'chromatic_size' in locals() else 'Big'), "prediction": str(chromatic16_prediction if 'chromatic16_prediction' in locals() else 5)}
-    st.session_state["last_pred_titan17"] = {"issue": next_issue_key, "pred_col": str(titan17_col if 'titan17_col' in locals() else 'Red'), "pred_size": str(titan17_size if 'titan17_size' in locals() else 'Big'), "prediction": f"{titan17_col if 'titan17_col' in locals() else 'Red'} {titan17_size if 'titan17_size' in locals() else 'Big'}"}
-    st.session_state["last_pred_omnisapient18"] = {"issue": next_issue_key, "pred_col": str(omnisapient_col if 'omnisapient_col' in locals() else 'Red'), "pred_size": str(omnisapient_size if 'omnisapient_size' in locals() else 'Big'), "prediction": f"{omnisapient_col if 'omnisapient_col' in locals() else 'Red'} {omnisapient_size if 'omnisapient_size' in locals() else 'Big'}"}
-    st.session_state["last_pred_sentinel_phoenix"] = {"issue": next_issue_key, "pred_col": str(phoenix_col if 'phoenix_col' in locals() else 'Red'), "pred_size": str(phoenix_size if 'phoenix_size' in locals() else 'Big'), "prediction": str(phoenix_prediction if 'phoenix_prediction' in locals() else 5)}
-    st.session_state["last_pred_sentinel_ultra_21"] = {"issue": next_issue_key, "pred_col": str(ultra21_col if 'ultra21_col' in locals() else 'Red'), "pred_size": str(ultra21_size if 'ultra21_size' in locals() else 'Big'), "prediction": str(sentinel_ultra_21_prediction if 'sentinel_ultra_21_prediction' in locals() else 5)}
-    st.session_state["last_pred_nexus_atlas"] = {"issue": next_issue_key, "pred_col": str(atlas_col if 'atlas_col' in locals() else 'Red'), "pred_size": str(atlas_size if 'atlas_size' in locals() else 'Big'), "prediction": str(atlas_prediction if 'atlas_prediction' in locals() else 5)}
     sorted_keys_by_ucb = sorted(ucb_scores.keys(), key=lambda k: ucb_scores[k], reverse=True) if ucb_scores else sorted(engines_dict.keys(), key=lambda k: engines_dict[k].get('pts', 0), reverse=True)
     top_rank_1_key_logged = sorted_keys_by_ucb[0] if sorted_keys_by_ucb else "E1"
     top_rank_2_key_logged = sorted_keys_by_ucb[1] if len(sorted_keys_by_ucb) > 1 else "E2"
@@ -9752,13 +9579,13 @@ def generate_last_8_boxes_html(agent_key, current_issue):
         size_border = "#22c55e" if size_ok else "#ef4444"
         size_color = "#86efac" if size_ok else "#fca5a5"
         
-        num_badges.append(f'<span style="background: {num_bg}; border: 1px solid {num_border}; color: {num_color}; padding: 1px 4px; border-radius: 4px; font-size: 8.5px; font-weight: 800; display: inline-block;">{issue_str} {"&#10003;" if num_ok else "&#10007;"}</span>')
-        col_badges.append(f'<span style="background: {col_bg}; border: 1px solid {col_border}; color: {col_color}; padding: 1px 4px; border-radius: 4px; font-size: 8.5px; font-weight: 800; display: inline-block;">{issue_str} {"&#10003;" if col_ok else "&#10007;"}</span>')
-        size_badges.append(f'<span style="background: {size_bg}; border: 1px solid {size_border}; color: {size_color}; padding: 1px 4px; border-radius: 4px; font-size: 8.5px; font-weight: 800; display: inline-block;">{issue_str} {"&#10003;" if size_ok else "&#10007;"}</span>')
+        num_badges.append(f'<span style="background: {num_bg}; border: 1px solid {num_border}; color: {num_color}; padding: 2px 6px; border-radius: 5px; font-size: 11px; font-weight: 800; display: inline-block;">{issue_str} {"&#10003;" if num_ok else "&#10007;"}</span>')
+        col_badges.append(f'<span style="background: {col_bg}; border: 1px solid {col_border}; color: {col_color}; padding: 2px 6px; border-radius: 5px; font-size: 11px; font-weight: 800; display: inline-block;">{issue_str} {"&#10003;" if col_ok else "&#10007;"}</span>')
+        size_badges.append(f'<span style="background: {size_bg}; border: 1px solid {size_border}; color: {size_color}; padding: 2px 6px; border-radius: 5px; font-size: 11px; font-weight: 800; display: inline-block;">{issue_str} {"&#10003;" if size_ok else "&#10007;"}</span>')
         
-    num_row = "".join(num_badges) if num_badges else '<span style="color:#94a3b8; font-size:9px;">No Data</span>'
-    col_row = "".join(col_badges) if col_badges else '<span style="color:#94a3b8; font-size:9px;">No Data</span>'
-    size_row = "".join(size_badges) if size_badges else '<span style="color:#94a3b8; font-size:9px;">No Data</span>'
+    num_row = "".join(num_badges) if num_badges else '<span style="color:#94a3b8; font-size:11px;">No Data</span>'
+    col_row = "".join(col_badges) if col_badges else '<span style="color:#94a3b8; font-size:11px;">No Data</span>'
+    size_row = "".join(size_badges) if size_badges else '<span style="color:#94a3b8; font-size:11px;">No Data</span>'
 
     # Build full historical rows for up to 1000 stored rounds inside the small inner expander box
     history_items_html = []
@@ -9778,38 +9605,38 @@ def generate_last_8_boxes_html(agent_key, current_issue):
         col_badge_h = f'<span style="color:{"#22c55e" if h_col_ok else "#ef4444"}; font-weight:800;">{h_p_col} vs {h_a_col} {"✓" if h_col_ok else "✗"}</span>'
         sz_badge_h = f'<span style="color:{"#22c55e" if h_sz_ok else "#ef4444"}; font-weight:800;">{h_p_sz} vs {h_a_sz} {"✓" if h_sz_ok else "✗"}</span>'
         
-        history_items_html.append(f'<div style="background: rgba(2, 6, 23, 0.7); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; padding: 2px 6px; font-size: 8.5px; display: flex; justify-content: space-between; align-items: center; gap: 4px;"><span style="color: #fbbf24; font-weight: 800;">#{h_iss}</span> {num_badge_h} {col_badge_h} {sz_badge_h}</div>')
+        history_items_html.append(f'<div style="background: rgba(2, 6, 23, 0.7); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 4px 8px; font-size: 10px; display: flex; justify-content: space-between; align-items: center; gap: 8px;"><span style="color: #fbbf24; font-weight: 800;">#{h_iss}</span> {num_badge_h} {col_badge_h} {sz_badge_h}</div>')
         
-    full_history_scrollable = "".join(history_items_html) if history_items_html else '<span style="color:#94a3b8; font-size:9px;">No History Stored</span>'
+    full_history_scrollable = "".join(history_items_html) if history_items_html else '<span style="color:#94a3b8; font-size:11px;">No History Stored</span>'
 
-    return f"""<div style="margin-top: 6px; background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(245, 158, 11, 0.4); border-radius: 8px; padding: 6px 8px; text-align: left;">
-<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; flex-wrap: wrap; gap: 4px;">
-<span style="font-size: 10px; font-weight: 900; color: #fbbf24;">📊 LAST 8 ISSUES PERFORMANCE TRACKER (pichle 8 issue ka record)</span>
+    return f"""<div style="margin-top: 14px; background: rgba(15, 23, 42, 0.85); border: 1.5px solid rgba(245, 158, 11, 0.4); border-radius: 10px; padding: 12px; text-align: left;">
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px;">
+<span style="font-size: 12px; font-weight: 800; color: #fbbf24;">📊 LAST 8 ISSUES PERFORMANCE TRACKER (pichle 8 issue ka record)</span>
 <details style="cursor: pointer;">
-<summary style="font-size: 8.5px; font-weight: 800; background: rgba(245, 158, 11, 0.2); border: 1px solid #f59e0b; color: #facc15; padding: 2px 6px; border-radius: 8px; outline: none; user-select: none; display: inline-block;">
-📜 ALL HISTORY ({total_stored}) 🔽
+<summary style="font-size: 10px; font-weight: 800; background: rgba(245, 158, 11, 0.2); border: 1px solid #f59e0b; color: #facc15; padding: 3px 10px; border-radius: 12px; outline: none; user-select: none; display: inline-block;">
+📜 VIEW ALL STORED HISTORY ({total_stored} Rounds Stored) 🔽
 </summary>
-<div style="margin-top: 4px; max-height: 180px; overflow-y: auto; background: rgba(2, 6, 23, 0.9); border: 1px solid #f59e0b; border-radius: 6px; padding: 4px; display: flex; flex-direction: column; gap: 3px;">
-<div style="font-size: 9px; font-weight: 800; color: #67e8f9; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 2px; margin-bottom: 2px;">
-📦 Complete History Storage (Up to 1000 Rounds):
+<div style="margin-top: 8px; max-height: 220px; overflow-y: auto; background: rgba(2, 6, 23, 0.9); border: 1px solid #f59e0b; border-radius: 8px; padding: 8px; display: flex; flex-direction: column; gap: 4px;">
+<div style="font-size: 11px; font-weight: 800; color: #67e8f9; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 4px; margin-bottom: 4px;">
+📦 Complete History Storage (Up to 1000 Rounds Capacity):
 </div>
 {full_history_scrollable}
 </div>
 </details>
 </div>
 
-<div style="display: flex; flex-direction: column; gap: 4px; width: 100%;">
-<div style="background: rgba(2, 6, 23, 0.6); border: 1px solid #f59e0b; border-radius: 6px; padding: 3px 6px; text-align: left; display: flex; align-items: center; gap: 4px; overflow: hidden; width: 100%;">
-<span style="font-size: 8.5px; color: #fbbf24; font-weight: 800; width: 45px; flex-shrink: 0;">📌 NUM:</span>
-<div style="display: flex; gap: 3px; overflow-x: auto; flex-wrap: nowrap; width: 100%; -webkit-overflow-scrolling: touch; padding-bottom: 1px;">{num_row}</div>
+<div style="display: flex; flex-direction: column; gap: 8px;">
+<div style="background: rgba(2, 6, 23, 0.6); border: 1px solid #f59e0b; border-radius: 8px; padding: 6px 10px; text-align: left;">
+<span style="font-size: 11px; color: #fbbf24; font-weight: 800; margin-right: 8px; display: inline-block; min-width: 130px;">📌 NUMBER (अंक):</span>
+<div style="display: inline-flex; gap: 5px; flex-wrap: wrap; align-items: center;">{num_row}</div>
 </div>
-<div style="background: rgba(2, 6, 23, 0.6); border: 1px solid #22c55e; border-radius: 6px; padding: 3px 6px; text-align: left; display: flex; align-items: center; gap: 4px; overflow: hidden; width: 100%;">
-<span style="font-size: 8.5px; color: #86efac; font-weight: 800; width: 45px; flex-shrink: 0;">🎨 COL:</span>
-<div style="display: flex; gap: 3px; overflow-x: auto; flex-wrap: nowrap; width: 100%; -webkit-overflow-scrolling: touch; padding-bottom: 1px;">{col_row}</div>
+<div style="background: rgba(2, 6, 23, 0.6); border: 1px solid #22c55e; border-radius: 8px; padding: 6px 10px; text-align: left;">
+<span style="font-size: 11px; color: #86efac; font-weight: 800; margin-right: 8px; display: inline-block; min-width: 130px;">🎨 COLOR (रंग):</span>
+<div style="display: inline-flex; gap: 5px; flex-wrap: wrap; align-items: center;">{col_row}</div>
 </div>
-<div style="background: rgba(2, 6, 23, 0.6); border: 1px solid #a855f7; border-radius: 6px; padding: 3px 6px; text-align: left; display: flex; align-items: center; gap: 4px; overflow: hidden; width: 100%;">
-<span style="font-size: 8.5px; color: #c084fc; font-weight: 800; width: 45px; flex-shrink: 0;">📏 SIZE:</span>
-<div style="display: flex; gap: 3px; overflow-x: auto; flex-wrap: nowrap; width: 100%; -webkit-overflow-scrolling: touch; padding-bottom: 1px;">{size_row}</div>
+<div style="background: rgba(2, 6, 23, 0.6); border: 1px solid #a855f7; border-radius: 8px; padding: 6px 10px; text-align: left;">
+<span style="font-size: 11px; color: #c084fc; font-weight: 800; margin-right: 8px; display: inline-block; min-width: 130px;">📏 BIG / SMALL (आकार):</span>
+<div style="display: inline-flex; gap: 5px; flex-wrap: wrap; align-items: center;">{size_row}</div>
 </div>
 </div>
 </div>"""
@@ -9891,7 +9718,7 @@ top_rank_2_col_hex = '#ef4444' if top_rank_2_col == 'Red' else ('#22c55e' if top
 # --- HYPERION OMNI-AGI 12.0 APEX CARD RENDER ---
 hyp12_pred_num = str(hyperion12_prediction)
 hyp12_digit = int(hyp12_pred_num) if hyp12_pred_num.isdigit() else 5
-hyp12_pred_col = "Red" if hyp12_digit in [0, 2, 4, 6, 8] else "Green"
+hyp12_pred_col = "Red" if hyp12_digit in [1, 3, 7, 9, 8] else "Green"
 hyp12_pred_size = "Big" if hyp12_digit >= 5 else "Small"
 
 render_hyperion_omni_agi_12_card(
@@ -10061,116 +9888,116 @@ render_nexus_atlas_card(
 st.markdown(generate_last_8_boxes_html('nexus_atlas', latest_issue), unsafe_allow_html=True)
 
 st.markdown(f"""
-<div style="background: linear-gradient(135deg, #1e1b4b 0%, #311b92 50%, #0f172a 100%); border: 2.5px solid #8b5cf6; border-radius: 12px; padding: 10px; text-align: center; margin-bottom: 16px; box-shadow: 0 0 25px rgba(139, 92, 246, 0.4);">
-    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px;">
+<div style="background: linear-gradient(135deg, #1e1b4b 0%, #311b92 50%, #0f172a 100%); border: 3.5px solid #8b5cf6; border-radius: 16px; padding: 22px; text-align: center; margin-bottom: 20px; box-shadow: 0 0 35px rgba(139, 92, 246, 0.6);">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
         <div style="text-align: left;">
-            <span style="font-size: 14px; font-weight: 900; color: #c4b5fd; text-shadow: 0 0 10px rgba(196, 181, 253, 0.9);">
-                &#127942; RANK #1: {top_rank_1_key} ({top_rank_1_name})
+            <span style="font-size: 22px; font-weight: 900; color: #c4b5fd; text-shadow: 0 0 14px rgba(196, 181, 253, 0.9);">
+                &#127942; TOP ENGINE RANK #1: {top_rank_1_key} ({top_rank_1_name})
             </span>
-            <div style="font-size: 9.5px; color: #ddd6fe; margin-top: 1px;">
-                59 इंजनों में सर्वश्रेष्ठ UCB (Score: {round(float(top_rank_1_ucb), 2)})
+            <div style="font-size: 12px; color: #ddd6fe; margin-top: 2px;">
+                59 इंजनों में से सर्वोच्च UCB स्कोर (UCB Score: {round(float(top_rank_1_ucb), 2)}) प्राप्त करने वाला Rank #1 सर्वश्रेष्ठ इंजन
             </div>
         </div>
-        <div style="display: flex; gap: 4px; align-items: center; flex-wrap: wrap;">
-            <span style="background: rgba(15, 23, 42, 0.85); border: 1px solid #8b5cf6; border-radius: 6px; padding: 2px 6px; font-size: 8.5px; font-weight: 800; color: #a7f3d0; display: inline-flex; align-items: center; gap: 4px;">
-                &#127919; TARGET: <span style="color: #facc15; font-size: 10px; font-weight: 900;">#{target_issue}</span>
-                <span style="background: #10b981; color: #020617; font-size: 7.5px; font-weight: 900; padding: 1px 4px; border-radius: 8px;">LIVE</span>
+        <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
+            <span style="background: rgba(15, 23, 42, 0.85); border: 1.5px solid #8b5cf6; border-radius: 8px; padding: 4px 12px; font-size: 10px; font-weight: 800; color: #a7f3d0; display: inline-flex; align-items: center; gap: 6px;">
+                &#127919; TARGET ISSUE: <span style="color: #facc15; font-size: 12px; font-weight: 900;">#{target_issue}</span>
+                <span style="background: #10b981; color: #020617; font-size: 8px; font-weight: 900; padding: 2px 6px; border-radius: 10px;">LIVE SYNC</span>
             </span>
-            <span style="background: #8b5cf6; color: #ffffff; font-size: 8.5px; font-weight: 900; padding: 3px 8px; border-radius: 12px;">
-                &#129351; RANK 1
+            <span style="background: #8b5cf6; color: #ffffff; font-size: 10px; font-weight: 900; padding: 5px 14px; border-radius: 20px;">
+                &#129351; RANK 1 CHAMPION
             </span>
         </div>
     </div>
-    <div style="margin-top: 8px; display: flex; justify-content: center; gap: 6px; width: 100%;">
-        <div style="background: rgba(2, 6, 23, 0.8); border: 1.5px solid #8b5cf6; border-radius: 8px; padding: 6px 3px; flex: 1; min-width: 0;">
-            <span style="font-size: 8.5px; color: #c4b5fd; font-weight: 700; display:block;">&#128302; NUMBER</span>
-            <span style="font-size: 18px; font-weight: 900; color: #a78bfa; text-shadow: 0 0 10px rgba(167, 139, 250, 0.9);">{top_rank_1_num}</span>
+    <div style="margin-top: 16px; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
+        <div style="background: rgba(2, 6, 23, 0.8); border: 2px solid #8b5cf6; border-radius: 12px; padding: 12px 24px; min-width: 150px;">
+            <span style="font-size: 11px; color: #c4b5fd; font-weight: 700; display:block;">&#128302; PREDICTED NUMBER (अंक)</span>
+            <span style="font-size: 32px; font-weight: 900; color: #a78bfa; text-shadow: 0 0 16px rgba(167, 139, 250, 0.9);">{top_rank_1_num}</span>
         </div>
-        <div style="background: rgba(2, 6, 23, 0.8); border: 1.5px solid {top_rank_1_col_hex}; border-radius: 8px; padding: 6px 3px; flex: 1; min-width: 0;">
-            <span style="font-size: 8.5px; color: #94a3b8; font-weight: 700; display:block;">&#127912; COLOR</span>
-            <span style="font-size: 18px; font-weight: 900; color: {top_rank_1_col_hex};">{top_rank_1_col}</span>
+        <div style="background: rgba(2, 6, 23, 0.8); border: 2px solid {top_rank_1_col_hex}; border-radius: 12px; padding: 12px 24px; min-width: 120px;">
+            <span style="font-size: 11px; color: #94a3b8; font-weight: 700; display:block;">&#127912; COLOR (रंग)</span>
+            <span style="font-size: 22px; font-weight: 900; color: {top_rank_1_col_hex};">{top_rank_1_col}</span>
         </div>
-        <div style="background: rgba(2, 6, 23, 0.8); border: 1.5px solid #38bdf8; border-radius: 8px; padding: 6px 3px; flex: 1; min-width: 0;">
-            <span style="font-size: 8.5px; color: #bae6fd; font-weight: 700; display:block;">&#128207; SIZE</span>
-            <span style="font-size: 18px; font-weight: 900; color: #38bdf8;">{top_rank_1_size}</span>
-        </div>
-    </div>
-    <div style="margin-top: 6px; display: flex; justify-content: space-between; gap: 4px; width: 100%;">
-        <div style="background: rgba(2, 6, 23, 0.7); border: 1px solid #8b5cf6; border-radius: 6px; padding: 3px 2px; flex: 1; min-width: 0; text-align: center;">
-            <span style="font-size: 7.5px; color: #c4b5fd; font-weight: 700; display:block; text-transform: uppercase;">📌 NUMBER</span>
-            <span style="font-size: 9px; font-weight: 800; color: #ffffff;">{top1_num_sahi} Sahi | {top1_num_galat} Galat</span>
-        </div>
-        <div style="background: rgba(2, 6, 23, 0.7); border: 1px solid #22c55e; border-radius: 6px; padding: 3px 2px; flex: 1; min-width: 0; text-align: center;">
-            <span style="font-size: 7.5px; color: #86efac; font-weight: 700; display:block; text-transform: uppercase;">🎨 COLOR</span>
-            <span style="font-size: 9px; font-weight: 800; color: #86efac;">{top1_col_sahi} Sahi | {top1_col_galat} Galat</span>
-        </div>
-        <div style="background: rgba(2, 6, 23, 0.7); border: 1px solid #a855f7; border-radius: 6px; padding: 3px 2px; flex: 1; min-width: 0; text-align: center;">
-            <span style="font-size: 7.5px; color: #c084fc; font-weight: 700; display:block; text-transform: uppercase;">📏 SIZE</span>
-            <span style="font-size: 9px; font-weight: 800; color: #d8b4fe;">{top1_size_sahi} Sahi | {top1_size_galat} Galat</span>
+        <div style="background: rgba(2, 6, 23, 0.8); border: 2px solid #38bdf8; border-radius: 12px; padding: 12px 24px; min-width: 120px;">
+            <span style="font-size: 11px; color: #bae6fd; font-weight: 700; display:block;">&#128207; SIZE (आकार)</span>
+            <span style="font-size: 22px; font-weight: 900; color: #38bdf8;">{top_rank_1_size}</span>
         </div>
     </div>
-    <div style="margin-top: 6px; display: flex; justify-content: space-around; align-items: center; font-size: 9.5px; color: #e2e8f0; background: rgba(2, 6, 23, 0.6); padding: 4px 8px; border-radius: 6px; border: 1px solid rgba(139, 92, 246, 0.4); flex-wrap: wrap; gap: 4px;">
-        <span><strong>UCB:</strong> <span style="color: #a78bfa;">{round(float(top_rank_1_ucb), 2)}</span></span>
-        <span><strong>Win:</strong> <span style="color: #4ade80;">{top_rank_1_winrate}%</span></span>
-        <span><strong>Wt:</strong> <span style="color: #facc15;">{top_rank_1_weight}x</span></span>
-        <span><strong>Pts:</strong> <span style="color: #38bdf8;">{top_rank_1_pts}</span></span>
+    <div style="margin-top: 14px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
+        <div style="background: rgba(2, 6, 23, 0.7); border: 1px solid #8b5cf6; border-radius: 6px; padding: 6px 12px; min-width: 140px; text-align: center;">
+            <span style="font-size: 10px; color: #c4b5fd; font-weight: 700; display:block; text-transform: uppercase;">&#128204; Number (अंक)</span>
+            <span style="font-size: 12px; font-weight: 800; color: #ffffff;">{top1_num_sahi} Sahi | {top1_num_galat} Galat</span>
+        </div>
+        <div style="background: rgba(2, 6, 23, 0.7); border: 1px solid #22c55e; border-radius: 6px; padding: 6px 12px; min-width: 140px; text-align: center;">
+            <span style="font-size: 10px; color: #86efac; font-weight: 700; display:block; text-transform: uppercase;">&#127912; Color (रंग)</span>
+            <span style="font-size: 12px; font-weight: 800; color: #86efac;">{top1_col_sahi} Sahi | {top1_col_galat} Galat</span>
+        </div>
+        <div style="background: rgba(2, 6, 23, 0.7); border: 1px solid #a855f7; border-radius: 6px; padding: 6px 12px; min-width: 140px; text-align: center;">
+            <span style="font-size: 10px; color: #c084fc; font-weight: 700; display:block; text-transform: uppercase;">&#128207; Size (आकार)</span>
+            <span style="font-size: 12px; font-weight: 800; color: #d8b4fe;">{top1_size_sahi} Sahi | {top1_size_galat} Galat</span>
+        </div>
+    </div>
+    <div style="margin-top: 14px; display: flex; justify-content: space-around; align-items: center; font-size: 12px; color: #e2e8f0; background: rgba(2, 6, 23, 0.6); padding: 8px 16px; border-radius: 8px; border: 1px solid rgba(139, 92, 246, 0.4); flex-wrap: wrap; gap: 10px;">
+        <span>&#128202; <strong>UCB Score:</strong> <span style="color: #a78bfa;">{round(float(top_rank_1_ucb), 2)}</span></span>
+        <span>&#128200; <strong>Win Rate:</strong> <span style="color: #4ade80;">{top_rank_1_winrate}%</span></span>
+        <span>&#9878; <strong>Engine Weight:</strong> <span style="color: #facc15;">{top_rank_1_weight}x</span></span>
+        <span>&#127942; <strong>Points:</strong> <span style="color: #38bdf8;">{top_rank_1_pts} Pts</span></span>
     </div>
     {generate_last_8_boxes_html('top1', latest_issue)}
 </div>
 
-<div style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0369a1 100%); border: 2.5px solid #06b6d4; border-radius: 12px; padding: 10px; text-align: center; margin-bottom: 16px; box-shadow: 0 0 25px rgba(6, 182, 212, 0.4);">
-    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px;">
+<div style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0369a1 100%); border: 3.5px solid #06b6d4; border-radius: 16px; padding: 22px; text-align: center; margin-bottom: 24px; box-shadow: 0 0 35px rgba(6, 182, 212, 0.6);">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
         <div style="text-align: left;">
-            <span style="font-size: 14px; font-weight: 900; color: #67e8f9; text-shadow: 0 0 10px rgba(103, 232, 249, 0.9);">
-                &#129352; RANK #2: {top_rank_2_key} ({top_rank_2_name})
+            <span style="font-size: 22px; font-weight: 900; color: #67e8f9; text-shadow: 0 0 14px rgba(103, 232, 249, 0.9);">
+                &#129352; TOP ENGINE RANK #2: {top_rank_2_key} ({top_rank_2_name})
             </span>
-            <div style="font-size: 9.5px; color: #bae6fd; margin-top: 1px;">
-                59 इंजनों में द्वितीय UCB (Score: {round(float(top_rank_2_ucb), 2)})
+            <div style="font-size: 12px; color: #bae6fd; margin-top: 2px;">
+                59 इंजनों में से द्वितीय UCB स्कोर (UCB Score: {round(float(top_rank_2_ucb), 2)}) प्राप्त करने वाला Rank #2 सर्वश्रेष्ठ रनर-अप इंजन
             </div>
         </div>
-        <div style="display: flex; gap: 4px; align-items: center; flex-wrap: wrap;">
-            <span style="background: rgba(15, 23, 42, 0.85); border: 1px solid #06b6d4; border-radius: 6px; padding: 2px 6px; font-size: 8.5px; font-weight: 800; color: #67e8f9; display: inline-flex; align-items: center; gap: 4px;">
-                &#127919; TARGET: <span style="color: #facc15; font-size: 10px; font-weight: 900;">#{target_issue}</span>
-                <span style="background: #10b981; color: #020617; font-size: 7.5px; font-weight: 900; padding: 1px 4px; border-radius: 8px;">LIVE</span>
+        <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
+            <span style="background: rgba(15, 23, 42, 0.85); border: 1.5px solid #06b6d4; border-radius: 8px; padding: 4px 12px; font-size: 10px; font-weight: 800; color: #67e8f9; display: inline-flex; align-items: center; gap: 6px;">
+                &#127919; TARGET ISSUE: <span style="color: #facc15; font-size: 12px; font-weight: 900;">#{target_issue}</span>
+                <span style="background: #10b981; color: #020617; font-size: 8px; font-weight: 900; padding: 2px 6px; border-radius: 10px;">LIVE SYNC</span>
             </span>
-            <span style="background: #06b6d4; color: #ffffff; font-size: 8.5px; font-weight: 900; padding: 3px 8px; border-radius: 12px;">
-                &#129352; RANK 2
+            <span style="background: #06b6d4; color: #ffffff; font-size: 10px; font-weight: 900; padding: 5px 14px; border-radius: 20px;">
+                &#129352; RANK 2 RUNNER-UP
             </span>
         </div>
     </div>
-    <div style="margin-top: 8px; display: flex; justify-content: center; gap: 6px; width: 100%;">
-        <div style="background: rgba(2, 6, 23, 0.8); border: 1.5px solid #06b6d4; border-radius: 8px; padding: 6px 3px; flex: 1; min-width: 0;">
-            <span style="font-size: 8.5px; color: #67e8f9; font-weight: 700; display:block;">&#128302; NUMBER</span>
-            <span style="font-size: 18px; font-weight: 900; color: #22d3ee; text-shadow: 0 0 10px rgba(34, 211, 238, 0.9);">{top_rank_2_num}</span>
+    <div style="margin-top: 16px; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
+        <div style="background: rgba(2, 6, 23, 0.8); border: 2px solid #06b6d4; border-radius: 12px; padding: 12px 24px; min-width: 150px;">
+            <span style="font-size: 11px; color: #67e8f9; font-weight: 700; display:block;">&#128302; PREDICTED NUMBER (अंक)</span>
+            <span style="font-size: 32px; font-weight: 900; color: #22d3ee; text-shadow: 0 0 16px rgba(34, 211, 238, 0.9);">{top_rank_2_num}</span>
         </div>
-        <div style="background: rgba(2, 6, 23, 0.8); border: 1.5px solid {top_rank_2_col_hex}; border-radius: 8px; padding: 6px 3px; flex: 1; min-width: 0;">
-            <span style="font-size: 8.5px; color: #94a3b8; font-weight: 700; display:block;">&#127912; COLOR</span>
-            <span style="font-size: 18px; font-weight: 900; color: {top_rank_2_col_hex};">{top_rank_2_col}</span>
+        <div style="background: rgba(2, 6, 23, 0.8); border: 2px solid {top_rank_2_col_hex}; border-radius: 12px; padding: 12px 24px; min-width: 120px;">
+            <span style="font-size: 11px; color: #94a3b8; font-weight: 700; display:block;">&#127912; COLOR (रंग)</span>
+            <span style="font-size: 22px; font-weight: 900; color: {top_rank_2_col_hex};">{top_rank_2_col}</span>
         </div>
-        <div style="background: rgba(2, 6, 23, 0.8); border: 1.5px solid #38bdf8; border-radius: 8px; padding: 6px 3px; flex: 1; min-width: 0;">
-            <span style="font-size: 8.5px; color: #bae6fd; font-weight: 700; display:block;">&#128207; SIZE</span>
-            <span style="font-size: 18px; font-weight: 900; color: #38bdf8;">{top_rank_2_size}</span>
-        </div>
-    </div>
-    <div style="margin-top: 6px; display: flex; justify-content: space-between; gap: 4px; width: 100%;">
-        <div style="background: rgba(2, 6, 23, 0.7); border: 1px solid #06b6d4; border-radius: 6px; padding: 3px 2px; flex: 1; min-width: 0; text-align: center;">
-            <span style="font-size: 7.5px; color: #67e8f9; font-weight: 700; display:block; text-transform: uppercase;">📌 NUMBER</span>
-            <span style="font-size: 9px; font-weight: 800; color: #ffffff;">{top2_num_sahi} Sahi | {top2_num_galat} Galat</span>
-        </div>
-        <div style="background: rgba(2, 6, 23, 0.7); border: 1px solid #22c55e; border-radius: 6px; padding: 3px 2px; flex: 1; min-width: 0; text-align: center;">
-            <span style="font-size: 7.5px; color: #86efac; font-weight: 700; display:block; text-transform: uppercase;">🎨 COLOR</span>
-            <span style="font-size: 9px; font-weight: 800; color: #86efac;">{top2_col_sahi} Sahi | {top2_col_galat} Galat</span>
-        </div>
-        <div style="background: rgba(2, 6, 23, 0.7); border: 1px solid #a855f7; border-radius: 6px; padding: 3px 2px; flex: 1; min-width: 0; text-align: center;">
-            <span style="font-size: 7.5px; color: #c084fc; font-weight: 700; display:block; text-transform: uppercase;">📏 SIZE</span>
-            <span style="font-size: 9px; font-weight: 800; color: #d8b4fe;">{top2_size_sahi} Sahi | {top2_size_galat} Galat</span>
+        <div style="background: rgba(2, 6, 23, 0.8); border: 2px solid #38bdf8; border-radius: 12px; padding: 12px 24px; min-width: 120px;">
+            <span style="font-size: 11px; color: #bae6fd; font-weight: 700; display:block;">&#128207; SIZE (आकार)</span>
+            <span style="font-size: 22px; font-weight: 900; color: #38bdf8;">{top_rank_2_size}</span>
         </div>
     </div>
-    <div style="margin-top: 6px; display: flex; justify-content: space-around; align-items: center; font-size: 9.5px; color: #e2e8f0; background: rgba(2, 6, 23, 0.6); padding: 4px 8px; border-radius: 6px; border: 1px solid rgba(6, 182, 212, 0.4); flex-wrap: wrap; gap: 4px;">
-        <span><strong>UCB:</strong> <span style="color: #67e8f9;">{round(float(top_rank_2_ucb), 2)}</span></span>
-        <span><strong>Win:</strong> <span style="color: #4ade80;">{top_rank_2_winrate}%</span></span>
-        <span><strong>Wt:</strong> <span style="color: #facc15;">{top_rank_2_weight}x</span></span>
-        <span><strong>Pts:</strong> <span style="color: #38bdf8;">{top_rank_2_pts}</span></span>
+    <div style="margin-top: 14px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
+        <div style="background: rgba(2, 6, 23, 0.7); border: 1px solid #06b6d4; border-radius: 6px; padding: 6px 12px; min-width: 140px; text-align: center;">
+            <span style="font-size: 10px; color: #67e8f9; font-weight: 700; display:block; text-transform: uppercase;">&#128204; Number (अंक)</span>
+            <span style="font-size: 12px; font-weight: 800; color: #ffffff;">{top2_num_sahi} Sahi | {top2_num_galat} Galat</span>
+        </div>
+        <div style="background: rgba(2, 6, 23, 0.7); border: 1px solid #22c55e; border-radius: 6px; padding: 6px 12px; min-width: 140px; text-align: center;">
+            <span style="font-size: 10px; color: #86efac; font-weight: 700; display:block; text-transform: uppercase;">&#127912; Color (रंग)</span>
+            <span style="font-size: 12px; font-weight: 800; color: #86efac;">{top2_col_sahi} Sahi | {top2_col_galat} Galat</span>
+        </div>
+        <div style="background: rgba(2, 6, 23, 0.7); border: 1px solid #a855f7; border-radius: 6px; padding: 6px 12px; min-width: 140px; text-align: center;">
+            <span style="font-size: 10px; color: #c084fc; font-weight: 700; display:block; text-transform: uppercase;">&#128207; Size (आकार)</span>
+            <span style="font-size: 12px; font-weight: 800; color: #d8b4fe;">{top2_size_sahi} Sahi | {top2_size_galat} Galat</span>
+        </div>
+    </div>
+    <div style="margin-top: 14px; display: flex; justify-content: space-around; align-items: center; font-size: 12px; color: #e2e8f0; background: rgba(2, 6, 23, 0.6); padding: 8px 16px; border-radius: 8px; border: 1px solid rgba(6, 182, 212, 0.4); flex-wrap: wrap; gap: 10px;">
+        <span>&#128202; <strong>UCB Score:</strong> <span style="color: #67e8f9;">{round(float(top_rank_2_ucb), 2)}</span></span>
+        <span>&#128200; <strong>Win Rate:</strong> <span style="color: #4ade80;">{top_rank_2_winrate}%</span></span>
+        <span>&#9878; <strong>Engine Weight:</strong> <span style="color: #facc15;">{top_rank_2_weight}x</span></span>
+        <span>&#127942; <strong>Points:</strong> <span style="color: #38bdf8;">{top_rank_2_pts} Pts</span></span>
     </div>
         <span>&#128200; <strong>Win Rate:</strong> <span style="color: #4ade80;">{top_rank_2_winrate}%</span></span>
         <span>&#9878; <strong>Engine Weight:</strong> <span style="color: #facc15;">{top_rank_2_weight}x</span></span>
@@ -10189,40 +10016,40 @@ st.markdown(f"""
     <div style="font-size: 12px; color: #cbd5e1; margin-top: 4px;">
         Math, Data Analysis, and Singularity Pattern Engine. यह सुपर-इंटेलिजेंट एजेंट 100% निश्चितता वाले एकल लक्ष्य को चुनता है:
     </div>
-    <div style="margin-top: 8px; display: flex; justify-content: center; gap: 6px; width: 100%;">
-        <div style="background: rgba(2, 6, 23, 0.6); border: 1.5px solid #06b6d4; border-radius: 8px; padding: 6px 3px; flex: 1; min-width: 0; text-align: center;">
-            <span style="font-size: 8.5px; color: #67e8f9; font-weight: 700; display:block;">&#127919; SINGULAR TARGET</span>
-            <span style="font-size: 16px; font-weight: 900; color: #e0f7fa;">{asi_target}</span>
+    <div style="margin-top: 12px; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
+        <div style="background: rgba(2, 6, 23, 0.6); border: 1.5px solid #06b6d4; border-radius: 8px; padding: 8px 16px; min-width: 220px;">
+            <span style="font-size: 11px; color: #67e8f9; font-weight: 700; display:block;">&#127919; CALIBRATED SINGULAR TARGET (विलक्षण लक्ष्य)</span>
+            <span style="font-size: 18px; font-weight: 900; color: #e0f7fa;">{asi_target}</span>
         </div>
-        <div style="background: rgba(2, 6, 23, 0.6); border: 1.5px solid #22c55e; border-radius: 8px; padding: 6px 3px; flex: 1; min-width: 0; text-align: center;">
-            <span style="font-size: 8.5px; color: #86efac; font-weight: 700; display:block;">&#128302; PREDICTION</span>
-            <span style="font-size: 16px; font-weight: 900; color: #4ade80; text-shadow: 0 0 10px rgba(74, 222, 128, 0.5);">{asi_prediction}</span>
-        </div>
-    </div>
-    <div style="margin-top: 6px; display: flex; justify-content: space-between; gap: 4px; width: 100%;">
-        <div style="background: rgba(2, 6, 23, 0.6); border: 1px solid #06b6d4; border-radius: 6px; padding: 3px 2px; flex: 1; min-width: 0; text-align: center;">
-            <span style="font-size: 7.5px; color: #67e8f9; font-weight: 700; display:block; text-transform: uppercase;">📌 NUMBER</span>
-            <span style="font-size: 9px; font-weight: 800; color: #e0f7fa;">{asi3_num_sahi} Sahi | {asi3_num_galat} Galat</span>
-        </div>
-        <div style="background: rgba(2, 6, 23, 0.6); border: 1px solid #22c55e; border-radius: 6px; padding: 3px 2px; flex: 1; min-width: 0; text-align: center;">
-            <span style="font-size: 7.5px; color: #86efac; font-weight: 700; display:block; text-transform: uppercase;">🎨 COLOR</span>
-            <span style="font-size: 9px; font-weight: 800; color: #4ade80;">{asi3_col_sahi} Sahi | {asi3_col_galat} Galat</span>
-        </div>
-        <div style="background: rgba(2, 6, 23, 0.6); border: 1px solid #a855f7; border-radius: 6px; padding: 3px 2px; flex: 1; min-width: 0; text-align: center;">
-            <span style="font-size: 7.5px; color: #d8b4fe; font-weight: 700; display:block; text-transform: uppercase;">📏 SIZE</span>
-            <span style="font-size: 9px; font-weight: 800; color: #c084fc;">{asi3_size_sahi} Sahi | {asi3_size_galat} Galat</span>
+        <div style="background: rgba(2, 6, 23, 0.6); border: 1.5px solid #22c55e; border-radius: 8px; padding: 8px 16px; min-width: 220px;">
+            <span style="font-size: 11px; color: #86efac; font-weight: 700; display:block;">&#128302; ASI ULTIMATE PREDICTION (सर्वोच्च भविष्यवाणी)</span>
+            <span style="font-size: 20px; font-weight: 900; color: #4ade80; text-shadow: 0 0 10px rgba(74, 222, 128, 0.5);">{asi_prediction}</span>
         </div>
     </div>
-    <div style="font-size: 9.5px; color: #22d3ee; font-weight: 800; margin-top: 6px;">
-        &#128737; ASI Certainty: {round(float(asi_confidence), 2)}%
+    <div style="margin-top: 12px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
+        <div style="background: rgba(2, 6, 23, 0.6); border: 1px solid #06b6d4; border-radius: 6px; padding: 6px 12px; min-width: 140px; text-align: center;">
+            <span style="font-size: 10px; color: #67e8f9; font-weight: 700; display:block; text-transform: uppercase;">&#128204; Number (अंक)</span>
+            <span style="font-size: 12px; font-weight: 800; color: #e0f7fa;">N: {asi3_num_sahi} Sahi | {asi3_num_galat} Galat</span>
+        </div>
+        <div style="background: rgba(2, 6, 23, 0.6); border: 1px solid #22c55e; border-radius: 6px; padding: 6px 12px; min-width: 140px; text-align: center;">
+            <span style="font-size: 10px; color: #86efac; font-weight: 700; display:block; text-transform: uppercase;">&#127912; Color (रंग)</span>
+            <span style="font-size: 12px; font-weight: 800; color: #4ade80;">C: {asi3_col_sahi} Sahi | {asi3_col_galat} Galat</span>
+        </div>
+        <div style="background: rgba(2, 6, 23, 0.6); border: 1px solid #a855f7; border-radius: 6px; padding: 6px 12px; min-width: 140px; text-align: center;">
+            <span style="font-size: 10px; color: #d8b4fe; font-weight: 700; display:block; text-transform: uppercase;">&#128207; Size (आकार)</span>
+            <span style="font-size: 12px; font-weight: 800; color: #c084fc;">S: {asi3_size_sahi} Sahi | {asi3_size_galat} Galat</span>
+        </div>
     </div>
-    <div style="font-size: 9px; color: #cbd5e1; font-style: italic; margin-top: 2px;">
+    <div style="font-size: 12px; color: #22d3ee; font-weight: 800; margin-top: 10px;">
+        &#128737; ASI Mathematical Certainty: {round(float(asi_confidence), 2)}% (Calibrated Singularity Bounds)
+    </div>
+    <div style="font-size: 11px; color: #cbd5e1; font-style: italic; margin-top: 4px;">
         &#128161; ASI Analysis: {asi_rationale}
     </div>
-    <details style="background: rgba(2, 6, 23, 0.4); border: 1px solid #06b6d4; border-radius: 6px; padding: 6px; margin-top: 6px; text-align: left; cursor: pointer;">
-        <summary style="color: #22d3ee; font-weight: 700; font-size: 9.5px;">&#129504; ASI Thinking Process</summary>
-        <div style="font-size: 8.5px; color: #e2e8f0; line-height: 1.4; margin-top: 4px; max-height: 140px; overflow-y: auto; font-family: monospace;">
-            <div style='margin-bottom:2px;'>{asi_thinking_steps[0]}</div><div style='margin-bottom:2px;'>{asi_thinking_steps[1]}</div><div style='margin-bottom:2px;'>{asi_thinking_steps[2]}</div><div style='margin-bottom:2px;'>{asi_thinking_steps[3]}</div><div style='margin-bottom:2px;'>{asi_thinking_steps[4]}</div><div style='margin-bottom:2px;'>{asi_thinking_steps[5]}</div><div style='margin-bottom:2px;'>{asi_thinking_steps[6]}</div><div style='margin-bottom:2px;'>{asi_thinking_steps[7]}</div><div style='margin-bottom:2px;'>{asi_thinking_steps[8]}</div><div style='margin-bottom:2px;'>{asi_thinking_steps[9]}</div>
+    <details style="background: rgba(2, 6, 23, 0.4); border: 1px solid #06b6d4; border-radius: 8px; padding: 10px; margin-top: 12px; text-align: left; cursor: pointer;">
+        <summary style="color: #22d3ee; font-weight: 700; font-size: 12px;">&#129504; ASI 10x Thinking Process (10x गहन विचार प्रक्रिया)</summary>
+        <div style="font-size: 11px; color: #e2e8f0; line-height: 1.6; margin-top: 8px; max-height: 180px; overflow-y: auto; padding-right: 5px; font-family: monospace;">
+            <div style='margin-bottom:4px;'>{asi_thinking_steps[0]}</div><br/><div style='margin-bottom:4px;'>{asi_thinking_steps[1]}</div><br/><div style='margin-bottom:4px;'>{asi_thinking_steps[2]}</div><br/><div style='margin-bottom:4px;'>{asi_thinking_steps[3]}</div><br/><div style='margin-bottom:4px;'>{asi_thinking_steps[4]}</div><br/><div style='margin-bottom:4px;'>{asi_thinking_steps[5]}</div><br/><div style='margin-bottom:4px;'>{asi_thinking_steps[6]}</div><br/><div style='margin-bottom:4px;'>{asi_thinking_steps[7]}</div><br/><div style='margin-bottom:4px;'>{asi_thinking_steps[8]}</div><br/><div style='margin-bottom:4px;'>{asi_thinking_steps[9]}</div>
         </div>
     </details>
     {generate_last_8_boxes_html('asi3', latest_issue)}
@@ -10242,39 +10069,41 @@ except Exception:
     omni_regret = 0.0
 
 st.markdown(f"""
-<div style="background: linear-gradient(135deg, #0a0f1f 0%, #1a1040 50%, #0a0f1f 100%); border: 2.5px solid #10b981; border-radius: 12px; padding: 10px; text-align: center; margin-bottom: 16px; box-shadow: 0 0 25px rgba(16, 185, 129, 0.3);">
-    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px;">
-        <span style="font-size: 14px; font-weight: 900; color: #10b981; text-shadow: 0 0 10px rgba(16, 185, 129, 0.6);">&#129504; OMNI AGENT 6.0 (IQ 2500+)</span>
-        <span style="background: rgba(15, 23, 42, 0.85); border: 1px solid #10b981; border-radius: 6px; padding: 2px 6px; font-size: 8.5px; font-weight: 800; color: #34d399; display: inline-flex; align-items: center; gap: 4px;">&#127919; TARGET: <span style="color: #facc15; font-size: 10px; font-weight: 900;">#{target_issue}</span> <span style="background: #10b981; color: #020617; font-size: 7.5px; font-weight: 900; padding: 1px 4px; border-radius: 8px;">LIVE</span></span>
+<div style="background: linear-gradient(135deg, #0a0f1f 0%, #1a1040 50%, #0a0f1f 100%); border: 3px solid #10b981; border-radius: 12px; padding: 18px; text-align: center; margin-bottom: 18px; box-shadow: 0 0 25px rgba(16, 185, 129, 0.4);">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+        <span style="font-size: 18px; font-weight: 900; color: #10b981; text-shadow: 0 0 10px rgba(16, 185, 129, 0.6);">&#129504; OMNI AGENT 6.0 (IQ 2500+)</span>
+        <span style="background: rgba(15, 23, 42, 0.85); border: 1.5px solid #10b981; border-radius: 8px; padding: 3px 10px; font-size: 10px; font-weight: 800; color: #34d399; display: inline-flex; align-items: center; gap: 6px;">&#127919; TARGET ISSUE: <span style="color: #facc15; font-size: 11px; font-weight: 900;">#{target_issue}</span> <span style="background: #10b981; color: #020617; font-size: 8px; font-weight: 900; padding: 1px 5px; border-radius: 8px;">LIVE SYNC</span></span>
     </div>
-    <div style="margin-top: 8px; display: flex; justify-content: center; gap: 4px; width: 100%;">
-        <div style="background: rgba(2, 6, 23, 0.6); border: 1.5px solid #10b981; border-radius: 8px; padding: 6px 3px; flex: 1; min-width: 0;">
-            <span style="font-size: 8.5px; color: #34d399; font-weight: 700; display:block;">&#128302; PREDICTION</span>
-            <span style="font-size: 18px; font-weight: 900; color: #10b981; text-shadow: 0 0 10px rgba(16, 185, 129, 0.6);">{omni_prediction}</span>
+    <div style="font-size: 12px; color: #cbd5e1; margin-top: 6px; text-align: left;">
+        Episodic Memory & Policy Gradient Reinforcement Learning.
+    </div>
+    <div style="margin-top: 12px; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
+        <div style="background: rgba(2, 6, 23, 0.6); border: 1.5px solid #10b981; border-radius: 8px; padding: 8px 16px; min-width: 120px;">
+            <span style="font-size: 11px; color: #34d399; font-weight: 700; display:block;">&#128302; OMNI PREDICTION</span>
+            <span style="font-size: 24px; font-weight: 900; color: #10b981; text-shadow: 0 0 12px rgba(16, 185, 129, 0.6);">{omni_prediction}</span>
         </div>
-        <div style="background: rgba(2, 6, 23, 0.6); border: 1.5px solid {'#ef4444' if omni_col == 'Red' else '#22c55e'}; border-radius: 8px; padding: 6px 3px; flex: 1; min-width: 0;">
-            <span style="font-size: 8.5px; color: #94a3b8; font-weight: 700; display:block;">&#127912; COLOR</span>
+        <div style="background: rgba(2, 6, 23, 0.6); border: 1.5px solid {'#ef4444' if omni_col == 'Red' else '#22c55e'}; border-radius: 8px; padding: 8px 16px; min-width: 100px;">
+            <span style="font-size: 11px; color: #94a3b8; font-weight: 700; display:block;">&#127912; COLOR</span>
             <span style="font-size: 18px; font-weight: 900; color: {'#ef4444' if omni_col == 'Red' else '#22c55e'};">{omni_col}</span>
         </div>
-        <div style="background: rgba(2, 6, 23, 0.6); border: 1.5px solid #a855f7; border-radius: 8px; padding: 6px 3px; flex: 1; min-width: 0;">
-            <span style="font-size: 8.5px; color: #c084fc; font-weight: 700; display:block;">&#128207; SIZE</span>
+        <div style="background: rgba(2, 6, 23, 0.6); border: 1.5px solid #a855f7; border-radius: 8px; padding: 8px 16px; min-width: 100px;">
+            <span style="font-size: 11px; color: #c084fc; font-weight: 700; display:block;">&#128207; SIZE</span>
             <span style="font-size: 18px; font-weight: 900; color: #d8b4fe;">{omni_size}</span>
         </div>
     </div>
-    <div style="margin-top: 6px; display: flex; justify-content: space-between; gap: 4px; width: 100%;">
-        <div style="background: rgba(2, 6, 23, 0.6); border: 1px solid #10b981; border-radius: 6px; padding: 3px 2px; flex: 1; min-width: 0; text-align: center;">
-            <span style="font-size: 7.5px; color: #34d399; font-weight: 700; display:block; text-transform: uppercase;">📌 NUMBER</span>
-            <span style="font-size: 9px; font-weight: 800; color: #a7f3d0;">{omni6_num_sahi} Sahi | {omni6_num_galat} Galat</span>
+    <div style="margin-top: 12px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
+        <div style="background: rgba(2, 6, 23, 0.6); border: 1px solid #10b981; border-radius: 6px; padding: 6px 12px; min-width: 140px; text-align: center;">
+            <span style="font-size: 10px; color: #34d399; font-weight: 700; display:block; text-transform: uppercase;">&#128204; Number (अंक)</span>
+            <span style="font-size: 12px; font-weight: 800; color: #a7f3d0;">{omni6_num_sahi} Sahi | {omni6_num_galat} Galat</span>
         </div>
-        <div style="background: rgba(2, 6, 23, 0.6); border: 1px solid #22c55e; border-radius: 6px; padding: 3px 2px; flex: 1; min-width: 0; text-align: center;">
-            <span style="font-size: 7.5px; color: #86efac; font-weight: 700; display:block; text-transform: uppercase;">🎨 COLOR</span>
-            <span style="font-size: 9px; font-weight: 800; color: #86efac;">{omni6_col_sahi} Sahi | {omni6_col_galat} Galat</span>
+        <div style="background: rgba(2, 6, 23, 0.6); border: 1px solid #22c55e; border-radius: 6px; padding: 6px 12px; min-width: 140px; text-align: center;">
+            <span style="font-size: 10px; color: #86efac; font-weight: 700; display:block; text-transform: uppercase;">&#127912; Color (रंग)</span>
+            <span style="font-size: 12px; font-weight: 800; color: #86efac;">{omni6_col_sahi} Sahi | {omni6_col_galat} Galat</span>
         </div>
-        <div style="background: rgba(2, 6, 23, 0.6); border: 1px solid #a855f7; border-radius: 6px; padding: 3px 2px; flex: 1; min-width: 0; text-align: center;">
-            <span style="font-size: 7.5px; color: #c084fc; font-weight: 700; display:block; text-transform: uppercase;">📏 SIZE</span>
-            <span style="font-size: 9px; font-weight: 800; color: #d8b4fe;">{omni6_size_sahi} Sahi | {omni6_size_galat} Galat</span>
+        <div style="background: rgba(2, 6, 23, 0.6); border: 1px solid #a855f7; border-radius: 6px; padding: 6px 12px; min-width: 140px; text-align: center;">
+            <span style="font-size: 10px; color: #c084fc; font-weight: 700; display:block; text-transform: uppercase;">&#128207; Size (आकार)</span>
+            <span style="font-size: 12px; font-weight: 800; color: #d8b4fe;">{omni6_size_sahi} Sahi | {omni6_size_galat} Galat</span>
         </div>
-    </div>
     </div>
     <div style="margin-top: 10px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #cbd5e1; padding: 0 10px;">
         <span>&#128737; Confidence: <strong>{round(float(omni_confidence), 2)}%</strong></span>
@@ -10325,32 +10154,32 @@ st.markdown(f"""
     <div style="font-size: 12px; color: #cbd5e1; margin-top: 6px; text-align: left;">
         Temporal Sequence Memory (LSTM) with Generalized Advantage Estimation (GAE) & Proximal Policy Optimization (PPO).
     </div>
-    <div style="margin-top: 8px; display: flex; justify-content: center; gap: 4px; width: 100%;">
-        <div style="background: rgba(2, 6, 23, 0.6); border: 1.5px solid #06b6d4; border-radius: 8px; padding: 6px 3px; flex: 1; min-width: 0;">
-            <span style="font-size: 8.5px; color: #67e8f9; font-weight: 700; display:block;">&#128302; PREDICTION</span>
-            <span style="font-size: 18px; font-weight: 900; color: #06b6d4; text-shadow: 0 0 10px rgba(6, 182, 212, 0.6);">{omni7_prediction}</span>
+    <div style="margin-top: 12px; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
+        <div style="background: rgba(2, 6, 23, 0.6); border: 1.5px solid #06b6d4; border-radius: 8px; padding: 8px 16px; min-width: 120px;">
+            <span style="font-size: 11px; color: #67e8f9; font-weight: 700; display:block;">&#128302; OMNI 7.0 PREDICTION</span>
+            <span style="font-size: 24px; font-weight: 900; color: #06b6d4; text-shadow: 0 0 12px rgba(6, 182, 212, 0.6);">{omni7_prediction}</span>
         </div>
-        <div style="background: rgba(2, 6, 23, 0.6); border: 1.5px solid {'#ef4444' if omni7_col == 'Red' else '#22c55e'}; border-radius: 8px; padding: 6px 3px; flex: 1; min-width: 0;">
-            <span style="font-size: 8.5px; color: #94a3b8; font-weight: 700; display:block;">&#127912; COLOR</span>
+        <div style="background: rgba(2, 6, 23, 0.6); border: 1.5px solid {'#ef4444' if omni7_col == 'Red' else '#22c55e'}; border-radius: 8px; padding: 8px 16px; min-width: 100px;">
+            <span style="font-size: 11px; color: #94a3b8; font-weight: 700; display:block;">&#127912; COLOR</span>
             <span style="font-size: 18px; font-weight: 900; color: {'#ef4444' if omni7_col == 'Red' else '#22c55e'};">{omni7_col}</span>
         </div>
-        <div style="background: rgba(2, 6, 23, 0.6); border: 1.5px solid #a855f7; border-radius: 8px; padding: 6px 3px; flex: 1; min-width: 0;">
-            <span style="font-size: 8.5px; color: #c084fc; font-weight: 700; display:block;">&#128207; SIZE</span>
+        <div style="background: rgba(2, 6, 23, 0.6); border: 1.5px solid #a855f7; border-radius: 8px; padding: 8px 16px; min-width: 100px;">
+            <span style="font-size: 11px; color: #c084fc; font-weight: 700; display:block;">&#128207; SIZE</span>
             <span style="font-size: 18px; font-weight: 900; color: #d8b4fe;">{omni7_size}</span>
         </div>
     </div>
-    <div style="margin-top: 6px; display: flex; justify-content: space-between; gap: 4px; width: 100%;">
-        <div style="background: rgba(2, 6, 23, 0.6); border: 1px solid #06b6d4; border-radius: 6px; padding: 3px 2px; flex: 1; min-width: 0; text-align: center;">
-            <span style="font-size: 7.5px; color: #67e8f9; font-weight: 700; display:block; text-transform: uppercase;">📌 NUMBER</span>
-            <span style="font-size: 9px; font-weight: 800; color: #e0f7fa;">{omni7_num_sahi} Sahi | {omni7_num_galat} Galat</span>
+    <div style="margin-top: 12px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
+        <div style="background: rgba(2, 6, 23, 0.6); border: 1px solid #06b6d4; border-radius: 6px; padding: 6px 12px; min-width: 140px; text-align: center;">
+            <span style="font-size: 10px; color: #67e8f9; font-weight: 700; display:block; text-transform: uppercase;">&#128204; Number (अंक)</span>
+            <span style="font-size: 12px; font-weight: 800; color: #e0f7fa;">{omni7_num_sahi} Sahi | {omni7_num_galat} Galat</span>
         </div>
-        <div style="background: rgba(2, 6, 23, 0.6); border: 1px solid #22c55e; border-radius: 6px; padding: 3px 2px; flex: 1; min-width: 0; text-align: center;">
-            <span style="font-size: 7.5px; color: #86efac; font-weight: 700; display:block; text-transform: uppercase;">🎨 COLOR</span>
-            <span style="font-size: 9px; font-weight: 800; color: #86efac;">{omni7_col_sahi} Sahi | {omni7_col_galat} Galat</span>
+        <div style="background: rgba(2, 6, 23, 0.6); border: 1px solid #22c55e; border-radius: 6px; padding: 6px 12px; min-width: 140px; text-align: center;">
+            <span style="font-size: 10px; color: #86efac; font-weight: 700; display:block; text-transform: uppercase;">&#127912; Color (रंग)</span>
+            <span style="font-size: 12px; font-weight: 800; color: #86efac;">{omni7_col_sahi} Sahi | {omni7_col_galat} Galat</span>
         </div>
-        <div style="background: rgba(2, 6, 23, 0.6); border: 1px solid #a855f7; border-radius: 6px; padding: 3px 2px; flex: 1; min-width: 0; text-align: center;">
-            <span style="font-size: 7.5px; color: #c084fc; font-weight: 700; display:block; text-transform: uppercase;">📏 SIZE</span>
-            <span style="font-size: 9px; font-weight: 800; color: #d8b4fe;">{omni7_size_sahi} Sahi | {omni7_size_galat} Galat</span>
+        <div style="background: rgba(2, 6, 23, 0.6); border: 1px solid #a855f7; border-radius: 6px; padding: 6px 12px; min-width: 140px; text-align: center;">
+            <span style="font-size: 10px; color: #c084fc; font-weight: 700; display:block; text-transform: uppercase;">&#128207; Size (आकार)</span>
+            <span style="font-size: 12px; font-weight: 800; color: #d8b4fe;">{omni7_size_sahi} Sahi | {omni7_size_galat} Galat</span>
         </div>
     </div>
     <div style="margin-top: 10px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #cbd5e1; padding: 0 10px;">
@@ -10397,7 +10226,7 @@ ascend_active_engines_count = 59 - ascend_pruned_engines_count
 
 # --- THE ABSOLUTE AGENT 10.0 STANDALONE UI CARD ---
 abs10_pred_digit = int(absolute10_prediction) if str(absolute10_prediction).isdigit() else 5
-abs10_col = "Red" if abs10_pred_digit in [0, 2, 4, 6, 8] else "Green"
+abs10_col = "Red" if abs10_pred_digit in [1, 3, 7, 9, 8] else "Green"
 abs10_size = "Big" if abs10_pred_digit >= 5 else "Small"
 
 abs10_info = st.session_state.get("absolute10_stats", {})
@@ -10440,29 +10269,29 @@ st.markdown(f"""
         Self-Evolving Transcendent Mind unifying Multi-Horizon Planning, Regime Transfer Learning, Meta-Meta-Ensemble, Do-Calculus, Self-Consistency, Genetic Evolution, Attention Memory, and Conformal Uncertainty.
     </div>
     <div style="margin-top: 14px; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
-        <div style="background: rgba(2, 6, 23, 0.85); border: 2px solid #10b981; border-radius: 10px; padding: 10px 22px; flex: 1; min-width: 0;">
+        <div style="background: rgba(2, 6, 23, 0.85); border: 2px solid #10b981; border-radius: 10px; padding: 10px 22px; min-width: 140px;">
             <span style="font-size: 11px; color: #a7f3d0; font-weight: 700; display:block;">&#9889; PREDICTED NUMBER</span>
             <span style="font-size: 28px; font-weight: 900; color: #34d399; text-shadow: 0 0 16px rgba(52, 211, 153, 0.9);">{absolute10_prediction}</span>
         </div>
-        <div style="background: rgba(2, 6, 23, 0.85); border: 2px solid {'#ef4444' if abs10_col == 'Red' else '#22c55e'}; border-radius: 10px; padding: 10px 22px; flex: 1; min-width: 0;">
+        <div style="background: rgba(2, 6, 23, 0.85); border: 2px solid {'#ef4444' if abs10_col == 'Red' else '#22c55e'}; border-radius: 10px; padding: 10px 22px; min-width: 110px;">
             <span style="font-size: 11px; color: #94a3b8; font-weight: 700; display:block;">&#127912; COLOR BADGE</span>
             <span style="font-size: 20px; font-weight: 900; color: {'#ef4444' if abs10_col == 'Red' else '#22c55e'};">{abs10_col}</span>
         </div>
-        <div style="background: rgba(2, 6, 23, 0.85); border: 2px solid #a855f7; border-radius: 10px; padding: 10px 22px; flex: 1; min-width: 0;">
+        <div style="background: rgba(2, 6, 23, 0.85); border: 2px solid #a855f7; border-radius: 10px; padding: 10px 22px; min-width: 110px;">
             <span style="font-size: 11px; color: #c084fc; font-weight: 700; display:block;">&#128207; SIZE BADGE</span>
             <span style="font-size: 20px; font-weight: 900; color: #d8b4fe;">{abs10_size}</span>
         </div>
     </div>
     <div style="margin-top: 12px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
-        <div style="background: rgba(2, 6, 23, 0.85); border: 1px solid #10b981; border-radius: 6px; padding: 6px 12px; flex: 1; min-width: 0; text-align: center;">
+        <div style="background: rgba(2, 6, 23, 0.85); border: 1px solid #10b981; border-radius: 6px; padding: 6px 12px; min-width: 140px; text-align: center;">
             <span style="font-size: 10px; color: #a7f3d0; font-weight: 700; display:block; text-transform: uppercase;">&#128204; Number (अंक)</span>
             <span style="font-size: 12px; font-weight: 800; color: #ffffff;">{abs10_num_sahi} Sahi | {abs10_num_galat} Galat</span>
         </div>
-        <div style="background: rgba(2, 6, 23, 0.85); border: 1px solid #22c55e; border-radius: 6px; padding: 6px 12px; flex: 1; min-width: 0; text-align: center;">
+        <div style="background: rgba(2, 6, 23, 0.85); border: 1px solid #22c55e; border-radius: 6px; padding: 6px 12px; min-width: 140px; text-align: center;">
             <span style="font-size: 10px; color: #86efac; font-weight: 700; display:block; text-transform: uppercase;">&#127912; Color (रंग)</span>
             <span style="font-size: 12px; font-weight: 800; color: #86efac;">{abs10_col_sahi} Sahi | {abs10_col_galat} Galat</span>
         </div>
-        <div style="background: rgba(2, 6, 23, 0.85); border: 1px solid #a855f7; border-radius: 6px; padding: 6px 12px; flex: 1; min-width: 0; text-align: center;">
+        <div style="background: rgba(2, 6, 23, 0.85); border: 1px solid #a855f7; border-radius: 6px; padding: 6px 12px; min-width: 140px; text-align: center;">
             <span style="font-size: 10px; color: #c084fc; font-weight: 700; display:block; text-transform: uppercase;">&#128207; Size (आकार)</span>
             <span style="font-size: 12px; font-weight: 800; color: #d8b4fe;">{abs10_size_sahi} Sahi | {abs10_size_galat} Galat</span>
         </div>
@@ -10495,7 +10324,7 @@ with st.expander("&#129504; THE ABSOLUTE AGENT 10.0 Transcendent Thinking Proces
 
 # --- TRANSCENDENT AGENT 11.0 (THE GOD-MIND) STANDALONE UI CARD ---
 transcendent11_pred_digit = int(transcendent11_prediction) if str(transcendent11_prediction).isdigit() else 7
-transcendent11_col = "Red" if transcendent11_pred_digit in [0, 2, 4, 6, 8] else "Green"
+transcendent11_col = "Red" if transcendent11_pred_digit in [1, 3, 7, 9, 8] else "Green"
 transcendent11_size = "Big" if transcendent11_pred_digit >= 5 else "Small"
 
 trans11_info = st.session_state.get("transcendent11_stats", {})
@@ -10524,33 +10353,32 @@ st.markdown(f"""
             <span style="background: #a855f7; color: #ffffff; font-size: 10px; font-weight: 900; padding: 5px 14px; border-radius: 20px;">
                 &#127756; GOD-MIND AGI
             </span>
-            {render_notif_button("transcendent11", "TRANSCENDENT 11.0", target_issue, transcendent11_prediction, transcendent11_col, transcendent11_size, round(float(transcendent11_confidence), 1))}
         </div>
     </div>
     <div style="margin-top: 16px; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
-        <div style="background: rgba(2, 6, 23, 0.8); border: 2px solid #a855f7; border-radius: 12px; padding: 12px 24px; flex: 1; min-width: 0;">
+        <div style="background: rgba(2, 6, 23, 0.8); border: 2px solid #a855f7; border-radius: 12px; padding: 12px 24px; min-width: 150px;">
             <span style="font-size: 11px; color: #f0abfc; font-weight: 700; display:block;">&#128302; GOD-MIND PREDICTION</span>
             <span style="font-size: 32px; font-weight: 900; color: #d8b4fe; text-shadow: 0 0 18px rgba(216, 180, 254, 0.9);">{transcendent11_prediction}</span>
         </div>
-        <div style="background: rgba(2, 6, 23, 0.8); border: 2px solid {'#ef4444' if transcendent11_col == 'Red' else ('#22c55e' if transcendent11_col == 'Green' else '#a855f7')}; border-radius: 12px; padding: 12px 24px; flex: 1; min-width: 0;">
+        <div style="background: rgba(2, 6, 23, 0.8); border: 2px solid {'#ef4444' if transcendent11_col == 'Red' else ('#22c55e' if transcendent11_col == 'Green' else '#a855f7')}; border-radius: 12px; padding: 12px 24px; min-width: 120px;">
             <span style="font-size: 11px; color: #94a3b8; font-weight: 700; display:block;">&#127912; COLOR BADGE</span>
             <span style="font-size: 22px; font-weight: 900; color: {'#ef4444' if transcendent11_col == 'Red' else ('#22c55e' if transcendent11_col == 'Green' else '#a855f7')};">{transcendent11_col}</span>
         </div>
-        <div style="background: rgba(2, 6, 23, 0.8); border: 2px solid #38bdf8; border-radius: 12px; padding: 12px 24px; flex: 1; min-width: 0;">
+        <div style="background: rgba(2, 6, 23, 0.8); border: 2px solid #38bdf8; border-radius: 12px; padding: 12px 24px; min-width: 120px;">
             <span style="font-size: 11px; color: #bae6fd; font-weight: 700; display:block;">&#128207; SIZE BADGE</span>
             <span style="font-size: 22px; font-weight: 900; color: #38bdf8;">{transcendent11_size}</span>
         </div>
     </div>
     <div style="margin-top: 14px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
-        <div style="background: rgba(2, 6, 23, 0.7); border: 1px solid #a855f7; border-radius: 6px; padding: 6px 12px; flex: 1; min-width: 0; text-align: center;">
+        <div style="background: rgba(2, 6, 23, 0.7); border: 1px solid #a855f7; border-radius: 6px; padding: 6px 12px; min-width: 140px; text-align: center;">
             <span style="font-size: 10px; color: #f0abfc; font-weight: 700; display:block; text-transform: uppercase;">&#128204; Number (अंक)</span>
             <span style="font-size: 12px; font-weight: 800; color: #ffffff;">{trans11_num_sahi} Sahi | {trans11_num_galat} Galat</span>
         </div>
-        <div style="background: rgba(2, 6, 23, 0.7); border: 1px solid #22c55e; border-radius: 6px; padding: 6px 12px; flex: 1; min-width: 0; text-align: center;">
+        <div style="background: rgba(2, 6, 23, 0.7); border: 1px solid #22c55e; border-radius: 6px; padding: 6px 12px; min-width: 140px; text-align: center;">
             <span style="font-size: 10px; color: #86efac; font-weight: 700; display:block; text-transform: uppercase;">&#127912; Color (रंग)</span>
             <span style="font-size: 12px; font-weight: 800; color: #86efac;">{trans11_col_sahi} Sahi | {trans11_col_galat} Galat</span>
         </div>
-        <div style="background: rgba(2, 6, 23, 0.7); border: 1px solid #a855f7; border-radius: 6px; padding: 6px 12px; flex: 1; min-width: 0; text-align: center;">
+        <div style="background: rgba(2, 6, 23, 0.7); border: 1px solid #a855f7; border-radius: 6px; padding: 6px 12px; min-width: 140px; text-align: center;">
             <span style="font-size: 10px; color: #c084fc; font-weight: 700; display:block; text-transform: uppercase;">&#128207; Size (आकार)</span>
             <span style="font-size: 12px; font-weight: 800; color: #d8b4fe;">{trans11_size_sahi} Sahi | {trans11_size_galat} Galat</span>
         </div>
@@ -10575,7 +10403,7 @@ with st.expander("&#127756; 11 Transcendent Features (TRANSCENDENT AGENT 11.0 - 
 
 # --- NEXUS SUPREME PRIME STANDALONE UI CARD ---
 supreme_pred_digit = int(supreme_prediction) if str(supreme_prediction).isdigit() else 5
-supreme_col = "Red" if supreme_pred_digit in [0, 2, 4, 6, 8] else "Green"
+supreme_col = "Red" if supreme_pred_digit in [1, 3, 7, 9, 8] else "Green"
 supreme_size = "Big" if supreme_pred_digit >= 5 else "Small"
 
 supreme_info = st.session_state.get("supreme_stats", {})
@@ -10606,7 +10434,6 @@ st.markdown(f"""
             <span style="background: #a855f7; color: #ffffff; font-size: 10px; font-weight: 900; padding: 5px 14px; border-radius: 20px;">
                 &#128081; REGIME META-CHAMPION
             </span>
-            {render_notif_button("supreme_prime", "NEXUS SUPREME PRIME", target_issue, supreme_prediction, supreme_col, supreme_size, round(float(supreme_confidence), 1))}
         </div>
     </div>
     <div style="margin-top: 16px; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
@@ -10692,64 +10519,64 @@ sent_reset_html = f'<div style="margin-top: 10px; background: rgba(239, 68, 68, 
 sentinel_col_hex = '#ef4444' if sentinel_col == 'Red' else ('#22c55e' if sentinel_col == 'Green' else '#a855f7')
 
 sentinel_card_html = f"""
-<div style="background: linear-gradient(135deg, #020617 0%, #0f172a 50%, #1e1b4b 100%); border: 2.5px solid #f59e0b; border-radius: 12px; padding: 10px; text-align: center; margin-bottom: 16px; box-shadow: 0 0 25px rgba(245, 158, 11, 0.4);">
-<div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px;">
+<div style="background: linear-gradient(135deg, #020617 0%, #0f172a 50%, #1e1b4b 100%); border: 3.5px solid #f59e0b; border-radius: 16px; padding: 22px; text-align: center; margin-bottom: 24px; box-shadow: 0 0 40px rgba(245, 158, 11, 0.5);">
+<div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
 <div style="text-align: left;">
-<span style="font-size: 14px; font-weight: 900; color: #fbbf24; text-shadow: 0 0 10px rgba(245, 158, 11, 0.8);">
 &#127756; SENTINEL PRIME OMEGA (12-Layer Fractal Intelligence)
 </span>
-<div style="font-size: 9.5px; color: #67e8f9; margin-top: 1px;">
-HMM • NEAT NeuroEvolution • MCTS Strategic Planner • Bayesian Stacking • Quantum Collapse
+<div style="font-size: 12px; color: #67e8f9; margin-top: 2px;">
+HMM &#8226; NEAT NeuroEvolution &#8226; MCTS Strategic Planner &#8226; Bayesian Stacking &#8226; Quantum Collapse &#8226; Self-Healing Reset
 </div>
 </div>
-<div style="display: flex; gap: 4px; align-items: center; flex-wrap: wrap;">
-<span style="background: rgba(15, 23, 42, 0.85); border: 1px solid #f59e0b; border-radius: 6px; padding: 2px 6px; font-size: 8.5px; font-weight: 800; color: #a7f3d0; display: inline-flex; align-items: center; gap: 4px;">
-&#127919; TARGET: <span style="color: #facc15; font-size: 10px; font-weight: 900;">#{target_issue}</span>
-<span style="background: #10b981; color: #020617; font-size: 7.5px; font-weight: 900; padding: 1px 4px; border-radius: 8px;">LIVE</span>
+<div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
+<span style="background: rgba(15, 23, 42, 0.85); border: 1.5px solid #f59e0b; border-radius: 8px; padding: 4px 12px; font-size: 10px; font-weight: 800; color: #a7f3d0; display: inline-flex; align-items: center; gap: 6px;">
+&#127919; TARGET ISSUE: <span style="color: #facc15; font-size: 12px; font-weight: 900;">#{target_issue}</span>
+<span style="background: #10b981; color: #020617; font-size: 8px; font-weight: 900; padding: 2px 6px; border-radius: 10px;">LIVE SYNC</span>
 </span>
-<span style="background: linear-gradient(90deg, #f59e0b, #06b6d4); color: #020617; font-size: 8.5px; font-weight: 900; padding: 3px 8px; border-radius: 12px;">
-&#127756; 12-LAYER OMEGA
+<span style="background: linear-gradient(90deg, #f59e0b, #06b6d4); color: #020617; font-size: 10px; font-weight: 900; padding: 5px 14px; border-radius: 20px;">
+&#127756; 12-LAYER OMEGA AGENT
 </span>
 </div>
 </div>
 {sent_reset_html}
-<div style="margin-top: 8px; display: flex; justify-content: center; gap: 4px; width: 100%;">
-<div style="background: rgba(2, 6, 23, 0.85); border: 1.5px solid #f59e0b; border-radius: 8px; padding: 6px 3px; flex: 1; min-width: 0;">
-<span style="font-size: 8px; color: #fbbf24; font-weight: 700; display:block;">&#128302; NUMBER</span>
-<span style="font-size: 18px; font-weight: 900; color: #f59e0b; text-shadow: 0 0 10px rgba(245, 158, 11, 0.9);">{sentinel_pred_int}</span>
+<div style="margin-top: 16px; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
+<div style="background: rgba(2, 6, 23, 0.85); border: 2px solid #f59e0b; border-radius: 12px; padding: 12px 24px; min-width: 150px;">
+<span style="font-size: 11px; color: #fbbf24; font-weight: 700; display:block;">&#128302; PREDICTED NUMBER (अंक)</span>
+<span style="font-size: 34px; font-weight: 900; color: #f59e0b; text-shadow: 0 0 18px rgba(245, 158, 11, 0.9);">{sentinel_pred_int}</span>
 </div>
-<div style="background: rgba(2, 6, 23, 0.85); border: 1.5px solid {'#ef4444' if sentinel_col == 'Red' else ('#22c55e' if sentinel_col == 'Green' else '#a855f7')}; border-radius: 8px; padding: 6px 3px; flex: 1; min-width: 0;">
-<span style="font-size: 8px; color: #94a3b8; font-weight: 700; display:block;">&#127912; COLOR</span>
-<span style="font-size: 18px; font-weight: 900; color: {'#ef4444' if sentinel_col == 'Red' else ('#22c55e' if sentinel_col == 'Green' else '#a855f7')};">{sentinel_col}</span>
+<div style="background: rgba(2, 6, 23, 0.85); border: 2px solid {'#ef4444' if sentinel_col == 'Red' else ('#22c55e' if sentinel_col == 'Green' else '#a855f7')}; border-radius: 12px; padding: 12px 24px; min-width: 120px;">
+<span style="font-size: 11px; color: #94a3b8; font-weight: 700; display:block;">&#127912; COLOR (रंग)</span>
+<span style="font-size: 22px; font-weight: 900; color: {'#ef4444' if sentinel_col == 'Red' else ('#22c55e' if sentinel_col == 'Green' else '#a855f7')};">{sentinel_col}</span>
 </div>
-<div style="background: rgba(2, 6, 23, 0.85); border: 1.5px solid #06b6d4; border-radius: 8px; padding: 6px 3px; flex: 1; min-width: 0;">
-<span style="font-size: 8px; color: #67e8f9; font-weight: 700; display:block;">&#128207; SIZE</span>
-<span style="font-size: 18px; font-weight: 900; color: #38bdf8;">{sentinel_size}</span>
+<div style="background: rgba(2, 6, 23, 0.85); border: 2px solid #06b6d4; border-radius: 12px; padding: 12px 24px; min-width: 120px;">
+<span style="font-size: 11px; color: #67e8f9; font-weight: 700; display:block;">&#128207; SIZE (आकार)</span>
+<span style="font-size: 22px; font-weight: 900; color: #38bdf8;">{sentinel_size}</span>
 </div>
-<div style="background: rgba(2, 6, 23, 0.85); border: 1.5px solid #a855f7; border-radius: 8px; padding: 6px 3px; flex: 1; min-width: 0;">
-<span style="font-size: 8px; color: #c084fc; font-weight: 700; display:block;">&#128176; KELLY</span>
-<span style="font-size: 18px; font-weight: 900; color: #e9d5ff;">{round(float(sent_bet_size), 1)}%</span>
-</div>
-</div>
-<div style="margin-top: 6px; display: flex; justify-content: space-between; gap: 4px; width: 100%;">
-<div style="background: rgba(2, 6, 23, 0.7); border: 1px solid #f59e0b; border-radius: 6px; padding: 3px 2px; flex: 1; min-width: 0; text-align: center;">
-<span style="font-size: 7.5px; color: #fbbf24; font-weight: 700; display:block; text-transform: uppercase;">📌 NUMBER</span>
-<span style="font-size: 9px; font-weight: 800; color: #ffffff;">{sentinel_num_sahi} Sahi | {sentinel_num_galat} Galat</span>
-</div>
-<div style="background: rgba(2, 6, 23, 0.7); border: 1px solid #22c55e; border-radius: 6px; padding: 3px 2px; flex: 1; min-width: 0; text-align: center;">
-<span style="font-size: 7.5px; color: #86efac; font-weight: 700; display:block; text-transform: uppercase;">🎨 COLOR</span>
-<span style="font-size: 9px; font-weight: 800; color: #86efac;">{sentinel_col_sahi} Sahi | {sentinel_col_galat} Galat</span>
-</div>
-<div style="background: rgba(2, 6, 23, 0.7); border: 1px solid #a855f7; border-radius: 6px; padding: 3px 2px; flex: 1; min-width: 0; text-align: center;">
-<span style="font-size: 7.5px; color: #c084fc; font-weight: 700; display:block; text-transform: uppercase;">📏 SIZE</span>
-<span style="font-size: 9px; font-weight: 800; color: #d8b4fe;">{sentinel_size_sahi} Sahi | {sentinel_size_galat} Galat</span>
+<div style="background: rgba(2, 6, 23, 0.85); border: 2px solid #a855f7; border-radius: 12px; padding: 12px 24px; min-width: 130px;">
+<span style="font-size: 11px; color: #c084fc; font-weight: 700; display:block;">&#128176; KELLY BET SIZE</span>
+<span style="font-size: 22px; font-weight: 900; color: #e9d5ff;">{round(float(sent_bet_size), 1)}%</span>
 </div>
 </div>
-<div style="margin-top: 6px; display: flex; justify-content: space-around; align-items: center; font-size: 9px; color: #e2e8f0; background: rgba(2, 6, 23, 0.6); padding: 4px 6px; border-radius: 6px; border: 1px solid rgba(245, 158, 11, 0.4); flex-wrap: wrap; gap: 4px;">
-<span><strong>Regime:</strong> <span style="color: #facc15;">{sent_regime}</span></span>
-<span><strong>Conf:</strong> <span style="color: #4ade80;">{round(float(sentinel_confidence), 1)}%</span></span>
-<span><strong>MCTS:</strong> <span style="color: #38bdf8;">{sent_mcts_action}</span></span>
-<span><strong>Acc:</strong> <span style="color: #a78bfa;">{round(float(sent_rolling_acc), 1)}%</span></span>
+<div style="margin-top: 14px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
+<div style="background: rgba(2, 6, 23, 0.7); border: 1px solid #f59e0b; border-radius: 6px; padding: 6px 12px; min-width: 140px; text-align: center;">
+<span style="font-size: 10px; color: #fbbf24; font-weight: 700; display:block; text-transform: uppercase;">&#128204; Number (अंक)</span>
+<span style="font-size: 12px; font-weight: 800; color: #ffffff;">{sentinel_num_sahi} Sahi | {sentinel_num_galat} Galat</span>
+</div>
+<div style="background: rgba(2, 6, 23, 0.7); border: 1px solid #22c55e; border-radius: 6px; padding: 6px 12px; min-width: 140px; text-align: center;">
+<span style="font-size: 10px; color: #86efac; font-weight: 700; display:block; text-transform: uppercase;">&#127912; Color (रंग)</span>
+<span style="font-size: 12px; font-weight: 800; color: #86efac;">{sentinel_col_sahi} Sahi | {sentinel_col_galat} Galat</span>
+</div>
+<div style="background: rgba(2, 6, 23, 0.7); border: 1px solid #a855f7; border-radius: 6px; padding: 6px 12px; min-width: 140px; text-align: center;">
+<span style="font-size: 10px; color: #c084fc; font-weight: 700; display:block; text-transform: uppercase;">&#128207; Size (आकार)</span>
+<span style="font-size: 12px; font-weight: 800; color: #d8b4fe;">{sentinel_size_sahi} Sahi | {sentinel_size_galat} Galat</span>
+</div>
+</div>
+<div style="margin-top: 14px; display: flex; justify-content: space-around; align-items: center; font-size: 12px; color: #e2e8f0; background: rgba(2, 6, 23, 0.6); padding: 8px 16px; border-radius: 8px; border: 1px solid rgba(245, 158, 11, 0.4); flex-wrap: wrap; gap: 10px;">
+<span>&#128302; <strong>Regime:</strong> <span style="color: #facc15;">{sent_regime}</span></span>
+<span>&#128737; <strong>Confidence:</strong> <span style="color: #4ade80;">{round(float(sentinel_confidence), 1)}%</span></span>
+<span>&#127794; <strong>MCTS Action:</strong> <span style="color: #38bdf8;">{sent_mcts_action}</span></span>
+<span>&#128200; <strong>Rolling Acc (30R):</strong> <span style="color: #a78bfa;">{round(float(sent_rolling_acc), 1)}%</span></span>
+<span>&#128683; <strong>Diversity Violations:</strong> <span style="color: #ef4444;">{sent_violations}</span></span>
 </div>
 {generate_last_8_boxes_html('sentinel_omega', latest_issue)}
 </div>"""
@@ -10819,65 +10646,65 @@ u_pred_col = ultra_stats_card.get("pred_col", "Green")
 u_pred_sz = ultra_stats_card.get("pred_size", "Big")
 u_bet_pct = ultra_stats_card.get("bet_size_pct", 8.5)
 
-u_border = "2.5px solid #06b6d4" if not u_recovery_active else "3px solid #ef4444"
-u_shadow = "0 0 25px rgba(6, 182, 212, 0.4)" if not u_recovery_active else "0 0 35px rgba(239, 68, 68, 0.8)"
+u_border = "3.5px solid #06b6d4" if not u_recovery_active else "4px solid #ef4444"
+u_shadow = "0 0 35px rgba(6, 182, 212, 0.6)" if not u_recovery_active else "0 0 50px rgba(239, 68, 68, 0.85)"
 u_banner = "linear-gradient(90deg, #0891b2, #06b6d4)" if not u_recovery_active else "linear-gradient(90deg, #dc2626, #ef4444, #f59e0b)"
 
-ultra_card_html = f"""<div style="background: linear-gradient(135deg, #020617 0%, #0f172a 50%, #161e2e 100%); border: {u_border}; border-radius: 12px; padding: 10px; text-align: center; margin-bottom: 16px; margin-top: 12px; box-shadow: {u_shadow};">
-<div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px;">
+ultra_card_html = f"""<div style="background: linear-gradient(135deg, #020617 0%, #0f172a 50%, #161e2e 100%); border: {u_border}; border-radius: 18px; padding: 22px; text-align: center; margin-bottom: 24px; margin-top: 18px; box-shadow: {u_shadow};">
+<div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
 <div style="text-align: left;">
-<span style="font-size: 14px; font-weight: 900; color: #67e8f9; text-shadow: 0 0 10px rgba(103, 232, 249, 0.9);">
-🌌 SENTINEL ULTRA OMEGA 21.0 (Loss Recovery)
+<span style="font-size: 20px; font-weight: 900; color: #67e8f9; text-shadow: 0 0 14px rgba(103, 232, 249, 0.9);">
+🌌 SENTINEL PRIME ULTRA OMEGA 21.0 (Tri-Target Loss Recovery)
 </span>
-<div style="font-size: 9.5px; color: #a5f3fc; margin-top: 1px;">
-21-Layer Hyper-Fractal Cognition • Kelly Risk Manager ({u_bet_pct}% Bankroll)
+<div style="font-size: 12px; color: #a5f3fc; margin-top: 2px;">
+21-Layer Hyper-Fractal Cognition • 1-Loss Instant Trigger • Kelly Risk Manager ({u_bet_pct}% Bankroll) • Digital Wavelet Spectrum
 </div>
 </div>
-<div style="display: flex; gap: 4px; align-items: center; flex-wrap: wrap;">
-<span style="background: rgba(15, 23, 42, 0.85); border: 1px solid #06b6d4; border-radius: 6px; padding: 2px 6px; font-size: 8.5px; font-weight: 800; color: #a7f3d0;">
-🎯 TARGET: <span style="color: #facc15; font-size: 10px; font-weight: 900;">#{target_issue}</span>
+<div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
+<span style="background: rgba(15, 23, 42, 0.85); border: 1.5px solid #06b6d4; border-radius: 8px; padding: 4px 12px; font-size: 10px; font-weight: 800; color: #a7f3d0;">
+🎯 TARGET ISSUE: <span style="color: #facc15; font-size: 12px; font-weight: 900;">#{target_issue}</span>
 </span>
-<span style="background: {u_banner}; color: #ffffff; font-size: 8.5px; font-weight: 900; padding: 3px 8px; border-radius: 12px;">
+<span style="background: {u_banner}; color: #ffffff; font-size: 10px; font-weight: 900; padding: 5px 14px; border-radius: 20px;">
 {u_status_label}
 </span>
 </div>
 </div>
 
-<div style="margin-top: 8px; display: flex; justify-content: center; gap: 4px; width: 100%;">
-<div style="background: rgba(2, 6, 23, 0.85); border: 1.5px solid #06b6d4; border-radius: 8px; padding: 6px 3px; flex: 1; min-width: 0;">
-<span style="font-size: 8px; color: #67e8f9; font-weight: 700; display:block;">🔮 NUMBER</span>
-<span style="font-size: 18px; font-weight: 900; color: #22d3ee; text-shadow: 0 0 10px rgba(34, 211, 238, 0.9);">{u_pred_digit}</span>
+<div style="margin-top: 16px; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
+<div style="background: rgba(2, 6, 23, 0.85); border: 2px solid #06b6d4; border-radius: 12px; padding: 12px 24px; min-width: 150px;">
+<span style="font-size: 11px; color: #67e8f9; font-weight: 700; display:block;">🔮 PREDICTED NUMBER</span>
+<span style="font-size: 34px; font-weight: 900; color: #22d3ee; text-shadow: 0 0 18px rgba(34, 211, 238, 0.9);">{u_pred_digit}</span>
 </div>
-<div style="background: rgba(2, 6, 23, 0.85); border: 1.5px solid {'#ef4444' if u_pred_col == 'Red' else '#22c55e'}; border-radius: 8px; padding: 6px 3px; flex: 1; min-width: 0;">
-<span style="font-size: 8px; color: #94a3b8; font-weight: 700; display:block;">🎨 COLOR</span>
-<span style="font-size: 18px; font-weight: 900; color: {'#ef4444' if u_pred_col == 'Red' else '#22c55e'};">{u_pred_col}</span>
+<div style="background: rgba(2, 6, 23, 0.85); border: 2px solid {'#ef4444' if u_pred_col == 'Red' else '#22c55e'}; border-radius: 12px; padding: 12px 24px; min-width: 120px;">
+<span style="font-size: 11px; color: #94a3b8; font-weight: 700; display:block;">🎨 COLOR (रंग)</span>
+<span style="font-size: 22px; font-weight: 900; color: {'#ef4444' if u_pred_col == 'Red' else '#22c55e'};">{u_pred_col}</span>
 </div>
-<div style="background: rgba(2, 6, 23, 0.85); border: 1.5px solid #a855f7; border-radius: 8px; padding: 6px 3px; flex: 1; min-width: 0;">
-<span style="font-size: 8px; color: #c084fc; font-weight: 700; display:block;">📏 SIZE</span>
-<span style="font-size: 18px; font-weight: 900; color: #c084fc;">{u_pred_sz}</span>
+<div style="background: rgba(2, 6, 23, 0.85); border: 2px solid #a855f7; border-radius: 12px; padding: 12px 24px; min-width: 120px;">
+<span style="font-size: 11px; color: #c084fc; font-weight: 700; display:block;">📏 SIZE (आकार)</span>
+<span style="font-size: 22px; font-weight: 900; color: #c084fc;">{u_pred_sz}</span>
 </div>
-<div style="background: rgba(2, 6, 23, 0.85); border: 1.5px solid #f59e0b; border-radius: 8px; padding: 6px 3px; flex: 1; min-width: 0;">
-<span style="font-size: 8px; color: #fbbf24; font-weight: 700; display:block;">🎯 CONF</span>
-<span style="font-size: 18px; font-weight: 900; color: #fbbf24;">{round(float(u_conf), 1)}%</span>
+<div style="background: rgba(2, 6, 23, 0.85); border: 2px solid #f59e0b; border-radius: 12px; padding: 12px 24px; min-width: 130px;">
+<span style="font-size: 11px; color: #fbbf24; font-weight: 700; display:block;">🎯 CONFIDENCE</span>
+<span style="font-size: 22px; font-weight: 900; color: #fbbf24;">{round(float(u_conf), 1)}%</span>
 </div>
-<div style="background: rgba(2, 6, 23, 0.85); border: 1.5px solid #10b981; border-radius: 8px; padding: 6px 3px; flex: 1; min-width: 0;">
-<span style="font-size: 8px; color: #34d399; font-weight: 700; display:block;">💰 KELLY</span>
-<span style="font-size: 18px; font-weight: 900; color: #34d399;">{u_bet_pct}%</span>
+<div style="background: rgba(2, 6, 23, 0.85); border: 2px solid #10b981; border-radius: 12px; padding: 12px 24px; min-width: 130px;">
+<span style="font-size: 11px; color: #34d399; font-weight: 700; display:block;">💰 KELLY BET</span>
+<span style="font-size: 22px; font-weight: 900; color: #34d399;">{u_bet_pct}%</span>
 </div>
 </div>
 
-<div style="margin-top: 6px; display: flex; justify-content: space-between; gap: 4px; width: 100%;">
-<div style="background: rgba(2, 6, 23, 0.7); border: 1px solid {'#ef4444' if u_num_losses >= 1 else '#06b6d4'}; border-radius: 6px; padding: 3px 2px; flex: 1; min-width: 0; text-align: center;">
-<span style="font-size: 7.5px; color: {'#fca5a5' if u_num_losses >= 1 else '#67e8f9'}; font-weight: 700; display:block; text-transform: uppercase;">🔢 Number (L:{u_num_losses})</span>
-<span style="font-size: 9px; font-weight: 800; color: #ffffff;">{ultra_num_sahi} Sahi | {ultra_num_galat} Galat</span>
+<div style="margin-top: 14px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
+<div style="background: rgba(2, 6, 23, 0.7); border: 1px solid {'#ef4444' if u_num_losses >= 1 else '#06b6d4'}; border-radius: 6px; padding: 6px 12px; min-width: 140px; text-align: center;">
+<span style="font-size: 10px; color: {'#fca5a5' if u_num_losses >= 1 else '#67e8f9'}; font-weight: 700; display:block; text-transform: uppercase;">🔢 Number (Losses: {u_num_losses})</span>
+<span style="font-size: 12px; font-weight: 800; color: #ffffff;">{ultra_num_sahi} Sahi | {ultra_num_galat} Galat</span>
 </div>
-<div style="background: rgba(2, 6, 23, 0.7); border: 1px solid {'#ef4444' if u_color_losses >= 1 else '#22c55e'}; border-radius: 6px; padding: 3px 2px; flex: 1; min-width: 0; text-align: center;">
-<span style="font-size: 7.5px; color: {'#fca5a5' if u_color_losses >= 1 else '#86efac'}; font-weight: 700; display:block; text-transform: uppercase;">🎨 Color (L:{u_color_losses})</span>
-<span style="font-size: 9px; font-weight: 800; color: #86efac;">{ultra_col_sahi} Sahi | {ultra_col_galat} Galat</span>
+<div style="background: rgba(2, 6, 23, 0.7); border: 1px solid {'#ef4444' if u_color_losses >= 1 else '#22c55e'}; border-radius: 6px; padding: 6px 12px; min-width: 140px; text-align: center;">
+<span style="font-size: 10px; color: {'#fca5a5' if u_color_losses >= 1 else '#86efac'}; font-weight: 700; display:block; text-transform: uppercase;">🎨 Color (Losses: {u_color_losses})</span>
+<span style="font-size: 12px; font-weight: 800; color: #86efac;">{ultra_col_sahi} Sahi | {ultra_col_galat} Galat</span>
 </div>
-<div style="background: rgba(2, 6, 23, 0.7); border: 1px solid {'#ef4444' if u_size_losses >= 1 else '#a855f7'}; border-radius: 6px; padding: 3px 2px; flex: 1; min-width: 0; text-align: center;">
-<span style="font-size: 7.5px; color: {'#fca5a5' if u_size_losses >= 1 else '#c084fc'}; font-weight: 700; display:block; text-transform: uppercase;">📏 Size (L:{u_size_losses})</span>
-<span style="font-size: 9px; font-weight: 800; color: #d8b4fe;">{ultra_size_sahi} Sahi | {ultra_size_galat} Galat</span>
+<div style="background: rgba(2, 6, 23, 0.7); border: 1px solid {'#ef4444' if u_size_losses >= 1 else '#a855f7'}; border-radius: 6px; padding: 6px 12px; min-width: 140px; text-align: center;">
+<span style="font-size: 10px; color: {'#fca5a5' if u_size_losses >= 1 else '#c084fc'}; font-weight: 700; display:block; text-transform: uppercase;">📏 Size (Losses: {u_size_losses})</span>
+<span style="font-size: 12px; font-weight: 800; color: #d8b4fe;">{ultra_size_sahi} Sahi | {ultra_size_galat} Galat</span>
 </div>
 </div>
 {generate_last_8_boxes_html('sentinel_ultra_21', latest_issue)}
@@ -10909,7 +10736,7 @@ st.write("")
 
 # --- OMNI-NEXUS 9.0 UNIFIED STANDALONE UI CARD ---
 omni9_pred_digit = int(omni9_prediction) if str(omni9_prediction).isdigit() else 5
-omni9_col = "Red" if omni9_pred_digit in [0, 2, 4, 6, 8] else "Green"
+omni9_col = "Red" if omni9_pred_digit in [1, 3, 7, 9, 8] else "Green"
 omni9_size = "Big" if omni9_pred_digit >= 5 else "Small"
 
 omni9_info = st.session_state.get("omni9_stats", {})
@@ -10943,7 +10770,6 @@ st.markdown(f"""
             <span style="background: rgba(15, 23, 42, 0.85); border: 1.5px solid #06b6d4; border-radius: 8px; padding: 3px 10px; font-size: 10px; font-weight: 800; color: #38bdf8; display: inline-flex; align-items: center; gap: 6px; margin-right: 6px;">&#127919; TARGET ISSUE: <span style="color: #facc15; font-size: 11px; font-weight: 900;">#{target_issue}</span> <span style="background: #10b981; color: #020617; font-size: 8px; font-weight: 900; padding: 1px 5px; border-radius: 8px;">LIVE SYNC</span></span>
             <span style="background: #06b6d4; color: #020617; font-size: 10px; font-weight: 900; padding: 4px 12px; border-radius: 20px; margin-right: 6px;">UNIFIED 12-PILLAR MIND</span>
             <span style="background: #0284c7; color: #ffffff; font-size: 10px; font-weight: 800; padding: 4px 12px; border-radius: 20px;">&#9876;️ {omni9_self_play_winner} WINNER</span>
-            {render_notif_button("omni9", "OMNI-NEXUS 9.0", target_issue, omni9_prediction, omni9_col, omni9_size, round(float(omni9_confidence), 1))}
         </div>
     </div>
     <div style="font-size: 12px; color: #cbd5e1; margin-top: 6px; text-align: left;">
@@ -10963,18 +10789,18 @@ st.markdown(f"""
             <span style="font-size: 20px; font-weight: 900; color: #d8b4fe;">{omni9_size}</span>
         </div>
     </div>
-    <div style="margin-top: 6px; display: flex; justify-content: space-between; gap: 4px; width: 100%;">
-        <div style="background: rgba(2, 6, 23, 0.8); border: 1px solid #06b6d4; border-radius: 6px; padding: 3px 2px; flex: 1; min-width: 0; text-align: center;">
-            <span style="font-size: 7.5px; color: #bae6fd; font-weight: 700; display:block; text-transform: uppercase;">📌 NUMBER</span>
-            <span style="font-size: 9px; font-weight: 800; color: #ffffff;">{omni9_num_sahi} Sahi | {omni9_num_galat} Galat</span>
+    <div style="margin-top: 12px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
+        <div style="background: rgba(2, 6, 23, 0.8); border: 1px solid #06b6d4; border-radius: 6px; padding: 6px 12px; min-width: 140px; text-align: center;">
+            <span style="font-size: 10px; color: #bae6fd; font-weight: 700; display:block; text-transform: uppercase;">&#128204; Number (अंक)</span>
+            <span style="font-size: 12px; font-weight: 800; color: #ffffff;">{omni9_num_sahi} Sahi | {omni9_num_galat} Galat</span>
         </div>
-        <div style="background: rgba(2, 6, 23, 0.8); border: 1px solid #22c55e; border-radius: 6px; padding: 3px 2px; flex: 1; min-width: 0; text-align: center;">
-            <span style="font-size: 7.5px; color: #86efac; font-weight: 700; display:block; text-transform: uppercase;">🎨 COLOR</span>
-            <span style="font-size: 9px; font-weight: 800; color: #86efac;">{omni9_col_sahi} Sahi | {omni9_col_galat} Galat</span>
+        <div style="background: rgba(2, 6, 23, 0.8); border: 1px solid #22c55e; border-radius: 6px; padding: 6px 12px; min-width: 140px; text-align: center;">
+            <span style="font-size: 10px; color: #86efac; font-weight: 700; display:block; text-transform: uppercase;">&#127912; Color (रंग)</span>
+            <span style="font-size: 12px; font-weight: 800; color: #86efac;">{omni9_col_sahi} Sahi | {omni9_col_galat} Galat</span>
         </div>
-        <div style="background: rgba(2, 6, 23, 0.8); border: 1px solid #a855f7; border-radius: 6px; padding: 3px 2px; flex: 1; min-width: 0; text-align: center;">
-            <span style="font-size: 7.5px; color: #c084fc; font-weight: 700; display:block; text-transform: uppercase;">📏 SIZE</span>
-            <span style="font-size: 9px; font-weight: 800; color: #d8b4fe;">{omni9_size_sahi} Sahi | {omni9_size_galat} Galat</span>
+        <div style="background: rgba(2, 6, 23, 0.8); border: 1px solid #a855f7; border-radius: 6px; padding: 6px 12px; min-width: 140px; text-align: center;">
+            <span style="font-size: 10px; color: #c084fc; font-weight: 700; display:block; text-transform: uppercase;">&#128207; Size (आकार)</span>
+            <span style="font-size: 12px; font-weight: 800; color: #d8b4fe;">{omni9_size_sahi} Sahi | {omni9_size_galat} Galat</span>
         </div>
     </div>
     <div style="margin-top: 14px; background: rgba(2, 6, 23, 0.7); border: 1px solid #0284c7; border-radius: 8px; padding: 10px; text-align: left; font-size: 11px; color: #e0f2fe; display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
@@ -11026,18 +10852,18 @@ st.markdown(f"""
             <span style="font-size: 18px; font-weight: 900; color: #d8b4fe;">{ascend_size}</span>
         </div>
     </div>
-    <div style="margin-top: 6px; display: flex; justify-content: space-between; gap: 4px; width: 100%;">
-        <div style="background: rgba(2, 6, 23, 0.6); border: 1px solid #f59e0b; border-radius: 6px; padding: 3px 2px; flex: 1; min-width: 0; text-align: center;">
-            <span style="font-size: 7.5px; color: #fbbf24; font-weight: 700; display:block; text-transform: uppercase;">📌 NUMBER</span>
-            <span style="font-size: 9px; font-weight: 800; color: #fef08a;">{nexus9_num_sahi} Sahi | {nexus9_num_galat} Galat</span>
+    <div style="margin-top: 12px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
+        <div style="background: rgba(2, 6, 23, 0.6); border: 1px solid #f59e0b; border-radius: 6px; padding: 6px 12px; min-width: 140px; text-align: center;">
+            <span style="font-size: 10px; color: #fbbf24; font-weight: 700; display:block; text-transform: uppercase;">&#128204; Number (अंक)</span>
+            <span style="font-size: 12px; font-weight: 800; color: #fef08a;">{nexus9_num_sahi} Sahi | {nexus9_num_galat} Galat</span>
         </div>
-        <div style="background: rgba(2, 6, 23, 0.6); border: 1px solid #22c55e; border-radius: 6px; padding: 3px 2px; flex: 1; min-width: 0; text-align: center;">
-            <span style="font-size: 7.5px; color: #86efac; font-weight: 700; display:block; text-transform: uppercase;">🎨 COLOR</span>
-            <span style="font-size: 9px; font-weight: 800; color: #86efac;">{nexus9_col_sahi} Sahi | {nexus9_col_galat} Galat</span>
+        <div style="background: rgba(2, 6, 23, 0.6); border: 1px solid #22c55e; border-radius: 6px; padding: 6px 12px; min-width: 140px; text-align: center;">
+            <span style="font-size: 10px; color: #86efac; font-weight: 700; display:block; text-transform: uppercase;">&#127912; Color (रंग)</span>
+            <span style="font-size: 12px; font-weight: 800; color: #86efac;">{nexus9_col_sahi} Sahi | {nexus9_col_galat} Galat</span>
         </div>
-        <div style="background: rgba(2, 6, 23, 0.6); border: 1px solid #a855f7; border-radius: 6px; padding: 3px 2px; flex: 1; min-width: 0; text-align: center;">
-            <span style="font-size: 7.5px; color: #c084fc; font-weight: 700; display:block; text-transform: uppercase;">📏 SIZE</span>
-            <span style="font-size: 9px; font-weight: 800; color: #d8b4fe;">{nexus9_size_sahi} Sahi | {nexus9_size_galat} Galat</span>
+        <div style="background: rgba(2, 6, 23, 0.6); border: 1px solid #a855f7; border-radius: 6px; padding: 6px 12px; min-width: 140px; text-align: center;">
+            <span style="font-size: 10px; color: #c084fc; font-weight: 700; display:block; text-transform: uppercase;">&#128207; Size (आकार)</span>
+            <span style="font-size: 12px; font-weight: 800; color: #d8b4fe;">{nexus9_size_sahi} Sahi | {nexus9_size_galat} Galat</span>
         </div>
     </div>
     <div style="margin-top: 10px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #cbd5e1; padding: 0 10px; flex-wrap: wrap; gap: 10px;">
@@ -11148,7 +10974,7 @@ with st.expander("&#128300; 10 Ultra-Advanced Features (NEXUS 10.0)"):
         st.write(step_str)
 
 # --- OMEGA ZERO 2.0 STANDALONE UI CARD ---
-omega_col = "Red" if int(omega_prediction) in [0, 2, 4, 6, 8] else "Green"
+omega_col = "Red" if int(omega_prediction) in [1, 3, 7, 9, 8] else "Green"
 omega_size = "Big" if int(omega_prediction) >= 5 else "Small"
 omega_mcts_info = st.session_state.get("omega_mcts_stats", {})
 omega_sims = omega_mcts_info.get("sims", 30)
@@ -11364,7 +11190,7 @@ with st.expander("&#128300; 10 Ultra-Advanced Features (NEXUS 10.0)"):
         st.write(step_str)
 
 # --- OMEGA ZERO 2.0 STANDALONE UI CARD ---
-omega_col = "Red" if int(omega_prediction) in [0, 2, 4, 6, 8] else "Green"
+omega_col = "Red" if int(omega_prediction) in [1, 3, 7, 9, 8] else "Green"
 omega_size = "Big" if int(omega_prediction) >= 5 else "Small"
 omega_mcts_info = st.session_state.get("omega_mcts_stats", {})
 omega_sims = omega_mcts_info.get("sims", 30)
@@ -11443,7 +11269,7 @@ with st.expander("&#127795; OMEGA ZERO 2.0: MCTS + Diversity Stats"):
         st.markdown(f"- {s_step}")
 
 # --- NEXUS CORE AGENT STANDALONE UI CARD ---
-core_col = "Red" if int(core_prediction) in [0, 2, 4, 6, 8] else "Green"
+core_col = "Red" if int(core_prediction) in [1, 3, 7, 9, 8] else "Green"
 core_size = "Big" if int(core_prediction) >= 5 else "Small"
 core_info = st.session_state.get("core_agent_stats", {})
 core_status = core_info.get("status", "&#128994; Trained")
@@ -11525,7 +11351,7 @@ with st.expander("&#128202; Feature Importance & Probability Distribution (NEXUS
 
 # --- ORACLE AGENT 8.0 STANDALONE UI CARD ---
 oracle8_pred_digit = int(oracle8_prediction) if str(oracle8_prediction).isdigit() else 5
-oracle8_col = "Red" if oracle8_pred_digit in [0, 2, 4, 6, 8] else "Green"
+oracle8_col = "Red" if oracle8_pred_digit in [1, 3, 7, 9, 8] else "Green"
 oracle8_size = "Big" if oracle8_pred_digit >= 5 else "Small"
 
 oracle8_info = st.session_state.get("oracle8_stats", {})
@@ -11796,32 +11622,29 @@ d_col1, d_col2 = st.columns([2, 1])
 with d_col1:
     st.markdown(f"""
     <div class="decision-banner">
-    <div class="decision-banner">
-        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px;">
-            <span style="font-size: 11.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: #a7f3d0;">🎯 AI TARGET DECISION FOR ISSUE #{target_issue}</span>
-            {render_notif_button("top1", "AI TARGET CONSENSUS", target_issue, final_pred_num, final_pred_col, final_pred_size, overall_conf)}
+        <div style="font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:#a7f3d0;">
+            ð¯ AI TARGET DECISION FOR ISSUE #{target_issue}
         </div>
-        </div>
-        <div style="display: flex; justify-content: space-around; align-items: center; margin-top: 6px; gap: 4px; width: 100%;">
-            <div style="flex: 1; text-align: center;">
-                <span style="font-size: 8.5px; color: #cbd5e1; display: block;">NUM</span>
-                <span style="font-size: 18px; font-weight: 900; color: #fef08a;">{final_pred_num}</span>
+        <div style="display:flex; justify-content:space-around; align-items:center; margin-top:10px;">
+            <div>
+                <span style="font-size:12px; color:#cbd5e1;">Predicted Number:</span><br/>
+                <span style="font-size:32px; font-weight:900; color:#fef08a;"> {final_pred_num}</span>
             </div>
-            <div style="flex: 1; text-align: center;">
-                <span style="font-size: 8.5px; color: #cbd5e1; display: block;">COLOR</span>
-                <span style="font-size: 14px; font-weight: 800; color: {'#34d399' if final_pred_col=='Green' else '#f87171'};">
-                    {final_pred_col}
+            <div>
+                <span style="font-size:12px; color:#cbd5e1;">Predicted Color:</span><br/>
+                <span style="font-size:24px; font-weight:800; color: {'#34d399' if final_pred_col=='Green' else '#f87171'}; text-shadow: 0 0 10px {'rgba(52, 211, 153, 0.4)' if final_pred_col=='Green' else 'rgba(248, 113, 113, 0.4)'};">
+                    {" GREEN" if final_pred_col=="Green" else " RED"}
                 </span>
             </div>
-            <div style="flex: 1; text-align: center;">
-                <span style="font-size: 8.5px; color: #cbd5e1; display: block;">SIZE</span>
-                <span style="font-size: 14px; font-weight: 800; color: {'#38bdf8' if final_pred_size=='Big' else '#c084fc'};">
-                    {final_pred_size}
+            <div>
+                <span style="font-size:12px; color:#cbd5e1;">Predicted Size:</span><br/>
+                <span style="font-size:24px; font-weight:800; color: {'#38bdf8' if final_pred_size=='Big' else '#c084fc'}; text-shadow: 0 0 10px {'rgba(56, 189, 248, 0.4)' if final_pred_size=='Big' else 'rgba(192, 132, 252, 0.4)'};">
+                    {" BIG" if final_pred_size=="Big" else " SMALL"}
                 </span>
             </div>
-            <div style="flex: 1; text-align: center;">
-                <span style="font-size: 8.5px; color: #cbd5e1; display: block;">REC</span>
-                <span style="font-size: 13px; font-weight: 900; color: #5eead4;">{rec_action}</span>
+            <div>
+                <span style="font-size:12px; color:#cbd5e1;">Recommendation:</span><br/>
+                <span style="font-size:20px; font-weight:900; color:#5eead4;">{rec_action}</span>
             </div>
         </div>
         {generate_last_8_boxes_html('top1', target_issue)}
@@ -12573,128 +12396,3 @@ with st.expander("&#128202; ऐतिहासिक डेटा (अंति�
     }, inplace=True)
     st.dataframe(display_df, height=400, width="stretch", hide_index=True)
     st.caption(f"कुल राउंड: {len(display_df)}")
-
-# Client-side Live Notification & Mobile Sidebar JS Dispatcher (components.v1.html)
-components.html(f'''
-<script>
-(function() {{
-    const parentDoc = window.parent.document;
-    const parentWin = window.parent;
-
-    // Delegated click handler on parentDoc
-    parentDoc.addEventListener('click', function(e) {{
-        const btn = e.target.closest('.damananti-notif-toggle');
-        if (!btn) return;
-        
-        e.preventDefault();
-        e.stopPropagation();
-        
-        const agentKey = btn.getAttribute('data-agent-key') || btn.id.replace('notif_toggle_', '');
-        const agentName = btn.getAttribute('data-agent-name') || 'AI Agent';
-        const issue = btn.getAttribute('data-issue') || '';
-        const num = btn.getAttribute('data-num') || '';
-        const col = btn.getAttribute('data-col') || '';
-        const size = btn.getAttribute('data-size') || '';
-        const conf = btn.getAttribute('data-conf') || '';
-        
-        const keyName = 'damananti_notif_' + agentKey;
-        const current = parentWin.localStorage.getItem(keyName) === '1';
-        const nextState = !current;
-        parentWin.localStorage.setItem(keyName, nextState ? '1' : '0');
-        
-        updateButtons();
-        
-        if (nextState) {{
-            if ('Notification' in parentWin) {{
-                if (parentWin.Notification.permission === 'granted') {{
-                    try {{
-                        new parentWin.Notification('🔔 ' + agentName + ' Alert ON', {{
-                            body: 'Target #' + issue + ' ➔ NUM: ' + num + ' | COL: ' + col + ' | SIZE: ' + size + ' (' + conf + '%)'
-                        }});
-                    }} catch(err){{}}
-                }} else if (parentWin.Notification.permission !== 'denied') {{
-                    parentWin.Notification.requestPermission().then(function(perm) {{
-                        if (perm === 'granted') {{
-                            try {{
-                                new parentWin.Notification('🔔 ' + agentName + ' Alert ON', {{
-                                    body: 'Target #' + issue + ' ➔ NUM: ' + num + ' | COL: ' + col + ' | SIZE: ' + size + ' (' + conf + '%)'
-                                }});
-                            }} catch(err){{}}
-                        }}
-                    }});
-                }}
-            }}
-            if (parentWin.FlutterNotificationBridge) {{
-                parentWin.FlutterNotificationBridge.postMessage('🔔 ' + agentName + ' Alert ON ➔ Target #' + issue);
-            }}
-        }}
-    }}, true);
-
-    function updateButtons() {{
-        const buttons = parentDoc.querySelectorAll('.damananti-notif-toggle');
-        buttons.forEach(function(btn) {{
-            const key = btn.getAttribute('data-agent-key') || btn.id.replace('notif_toggle_', '');
-            const isEnabled = parentWin.localStorage.getItem('damananti_notif_' + key) === '1';
-            const lbl = btn.querySelector('[id^="notif_lbl_"]');
-            const icon = btn.querySelector('[id^="notif_icon_"]');
-            
-            if (isEnabled) {{
-                btn.style.setProperty('border-color', '#22c55e', 'important');
-                btn.style.setProperty('background', 'linear-gradient(90deg, #15803d, #16a34a)', 'important');
-                btn.style.setProperty('box-shadow', '0 0 14px rgba(34, 197, 94, 0.9)', 'important');
-                btn.style.setProperty('color', '#ffffff', 'important');
-                if (lbl) lbl.textContent = 'ALERT ON';
-                if (icon) icon.textContent = '🔔';
-            }} else {{
-                btn.style.setProperty('border-color', '#818cf8', 'important');
-                btn.style.setProperty('background', 'rgba(30, 27, 75, 0.85)', 'important');
-                btn.style.setProperty('box-shadow', '0 0 6px rgba(99, 102, 241, 0.4)', 'important');
-                btn.style.setProperty('color', '#cbd5e1', 'important');
-                if (lbl) lbl.textContent = 'ALERT OFF';
-                if (icon) icon.textContent = '🔕';
-            }}
-        }});
-    }}
-
-    function checkAutoFire() {{
-        const buttons = parentDoc.querySelectorAll('.damananti-notif-toggle');
-        if (!buttons || buttons.length === 0) return;
-        
-        const targetIssue = "{target_issue}";
-        const lastFired = parentWin.localStorage.getItem('damananti_last_fired_issue');
-        if (lastFired !== targetIssue) {{
-            parentWin.localStorage.setItem('damananti_last_fired_issue', targetIssue);
-            buttons.forEach(function(btn) {{
-                const key = btn.getAttribute('data-agent-key') || btn.id.replace('notif_toggle_', '');
-                const isEnabled = parentWin.localStorage.getItem('damananti_notif_' + key) === '1';
-                if (isEnabled) {{
-                    const aName = btn.getAttribute('data-agent-name') || 'AI Agent';
-                    const pVal = btn.getAttribute('data-num') || '5';
-                    const pCol = btn.getAttribute('data-col') || 'Red';
-                    const pSize = btn.getAttribute('data-size') || 'Big';
-                    const pConf = btn.getAttribute('data-conf') || '80.0';
-                    
-                    const title = '🎯 ' + aName + ' (Issue #' + targetIssue + ')';
-                    const body = 'NUM: ' + pVal + ' | COL: ' + pCol + ' | SIZE: ' + pSize + ' | CONF: ' + pConf + '%';
-                    
-                    if (parentWin.FlutterNotificationBridge) {{
-                        parentWin.FlutterNotificationBridge.postMessage(title + ' ➔ ' + body);
-                    }}
-                    if ('Notification' in parentWin && parentWin.Notification.permission === 'granted') {{
-                        try {{
-                            new parentWin.Notification(title, {{ body: body }});
-                        }} catch(e){{}}
-                    }}
-                }}
-            }});
-        }}
-    }}
-
-    setInterval(updateButtons, 400);
-    setTimeout(function() {{
-        updateButtons();
-        checkAutoFire();
-    }}, 150);
-}})();
-</script>
-''', height=0, width=0)

@@ -1,3 +1,4 @@
+import requests
 import warnings
 warnings.filterwarnings('ignore')
 import logging
@@ -543,6 +544,61 @@ LIVE_API_ENDPOINTS = {
     "Win Go 3Min": "https://draw.ar-lottery01.com/WinGo/WinGo_3M/GetHistoryIssuePage.json",
     "Win Go 5Min": "https://draw.ar-lottery01.com/WinGo/WinGo_5M/GetHistoryIssuePage.json",
 }
+
+DAMAN_BET_URL = "https://api.ar-lottery01.com/api/Lottery/WinGoBet"
+DAMAN_LOGIN_URL = "https://api.ar-lottery01.com/api/Account/HeaderLogin"
+
+def login_daman_account(mobile_number, password):
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+        "Origin": "https://damanworld.world",
+        "Referer": "https://damanworld.world/",
+        "Content-Type": "application/json;charset=UTF-8"
+    }
+    payload = {
+        "mobile": str(mobile_number).strip(),
+        "password": str(password).strip()
+    }
+    try:
+        r = requests.post(DAMAN_LOGIN_URL, json=payload, headers=headers, timeout=5)
+        if r.status_code == 200:
+            res = r.json()
+            token = res.get("data", {}).get("token") or res.get("data", {}).get("bearerToken")
+            if token:
+                return True, token, "Login successful! Bearer token auto-refreshed."
+            return False, None, res.get("msg", "Login failed: No token returned.")
+        return False, None, f"Login HTTP Error: {r.status_code}"
+    except Exception as e:
+        return False, None, f"Login exception: {str(e)}"
+
+def execute_daman_autobet(bearer_token, game_code, issue_number, bet_content, amount=10, bet_multiple=1):
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+        "Origin": "https://damanworld.world",
+        "Referer": "https://damanworld.world/",
+        "Content-Type": "application/json;charset=UTF-8",
+        "Authorization": f"Bearer {bearer_token}" if not str(bearer_token).startswith("Bearer ") else str(bearer_token)
+    }
+    random_str = f"{int(time.time()*1000)}{np.random.randint(1000, 9999)}"
+    payload = {
+        "gameCode": str(game_code),
+        "issueNumber": str(issue_number),
+        "amount": int(amount),
+        "betMultiple": int(bet_multiple),
+        "betContent": str(bet_content),
+        "language": "en",
+        "random": random_str,
+        "timestamp": int(time.time() * 1000)
+    }
+    try:
+        r = requests.post(DAMAN_BET_URL, json=payload, headers=headers, timeout=4)
+        try:
+            res_data = r.json()
+        except Exception:
+            res_data = {"code": r.status_code, "msg": r.text[:100]}
+        return r.status_code == 200, r.status_code, res_data
+    except Exception as e:
+        return False, 500, {"code": 500, "msg": str(e)}
 
 def fetch_live_daman_game_data(game_mode="Win Go 30Sec"):
     url = LIVE_API_ENDPOINTS.get(game_mode, LIVE_API_ENDPOINTS["Win Go 30Sec"])
@@ -8977,6 +9033,78 @@ cache_info = st.session_state.get("cache_info")
 st.sidebar.markdown("### &#128736;️ CONFIGURATION & AGENT CONTROL")
 deep_analysis = st.sidebar.checkbox("Deep Analysis Mode (SHAP & Causality) &#128300;", value=False)
 
+# --- 🤖 AUTOBET AUTOMATION CONTROL PANEL ---
+st.sidebar.markdown("---")
+st.sidebar.markdown("### ⚡ AUTOBET AUTOMATION ENGINE")
+autobet_enabled = st.sidebar.checkbox("Enable Real-Time AutoBetting 🚀", value=st.session_state.get("autobet_enabled", False))
+st.session_state["autobet_enabled"] = autobet_enabled
+
+with st.sidebar.expander("🔑 Auth & AutoBet Settings", expanded=autobet_enabled):
+    autobet_agent = st.selectbox(
+        "🎯 AI Agent Strategy to Follow:",
+        [
+            "Hyperion Omni-AGI 12.0",
+            "Nexus Atlas 22.0",
+            "Sentinel Ultra Omega 21.0",
+            "Sentinel Phoenix 20.0",
+            "Nexus Omnisapient 18.0",
+            "Titan Duo-Brain 17.0",
+            "Chromatic God-Mode 16.0",
+            "Top 1 Best Engine",
+            "Top 2 Best Engine",
+            "Nexus Supreme Prime"
+        ],
+        index=0
+    )
+    st.session_state["autobet_agent"] = autobet_agent
+    
+    autobet_target_type = st.selectbox(
+        "📌 Bet Type Preference:",
+        ["Color Only (Red/Green)", "Size Only (Big/Small)", "Both (Color + Size Dual)"],
+        index=0
+    )
+    st.session_state["autobet_target_type"] = autobet_target_type
+    
+    col_am1, col_am2 = st.columns(2)
+    with col_am1:
+        autobet_amount = st.number_input("Base Amount (₹)", min_value=1, value=10, step=10)
+        st.session_state["autobet_amount"] = autobet_amount
+    with col_am2:
+        autobet_multiple = st.selectbox("Bet Multiple", [1, 2, 3, 5, 10], index=0)
+        st.session_state["autobet_multiple"] = autobet_multiple
+
+    autobet_game_code = st.selectbox(
+        "🎮 Target Game Code",
+        ["WinGo_30S", "WinGo_1M", "WinGo_3M", "WinGo_5M"],
+        index=0
+    )
+    st.session_state["autobet_game_code"] = autobet_game_code
+    
+    bearer_token = st.text_input(
+        "🔑 Bearer JWT Token",
+        value=st.session_state.get("daman_bearer_token", ""),
+        type="password",
+        help="Paste valid Bearer JWT Token from network tab"
+    )
+    st.session_state["daman_bearer_token"] = bearer_token
+    
+    st.markdown("---")
+    st.markdown("📱 **Auto Token Refresher (Login):**")
+    mob_num = st.text_input("Mobile Number", value=st.session_state.get("daman_mob", ""), key="daman_mob_in")
+    mob_pass = st.text_input("Password", value="", type="password", key="daman_pass_in")
+    if st.button("🔑 Auto-Login & Refresh Token", width="stretch"):
+        if mob_num and mob_pass:
+            ok, tok, msg = login_daman_account(mob_num, mob_pass)
+            if ok:
+                st.session_state["daman_bearer_token"] = tok
+                st.sidebar.success(msg)
+                st.rerun()
+            else:
+                st.sidebar.error(msg)
+        else:
+            st.sidebar.warning("Please enter Mobile Number and Password.")
+
+
 if st.sidebar.button("FORCE RETRAIN MODELS &#128260;", width="stretch"):
     # Remove file and session state to trigger full retrain page
     if os.path.exists(CACHE_FILE):
@@ -9922,7 +10050,92 @@ st.session_state["last_pred_sentinel_ultra_21"] = {
     "prediction": f"{ultra_pred_digit}-{ultra_pred_col}-{ultra_pred_sz}"
 }
 
-# --- 🌌 NEXUS A.T.L.A.S. (Agentic Transcendent Logic And Synthesis) ULTIMATE SUPREME META-ORCHESTRATOR CARD RENDER ---
+
+# ============================================================
+#  ⚡ AUTOBET AUTOMATION EXECUTION ENGINE & LIVE MONITOR CARD
+# ============================================================
+autobet_logs = st.session_state.get("autobet_logs", [])
+
+if st.session_state.get("autobet_enabled", False):
+    token = st.session_state.get("daman_bearer_token", "").strip()
+    target_agent_sel = st.session_state.get("autobet_agent", "Hyperion Omni-AGI 12.0")
+    target_type_sel = st.session_state.get("autobet_target_type", "Color Only (Red/Green)")
+    base_amt = st.session_state.get("autobet_amount", 10)
+    bet_mult = st.session_state.get("autobet_multiple", 1)
+    game_code_sel = st.session_state.get("autobet_game_code", "WinGo_30S")
+    
+    # Map target agent selection to active prediction
+    selected_bet_content = None
+    if "Hyperion" in target_agent_sel:
+        selected_bet_content = hyp12_pred_col if "Color" in target_type_sel else hyp12_pred_size
+    elif "Atlas" in target_agent_sel:
+        selected_bet_content = atlas_pred_col if "Color" in target_type_sel else atlas_pred_sz
+    elif "Ultra" in target_agent_sel:
+        selected_bet_content = ultra_pred_col if "Color" in target_type_sel else ultra_pred_sz
+    elif "Phoenix" in target_agent_sel:
+        selected_bet_content = phoenix_pred_col if "Color" in target_type_sel else phoenix_pred_sz
+    elif "Omnisapient" in target_agent_sel:
+        selected_bet_content = omnisapient18_pred_col if "Color" in target_type_sel else omnisapient18_pred_sz
+    elif "Titan" in target_agent_sel:
+        selected_bet_content = titan17_pred_col if "Color" in target_type_sel else titan17_pred_sz
+    elif "Chromatic" in target_agent_sel:
+        selected_bet_content = chromatic16_pred_col
+    elif "Top 1" in target_agent_sel:
+        selected_bet_content = top_rank_1_col if "Color" in target_type_sel else top_rank_1_size
+    elif "Top 2" in target_agent_sel:
+        selected_bet_content = top_rank_2_col if "Color" in target_type_sel else top_rank_2_size
+    else:
+        selected_bet_content = supreme_prediction
+        
+    if token and selected_bet_content:
+        last_bet_issue = st.session_state.get("autobet_last_issue")
+        if last_bet_issue != target_issue:
+            success, status_code, res_data = execute_daman_autobet(
+                bearer_token=token,
+                game_code=game_code_sel,
+                issue_number=target_issue,
+                bet_content=selected_bet_content,
+                amount=base_amt,
+                bet_multiple=bet_mult
+            )
+            st.session_state["autobet_last_issue"] = target_issue
+            log_entry = {
+                "timestamp": datetime.datetime.now().strftime("%H:%M:%S"),
+                "issue": target_issue,
+                "agent": target_agent_sel,
+                "bet_content": selected_bet_content,
+                "amount": base_amt * bet_mult,
+                "status_code": status_code,
+                "success": success,
+                "msg": res_data.get("msg", "Bet Placed") if isinstance(res_data, dict) else str(res_data)
+            }
+            autobet_logs.append(log_entry)
+            st.session_state["autobet_logs"] = autobet_logs[-50:]
+
+autobet_is_on = st.session_state.get("autobet_enabled", False)
+autobet_token_present = bool(st.session_state.get("daman_bearer_token", "").strip())
+
+status_badge = '<span style="color:#22c55e; background:rgba(34,197,94,0.2); border:1px solid #22c55e; padding:4px 10px; border-radius:12px; font-weight:800;">ACTIVE ONLINE 🟢</span>' if (autobet_is_on and autobet_token_present) else ('<span style="color:#f59e0b; background:rgba(245,158,11,0.2); border:1px solid #f59e0b; padding:4px 10px; border-radius:12px; font-weight:800;">WAITING FOR TOKEN 🔑</span>' if autobet_is_on else '<span style="color:#94a3b8; background:rgba(148,163,184,0.2); border:1px solid #94a3b8; padding:4px 10px; border-radius:12px; font-weight:800;">PAUSED / OFF ⏸️</span>')
+
+last_log = st.session_state.get("autobet_logs", [])[-1] if st.session_state.get("autobet_logs") else None
+last_bet_html = f"Target Issue: <b>#{last_log['issue']}</b> | Bet: <b>{last_log['bet_content']}</b> | Amount: <b>₹{last_log['amount']}</b> | Status: <b>{last_log['status_code']}</b> ({last_log['msg']})" if last_log else "No bets executed in current session yet."
+
+st.markdown(f"""
+<div style="background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #020617 100%); border: 2.5px solid #6366f1; border-radius: 16px; padding: 18px; margin-bottom: 20px; box-shadow: 0 0 25px rgba(99, 102, 241, 0.4);">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;">
+        <span style="font-size: 18px; font-weight: 900; color: #a5b4fc;">⚡ AUTOBET AUTOMATION MONITOR ENGINE</span>
+        {status_badge}
+    </div>
+    <div style="font-size: 12px; color: #c7d2fe; margin-bottom: 10px;">
+        Follow Strategy: <b>{st.session_state.get('autobet_agent', 'Hyperion Omni-AGI 12.0')}</b> | Bet Mode: <b>{st.session_state.get('autobet_target_type', 'Color Only')}</b> | Base Amount: <b>₹{st.session_state.get('autobet_amount', 10)}</b>
+    </div>
+    <div style="background: rgba(2, 6, 23, 0.7); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 10px; font-size: 11px; color: #e2e8f0;">
+        📌 <b>Last Execution:</b> {last_bet_html}
+    </div>
+</div>
+""", unsafe_allow_html=True)
+
+# --- 🌌 NEXUS A\.T\.L\.A\.S\. \(Agentic Transcendent Logic And Synthesis\) ULTIMATE SUPREME META-ORCHESTRATOR CARD RENDER ---
 all_agent_preds_map = {
     "Nexus Omnisapient 18.0": {
         'color_pred': omnisapient18_pred_col,

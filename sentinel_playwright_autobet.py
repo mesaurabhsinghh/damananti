@@ -15,7 +15,7 @@ except ImportError:
 # ============================================================
 #  CONFIG & 10-STEP PROGRESSION LADDER
 # ============================================================
-DAMAN_URL = "https://damanworld.world/"
+DAMAN_URL = "https://damanclub.in/"
 STATE_FILE = os.path.join(os.path.dirname(__file__), "playwright_state.json")
 HISTORY_CSV = r"C:\damananti\history.csv"
 

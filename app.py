@@ -647,10 +647,19 @@ def execute_daman_autobet(bearer_token, game_code, issue_number, bet_content, am
         return False, 400, {"code": 400, "msg": "Invalid/Empty Bearer Token"}
         
     headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+        "User-Agent": "Mozilla/5.0 (Linux; Android 15; Pixel 9) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Mobile Safari/537.36",
         "Origin": "https://damanclub.in",
         "Referer": "https://damanclub.in/",
-        "Content-Type": "application/json;charset=UTF-8",
+        "Content-Type": "application/json",
+        "Accept": "application/json, text/plain, */*",
+        "Accept-Language": "en-US,en;q=0.7",
+        "sec-ch-ua": '"Not=A?Brand";v="99", "Brave";v="151", "Chromium";v="151"',
+        "sec-ch-ua-mobile": "?1",
+        "sec-ch-ua-platform": '"Android"',
+        "sec-fetch-dest": "empty",
+        "sec-fetch-mode": "cors",
+        "sec-fetch-site": "cross-site",
+        "sec-gpc": "1",
         "Authorization": f"Bearer {clean_tok}"
     }
     clean_s = clean_user_sign(user_sign)
@@ -687,29 +696,16 @@ def execute_daman_autobet(bearer_token, game_code, issue_number, bet_content, am
         payload["signature"] = clean_s
         payload["sign"] = clean_s
         
-    candidate_urls = [
-        "https://api.ar-lottery01.com/api/webapi/WinGoBet",
-        "https://api.ar-lottery01.com/api/Lottery/WinGoBet",
-        "https://api.ar-lottery01.com/api/webapi/Game/WinGoBet"
-    ]
-    
-    last_res = None
-    last_code = 500
-    for target_url in candidate_urls:
+    url = "https://api.ar-lottery01.com/api/Lottery/WinGoBet"
+    try:
+        r = requests.post(url, json=payload, headers=headers, timeout=5)
         try:
-            r = requests.post(target_url, json=payload, headers=headers, timeout=4)
-            last_code = r.status_code
-            try:
-                res_data = r.json()
-            except Exception:
-                res_data = {"code": r.status_code, "msg": r.text[:120]}
-            last_res = res_data
-            if r.status_code == 200:
-                return True, 200, res_data
-        except Exception as e:
-            last_res = {"code": 500, "msg": str(e)}
-            
-    return (last_code == 200), last_code, (last_res or {"code": last_code, "msg": "Endpoint unreachable"})
+            res_data = r.json()
+        except Exception:
+            res_data = {"code": r.status_code, "msg": r.text[:120]}
+        return r.status_code == 200, r.status_code, res_data
+    except Exception as e:
+        return False, 500, {"code": 500, "msg": str(e)}
 
 def fetch_live_daman_game_data(game_mode="Win Go 30Sec"):
     url = LIVE_API_ENDPOINTS.get(game_mode, LIVE_API_ENDPOINTS["Win Go 30Sec"])

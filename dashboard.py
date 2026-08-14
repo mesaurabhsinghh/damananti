@@ -9214,56 +9214,56 @@ with st.sidebar.expander("🔑 Login & AutoBet Settings", expanded=autobet_enabl
         else:
             st.sidebar.warning("Please paste Token in the box above.")
             
-        if st.button("🎯 Place Test Bet Now (Current Round)", width="stretch"):
-            if bearer_token:
-                clean_t = clean_bearer_token(bearer_token)
-                # Safely resolve target issue & prediction
-                cur_target_iss = target_issue if 'target_issue' in locals() else (int(df_history['issue'].iloc[-1]) + 1 if len(df_history) > 0 else 20260814100050000)
-                
-                # Sentinel Prime Omega prediction resolution
-                recent_nums = df_history['number'].tail(30).values if len(df_history) > 0 else [5]
-                top_digit = Counter(recent_nums).most_common(1)[0][0] if len(recent_nums) > 0 else 5
-                calc_col = helper_get_color(top_digit)
-                calc_size = helper_get_size(top_digit)
-                
-                test_content = calc_col if "Color" in autobet_target_type else calc_size
-                curr_amt = MARTINGALE_LADDER[st.session_state.get("autobet_step_index", 0)]
-                
-                st.sidebar.info(f"⏳ Sending Bet: #{cur_target_iss} ➔ {test_content} (₹{curr_amt})...")
-                
-                ok, sc, rd = execute_daman_autobet(
-                    bearer_token=clean_t,
-                    game_code=autobet_game_code,
-                    issue_number=cur_target_iss,
-                    bet_content=test_content,
-                    amount=curr_amt,
-                    bet_multiple=1,
-                    user_sign=st.session_state.get("daman_user_sign", "")
-                )
-                
-                # Record in autobet logs
-                log_entry = {
-                    "issue": cur_target_iss,
-                    "bet_type": autobet_target_type,
-                    "bet_content": test_content,
-                    "amount": curr_amt,
-                    "step_index": st.session_state.get("autobet_step_index", 0),
-                    "status_code": sc,
-                    "success": ok,
-                    "msg": rd.get("msg", str(rd)) if isinstance(rd, dict) else str(rd),
-                    "timestamp": datetime.datetime.now().strftime("%H:%M:%S")
-                }
-                if "autobet_logs" not in st.session_state:
-                    st.session_state["autobet_logs"] = []
-                st.session_state["autobet_logs"].append(log_entry)
-                st.session_state["autobet_last_placed"] = log_entry
-                
-                if ok or sc == 200:
-                    st.sidebar.success(f"🎉 Bet Placed Successfully! #{cur_target_iss} ➔ {test_content} (₹{curr_amt}) | Server: {rd}")
-                else:
-                    st.sidebar.error(f"⚠️ Bet Result (HTTP {sc}): {rd}")
+    if st.button("🎯 Place Test Bet Now (Current Round)", width="stretch"):
+        if bearer_token:
+            clean_t = clean_bearer_token(bearer_token)
+            # Safely resolve target issue & prediction
+            cur_target_iss = target_issue if 'target_issue' in locals() else (int(df_history['issue'].iloc[-1]) + 1 if len(df_history) > 0 else 20260814100050000)
+            
+            # Sentinel Prime Omega prediction resolution
+            recent_nums = df_history['number'].tail(30).values if len(df_history) > 0 else [5]
+            top_digit = Counter(recent_nums).most_common(1)[0][0] if len(recent_nums) > 0 else 5
+            calc_col = helper_get_color(top_digit)
+            calc_size = helper_get_size(top_digit)
+            
+            test_content = calc_col if "Color" in autobet_target_type else calc_size
+            curr_amt = MARTINGALE_LADDER[st.session_state.get("autobet_step_index", 0)]
+            
+            st.sidebar.info(f"⏳ Sending Bet: #{cur_target_iss} ➔ {test_content} (₹{curr_amt})...")
+            
+            ok, sc, rd = execute_daman_autobet(
+                bearer_token=clean_t,
+                game_code=autobet_game_code,
+                issue_number=cur_target_iss,
+                bet_content=test_content,
+                amount=curr_amt,
+                bet_multiple=1,
+                user_sign=st.session_state.get("daman_user_sign", "")
+            )
+            
+            # Record in autobet logs
+            log_entry = {
+                "issue": cur_target_iss,
+                "bet_type": autobet_target_type,
+                "bet_content": test_content,
+                "amount": curr_amt,
+                "step_index": st.session_state.get("autobet_step_index", 0),
+                "status_code": sc,
+                "success": ok,
+                "msg": rd.get("msg", str(rd)) if isinstance(rd, dict) else str(rd),
+                "timestamp": datetime.datetime.now().strftime("%H:%M:%S")
+            }
+            if "autobet_logs" not in st.session_state:
+                st.session_state["autobet_logs"] = []
+            st.session_state["autobet_logs"].append(log_entry)
+            st.session_state["autobet_last_placed"] = log_entry
+            
+            if ok or sc == 200:
+                st.sidebar.success(f"🎉 Bet Placed Successfully! #{cur_target_iss} ➔ {test_content} (₹{curr_amt}) | Server: {rd}")
             else:
-                st.sidebar.warning("Please paste Bearer Token first.")
+                st.sidebar.error(f"⚠️ Bet Result (HTTP {sc}): {rd}")
+        else:
+            st.sidebar.warning("Please paste Bearer Token first.")
 
     if bearer_token:
         st.sidebar.markdown("🟢 **Status:** `Token Connected & Ready`")

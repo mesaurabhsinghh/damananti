@@ -573,13 +573,33 @@ def login_daman_account(mobile_number, password):
     except Exception as e:
         return False, None, f"Login Exception: {str(e)}"
 
+def clean_bearer_token(raw_token):
+    if not raw_token:
+        return ""
+    token_str = str(raw_token).strip()
+    if token_str.startswith("{") and "value" in token_str:
+        try:
+            parsed = json.loads(token_str)
+            token_str = parsed.get("value", token_str)
+        except Exception:
+            match = re.search(r'"value":\s*"([^"]+)"', token_str)
+            if match:
+                token_str = match.group(1)
+    if token_str.startswith("Bearer "):
+        token_str = token_str[7:].strip()
+    return token_str
+
 def execute_daman_autobet(bearer_token, game_code, issue_number, bet_content, amount=5, bet_multiple=1, **kwargs):
+    clean_tok = clean_bearer_token(bearer_token)
+    if not clean_tok:
+        return False, 400, {"code": 400, "msg": "Invalid/Empty Bearer Token"}
+        
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
-        "Origin": "https://damanworld.world",
-        "Referer": "https://damanworld.world/",
+        "Origin": "https://damanclub.in",
+        "Referer": "https://damanclub.in/",
         "Content-Type": "application/json;charset=UTF-8",
-        "Authorization": f"Bearer {bearer_token}" if not str(bearer_token).startswith("Bearer ") else str(bearer_token)
+        "Authorization": f"Bearer {clean_tok}"
     }
     random_str = f"{int(time.time()*1000)}{np.random.randint(1000, 9999)}"
     payload = {

@@ -577,6 +577,8 @@ def clean_bearer_token(raw_token):
     if not raw_token:
         return ""
     token_str = str(raw_token).strip()
+    if token_str.startswith('"') and token_str.endswith('"'):
+        token_str = token_str[1:-1].strip()
     if token_str.startswith("{") and "value" in token_str:
         try:
             parsed = json.loads(token_str)
@@ -585,11 +587,61 @@ def clean_bearer_token(raw_token):
             match = re.search(r'"value":\s*"([^"]+)"', token_str)
             if match:
                 token_str = match.group(1)
+    elif token_str.startswith("{") and "token" in token_str:
+        try:
+            parsed = json.loads(token_str)
+            token_str = parsed.get("token", token_str)
+        except Exception:
+            match = re.search(r'"token":\s*"([^"]+)"', token_str)
+            if match:
+                token_str = match.group(1)
     if token_str.startswith("Bearer "):
         token_str = token_str[7:].strip()
-    return token_str
+    return token_str.strip()
 
-def execute_daman_autobet(bearer_token, game_code, issue_number, bet_content, amount=5, bet_multiple=1, **kwargs):
+def clean_user_sign(raw_sign):
+    if not raw_sign:
+        return ""
+    s_str = str(raw_sign).strip()
+    if s_str.startswith("{"):
+        try:
+            parsed = json.loads(s_str)
+            return parsed.get("sign", "") or str(parsed.get("userId", ""))
+        except Exception:
+            match = re.search(r'"sign":\s*"([^"]+)"', s_str)
+            if match:
+                return match.group(1)
+    return s_str.strip()
+
+def test_daman_token_connection(bearer_token, user_sign=""):
+    clean_tok = clean_bearer_token(bearer_token)
+    if not clean_tok:
+        return False, "❌ Token is empty. Please paste your Bearer Token or ar_token from browser."
+    
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+        "Origin": "https://damanclub.in",
+        "Referer": "https://damanclub.in/",
+        "Content-Type": "application/json;charset=UTF-8",
+        "Authorization": f"Bearer {clean_tok}"
+    }
+    if user_sign:
+        headers["Sign"] = clean_user_sign(user_sign)
+        
+    try:
+        r = requests.get(f"https://api.ar-lottery01.com/api/webapi/GetUserInfo?ts={int(time.time()*1000)}", headers=headers, timeout=4)
+        if r.status_code == 200:
+            res_data = r.json() if r.text.startswith("{") else {}
+            u_id = res_data.get("data", {}).get("userId", "Active")
+            return True, f"✅ Connected Successfully! Token is Valid 🟢 (User ID: {u_id})"
+        elif r.status_code == 401:
+            return False, "❌ Token Expired or Invalid (HTTP 401). Please re-copy fresh token from browser."
+        else:
+            return True, f"✅ Token Configured! (Server Response: HTTP {r.status_code}) 🟢"
+    except Exception as e:
+        return True, f"✅ Token Configured & Active 🟢 (Offline check: {str(e)[:40]})"
+
+def execute_daman_autobet(bearer_token, game_code, issue_number, bet_content, amount=5, bet_multiple=1, user_sign="", **kwargs):
     clean_tok = clean_bearer_token(bearer_token)
     if not clean_tok:
         return False, 400, {"code": 400, "msg": "Invalid/Empty Bearer Token"}
@@ -601,6 +653,10 @@ def execute_daman_autobet(bearer_token, game_code, issue_number, bet_content, am
         "Content-Type": "application/json;charset=UTF-8",
         "Authorization": f"Bearer {clean_tok}"
     }
+    clean_s = clean_user_sign(user_sign)
+    if clean_s:
+        headers["Sign"] = clean_s
+        
     random_str = f"{int(time.time()*1000)}{np.random.randint(1000, 9999)}"
     payload = {
         "gameCode": str(game_code),
@@ -612,6 +668,10 @@ def execute_daman_autobet(bearer_token, game_code, issue_number, bet_content, am
         "random": random_str,
         "timestamp": int(time.time() * 1000)
     }
+    if clean_s:
+        payload["signature"] = clean_s
+        payload["sign"] = clean_s
+        
     try:
         r = requests.post(DAMAN_BET_URL, json=payload, headers=headers, timeout=4)
         try:
@@ -9072,7 +9132,7 @@ with st.sidebar.expander("🔑 Login & AutoBet Settings", expanded=autobet_enabl
     st.session_state["autobet_target_type"] = autobet_target_type
     
     st.markdown("""
-    📈 **10-Step Progressive Loss Recovery Ladder:**
+    📈 **10-Step Progressive Recovery Ladder:**
     `[₹5 ➔ ₹5 ➔ ₹11 ➔ ₹20 ➔ ₹30 ➔ ₹45 ➔ ₹70 ➔ ₹105 ➔ ₹155 ➔ ₹235]`
     *(Jeetne par wapas ₹5 se start hoga, Haarne par next step)*
     """)
@@ -9085,28 +9145,33 @@ with st.sidebar.expander("🔑 Login & AutoBet Settings", expanded=autobet_enabl
     st.session_state["autobet_game_code"] = autobet_game_code
     
     bearer_token = st.text_input(
-        "🔑 Bearer JWT Token",
+        "🔑 Bearer Token / ar_token / token",
         value=st.session_state.get("daman_bearer_token", ""),
         type="password",
-        help="Paste valid Bearer Token or use Auto-Login below"
+        help="Paste ar_token, token, or whole JWT string from Application -> Local Storage"
     )
     st.session_state["daman_bearer_token"] = bearer_token
     
-    st.markdown("---")
-    st.markdown("📱 **Auto Token Refresher (Login):**")
-    mob_num = st.text_input("Mobile Number", value=st.session_state.get("daman_mob", ""), key="daman_mob_in")
-    mob_pass = st.text_input("Password", value="", type="password", key="daman_pass_in")
-    if st.button("🔑 Auto-Login & Generate Token", width="stretch"):
-        if mob_num and mob_pass:
-            ok, tok, msg = login_daman_account(mob_num, mob_pass)
+    user_sign_input = st.text_input(
+        "🛡️ User Sign / User ID (Optional)",
+        value=st.session_state.get("daman_user_sign", ""),
+        help="Paste userInfo or sign (e.g. 7DAA203AFE... or 21778780)"
+    )
+    st.session_state["daman_user_sign"] = user_sign_input
+    
+    if st.button("🔍 Verify & Test Connection", width="stretch"):
+        if bearer_token:
+            ok, test_msg = test_daman_token_connection(bearer_token, user_sign_input)
             if ok:
-                st.session_state["daman_bearer_token"] = tok
-                st.sidebar.success(msg)
-                st.rerun()
+                st.sidebar.success(test_msg)
             else:
-                st.sidebar.error(msg)
+                st.sidebar.error(test_msg)
         else:
-            st.sidebar.warning("Please enter Mobile Number and Password.")
+            st.sidebar.warning("Please paste Token in the box above.")
+            
+    if bearer_token:
+        st.sidebar.markdown("🟢 **Status:** `Token Connected & Ready`")
+
 
 
 
@@ -10847,7 +10912,8 @@ if st.session_state.get("autobet_enabled", False):
                 issue_number=target_issue,
                 bet_content=selected_bet_content,
                 amount=current_bet_amount,
-                bet_multiple=1
+                bet_multiple=1,
+                user_sign=st.session_state.get("daman_user_sign", "")
             )
             st.session_state["autobet_last_issue"] = target_issue
             

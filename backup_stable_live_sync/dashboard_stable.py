@@ -658,12 +658,27 @@ def execute_daman_autobet(bearer_token, game_code, issue_number, bet_content, am
         headers["Sign"] = clean_s
         
     random_str = f"{int(time.time()*1000)}{np.random.randint(1000, 9999)}"
+    
+    # Map typeId based on game mode
+    type_id = 1
+    if "30" in str(game_code):
+        type_id = 1
+    elif "1M" in str(game_code) or "1m" in str(game_code):
+        type_id = 2
+    elif "3M" in str(game_code) or "3m" in str(game_code):
+        type_id = 3
+    elif "5M" in str(game_code) or "5m" in str(game_code):
+        type_id = 4
+
     payload = {
+        "typeId": type_id,
         "gameCode": str(game_code),
         "issueNumber": str(issue_number),
         "amount": int(amount),
         "betMultiple": 1,
+        "betCount": 1,
         "betContent": str(bet_content),
+        "selectType": str(bet_content),
         "language": "en",
         "random": random_str,
         "timestamp": int(time.time() * 1000)
@@ -672,15 +687,29 @@ def execute_daman_autobet(bearer_token, game_code, issue_number, bet_content, am
         payload["signature"] = clean_s
         payload["sign"] = clean_s
         
-    try:
-        r = requests.post(DAMAN_BET_URL, json=payload, headers=headers, timeout=4)
+    candidate_urls = [
+        "https://api.ar-lottery01.com/api/webapi/WinGoBet",
+        "https://api.ar-lottery01.com/api/Lottery/WinGoBet",
+        "https://api.ar-lottery01.com/api/webapi/Game/WinGoBet"
+    ]
+    
+    last_res = None
+    last_code = 500
+    for target_url in candidate_urls:
         try:
-            res_data = r.json()
-        except Exception:
-            res_data = {"code": r.status_code, "msg": r.text[:100]}
-        return r.status_code == 200, r.status_code, res_data
-    except Exception as e:
-        return False, 500, {"code": 500, "msg": str(e)}
+            r = requests.post(target_url, json=payload, headers=headers, timeout=4)
+            last_code = r.status_code
+            try:
+                res_data = r.json()
+            except Exception:
+                res_data = {"code": r.status_code, "msg": r.text[:120]}
+            last_res = res_data
+            if r.status_code == 200:
+                return True, 200, res_data
+        except Exception as e:
+            last_res = {"code": 500, "msg": str(e)}
+            
+    return (last_code == 200), last_code, (last_res or {"code": last_code, "msg": "Endpoint unreachable"})
 
 def fetch_live_daman_game_data(game_mode="Win Go 30Sec"):
     url = LIVE_API_ENDPOINTS.get(game_mode, LIVE_API_ENDPOINTS["Win Go 30Sec"])
@@ -9169,6 +9198,27 @@ with st.sidebar.expander("🔑 Login & AutoBet Settings", expanded=autobet_enabl
         else:
             st.sidebar.warning("Please paste Token in the box above.")
             
+    if st.button("🎯 Place Test Bet Now (Current Round)", width="stretch"):
+        if bearer_token:
+            clean_t = clean_bearer_token(bearer_token)
+            test_content = sentinel_col if "Color" in autobet_target_type else sentinel_size
+            curr_amt = MARTINGALE_LADDER[st.session_state.get("autobet_step_index", 0)]
+            ok, sc, rd = execute_daman_autobet(
+                bearer_token=clean_t,
+                game_code=autobet_game_code,
+                issue_number=target_issue,
+                bet_content=test_content,
+                amount=curr_amt,
+                bet_multiple=1,
+                user_sign=st.session_state.get("daman_user_sign", "")
+            )
+            if ok or sc == 200:
+                st.sidebar.success(f"🎉 Test Bet Placed! #{target_issue} -> {test_content} (₹{curr_amt}) | Response: {rd}")
+            else:
+                st.sidebar.error(f"⚠️ Test Bet HTTP {sc} | Server Response: {rd}")
+        else:
+            st.sidebar.warning("Please paste Bearer Token first.")
+
     if bearer_token:
         st.sidebar.markdown("🟢 **Status:** `Token Connected & Ready`")
 

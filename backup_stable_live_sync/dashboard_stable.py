@@ -679,15 +679,30 @@ def execute_daman_autobet(bearer_token, game_code, issue_number, bet_content, am
     elif "5M" in str(game_code) or "5m" in str(game_code):
         type_id = 4
 
+    # SelectType mappings for WinGo
+    select_type_val = 1
+    if bet_content == "Green":
+        select_type_val = 1
+    elif bet_content == "Red":
+        select_type_val = 3
+    elif bet_content == "Violet":
+        select_type_val = 2
+    elif bet_content == "Big":
+        select_type_val = 1
+    elif bet_content == "Small":
+        select_type_val = 2
+
+    # Comprehensive Daman Payload with both numeric and string values
     payload = {
         "typeId": type_id,
+        "gameId": type_id,
         "gameCode": str(game_code),
         "issueNumber": str(issue_number),
         "amount": int(amount),
         "betMultiple": 1,
         "betCount": 1,
         "betContent": str(bet_content),
-        "selectType": str(bet_content),
+        "selectType": select_type_val,
         "language": "en",
         "random": random_str,
         "timestamp": int(time.time() * 1000)
@@ -702,7 +717,7 @@ def execute_daman_autobet(bearer_token, game_code, issue_number, bet_content, am
         try:
             res_data = r.json()
         except Exception:
-            res_data = {"code": r.status_code, "msg": r.text[:120]}
+            res_data = {"code": r.status_code, "msg": r.text[:150]}
         return r.status_code == 200, r.status_code, res_data
     except Exception as e:
         return False, 500, {"code": 500, "msg": str(e)}

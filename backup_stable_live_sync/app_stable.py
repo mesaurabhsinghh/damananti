@@ -696,7 +696,7 @@ def execute_daman_autobet(bearer_token, game_code, issue_number, bet_content, am
         payload["signature"] = clean_s
         payload["sign"] = clean_s
         
-    url = "https://api.ar-lottery01.com/api/Lottery/WinGoBet"
+    url = f"https://api.ar-lottery01.com/api/Lottery/WinGoBet?ts={int(time.time() * 1000)}"
     try:
         r = requests.post(url, json=payload, headers=headers, timeout=5)
         try:
